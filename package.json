@@ -25,7 +25,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && cp CNAME build/",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "deploy": "gh-pages -d build",
@@ -50,5 +50,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://parami-foundation.github.io/influence-mining-web/"
+  "homepage": "https://influence.parami.io/"
 }
