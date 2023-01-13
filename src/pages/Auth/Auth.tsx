@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useConnect, useEnsName, useNetwork, useSignMessage } from 'wagmi';
-import { Button, notification } from 'antd';
+import { Button, notification, Image } from 'antd';
 import { bindAccount, getInfluence } from '../../services/mining.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PARAMI_AIRDROP } from '../../models/parami';
-import { useDisconnect } from 'wagmi'
+import './Auth.scss';
 
 const generateSignedMessage = (twitter_oauth_verifier: string): string => {
     return `Parami Influence Mining:
@@ -43,7 +43,7 @@ function Auth() {
 
     useEffect(() => {
         if (oauthToken && oauthVerifier) {
-            signMessage({message: generateSignedMessage(oauthVerifier)});
+            signMessage({ message: generateSignedMessage(oauthVerifier) });
             window.removeEventListener('storage', storageHandler);
             window.localStorage.removeItem('oauth_token');
             window.localStorage.removeItem('oauth_verifier');
@@ -79,23 +79,31 @@ function Auth() {
     }, [address, chain]);
 
     return <>
-        <div>
-            <div>
-                <Button type='primary' disabled={isConnected} onClick={() => {
-                    open({ route: 'ConnectWallet' });
-                }}>
-                    {isConnected && <>Connected to {ensName ?? address}</>}
-                    {!isConnected && <>Connect Wallet</>}
-                </Button>
-                {/* <Button type='primary' onClick={() => {
-                    disconnect();
-                }}>Disconnect</Button> */}
+        <div className='auth-container'>
+            <div className='logo-container'>
+                <img className='logo' src='/assets/images/logo-core-white.svg'></img>
             </div>
-            <br></br>
-            <div>
-                <Button type='primary' disabled={!isConnected} onClick={handleConnectTwitter}>
-                    Connect Twitter
-                </Button>
+
+            <div className='btn-container'>
+                {!isConnected && <>
+                    <div className='connect-btn active' onClick={() => {
+                        open();
+                    }}>
+                        Connect Wallet
+                    </div>
+
+                    <div className='connect-btn disabled'>Connect Twitter</div>
+                </>}
+
+                {isConnected && <>
+                    <div className='connect-btn disabled'>
+                        Wallet Connected{ensName ? ` as ${ensName}` : ''}
+                    </div>
+
+                    <div className='connect-btn active' onClick={handleConnectTwitter}>
+                        Connect Twitter
+                    </div>
+                </>}
             </div>
         </div>
     </>;
