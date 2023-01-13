@@ -5,15 +5,12 @@ import { Button, notification } from 'antd';
 import { bindAccount, getInfluence } from '../../services/mining.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PARAMI_AIRDROP } from '../../models/parami';
+import { useDisconnect } from 'wagmi'
 
-const generateMessage = (code: string) => {
-    return `Parami Influence Mining:\n\nMy twitter oauth ticket: ${code}`;
-}
-
-const generateSignedMessage = (twitter_oauth_ticket: string): string => {
+const generateSignedMessage = (twitter_oauth_verifier: string): string => {
     return `Parami Influence Mining:
 
-My twitter oauth ticket: ${twitter_oauth_ticket}
+My twitter oauth verifier: ${twitter_oauth_verifier}
 `;
 };
 
@@ -24,48 +21,38 @@ function Auth() {
     const { chain } = useNetwork();
     const { data: ensName } = useEnsName({ address });
     const navigate = useNavigate();
-    // const [msg, setMsg] = useState<string>();
     const { data: userSignature, isError, isLoading, isSuccess, signMessage } = useSignMessage();
-    const [code, setCode] = useState<string>();
+    // const { disconnect } = useDisconnect();
+    const [oauthToken, setOauthToken] = useState<string>();
+    const [oauthVerifier, setOauthVerifier] = useState<string>();
+
+    const storageHandler = (event: any) => {
+        if (event.key === 'oauth_token') {
+            setOauthToken(event.newValue);
+        } else if (event.key === 'oauth_verifier') {
+            setOauthVerifier(event.newValue);
+        }
+    }
 
     const handleConnectTwitter = async () => {
-        // window.location.href = `http://localhost:8080/api/twitter/login?state=connectTwitter&callback=${window.origin}/twitter/oauth`
-        // window.open(`${PARAMI_AIRDROP}/influencemining/api/twitter/login?state=connectTwitter`);
-        // const resp = await fetch(`${'http://localhost:8080'}/influencemining/api/twitter/login?state=connect`);
-        // const { oauthUrl } = await resp.json();
-        window.open(`${PARAMI_AIRDROP}/influencemining/api/twitter/login?state=connect`);
-        // window.location.href = `${'http://localhost:8080'}/influencemining/api/twitter/login?state=connectTwitter`;
-
-        const storageHandler = (event: any) => {
-            console.log('Got localStorage event', event);
-            if (event.key === 'twitterOauth') {
-                console.log('twitterOauth!');
-                const code = event.newValue;
-                setCode(code);
-                signMessage({ message: generateSignedMessage(code) });
-
-                window.removeEventListener('storage', storageHandler);
-                window.localStorage.removeItem('twitterOauth');
-            }
-            // const { code, state } = event.data ?? {};
-            // console.log('message handler: ', event.origin, code, state);
-            // if (event.origin === window.origin && code && state) { // todo: check state
-            //     // sign message
-            //     // const msg = `Parami Influence Mining:\n\nMy twitter oauth ticket: ${code}`;
-            //     // setMsg(msg);
-            //     setCode(code);
-            //     signMessage({ message: generateMessage(code) });
-
-            //     window.removeEventListener('message', storageHandler);
-            // }
-        }
-
+        const resp = await fetch(`${PARAMI_AIRDROP}/request_oauth_token?callbackUrl=${window.origin}`);
+        const { oauthUrl } = await resp.json();
+        window.open(oauthUrl);
         window.addEventListener('storage', storageHandler);
     }
 
     useEffect(() => {
+        if (oauthToken && oauthVerifier) {
+            signMessage({message: generateSignedMessage(oauthVerifier)});
+            window.removeEventListener('storage', storageHandler);
+            window.localStorage.removeItem('oauth_token');
+            window.localStorage.removeItem('oauth_verifier');
+        }
+    }, [oauthToken, oauthVerifier])
+
+    useEffect(() => {
         if (userSignature) {
-            bindAccount(address!, chain!.id, code!, userSignature, generateSignedMessage(code!), searchParams.get('referer') ?? '').then((res) => {
+            bindAccount(address!, chain!.id, oauthToken!, oauthVerifier!, userSignature, generateSignedMessage(oauthVerifier!), searchParams.get('referer') ?? '').then((res) => {
                 if (res.success) {
                     notification.success({
                         message: 'Bind Success!'
@@ -77,7 +64,6 @@ function Auth() {
                 notification.warning({
                     message: res.message
                 })
-
             })
         }
     }, [userSignature]);
@@ -96,11 +82,14 @@ function Auth() {
         <div>
             <div>
                 <Button type='primary' disabled={isConnected} onClick={() => {
-                    open();
+                    open({ route: 'ConnectWallet' });
                 }}>
                     {isConnected && <>Connected to {ensName ?? address}</>}
                     {!isConnected && <>Connect Wallet</>}
                 </Button>
+                {/* <Button type='primary' onClick={() => {
+                    disconnect();
+                }}>Disconnect</Button> */}
             </div>
             <br></br>
             <div>

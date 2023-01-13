@@ -37,12 +37,12 @@ export interface PoolSummary {
   currentDailyOutput: string;
 }
 
-export const bindAccount = async (address: string, chainId: number, code: string, signature: string, msg: string, referer?: string) => {
-  console.log('binding account', address, chainId, code, signature, msg, referer);
+export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, signature: string, msg: string, referer?: string) => {
   const data = JSON.stringify({
     wallet: address,
     chainId,
-    twitter_oauth_ticket: code,
+    oauth_token: oauthToken,
+    oauth_verifier: oauthVerifier,
     sig: signature,
     sigPlainText: msg,
     refererWallet: referer

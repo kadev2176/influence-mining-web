@@ -2,9 +2,8 @@ import React, { useEffect } from 'react';
 import './App.scss';
 import { NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
-import { useAccount, useNetwork } from 'wagmi'
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { getInfluence } from './services/mining.service';
+import { useAccount } from 'wagmi'
+import { Link, Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 const { Header, Content, Sider } = Layout;
 
@@ -33,26 +32,24 @@ const siderMenuItems = [
 ];
 
 function App() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { isConnected } = useAccount();
-  const { address } = useAccount();
-  const { chain } = useNetwork();
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
-    if (!isConnected) {
+    if (searchParams.get('oauth_token') && searchParams.get('oauth_verifier')) {
+      window.localStorage.setItem('oauth_token', searchParams.get('oauth_token') as string);
+      window.localStorage.setItem('oauth_verifier', searchParams.get('oauth_verifier') as string);
+      window.close();
+    } else if (!isConnected) {
       navigate('/auth');
-    } else if (location.pathname !== '/oauth/twitter') {
-      getInfluence(address!, chain!.id).then(influence => {
-        if (!influence?.updatedTime) {
-          navigate('/auth');
-        }
-      })
+    } else {
+      navigate('/profile');
     }
-  }, [isConnected])
+  }, [searchParams, isConnected]);
 
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer }
   } = theme.useToken();
 
   return (

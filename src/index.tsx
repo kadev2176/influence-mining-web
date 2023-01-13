@@ -10,8 +10,7 @@ import {
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon, goerli } from "wagmi/chains";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import TwitterOauth from './pages/TwitterOauth/TwitterOauth';
+import { BrowserRouter, Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import Profile from './pages/Profile/Profile';
 import Ad3Transactions from './pages/Ad3Transactions/Ad3Transactions';
 import InfluenceTransactions from './pages/InfluenceTransactions/InfluenceTransactions';
@@ -48,17 +47,16 @@ root.render(
           },
         }}
       >
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/" element={<App />}>
               <Route path="/auth" element={<Auth />} />
-              <Route path="/oauth/twitter" element={<TwitterOauth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/ad3Tx" element={<Ad3Transactions />} />
               <Route path="/influenceTx" element={<InfluenceTransactions />} />
             </Route>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </ConfigProvider>
     </WagmiConfig>
 
