@@ -6,6 +6,7 @@ import { Balance, getAd3Balance, getInfluence, getPoolSummary, Influence, PoolSu
 import EIP5489ForInfluenceMining from '../../contracts/EIP5489ForInfluenceMining.json';
 import { EIP5489ForInfluenceMiningContractAddress } from '../../models/parami';
 import { BigNumber } from 'ethers';
+import MintBillboard from '../../components/MintBillboard/MintBillboard';
 
 const { Title } = Typography;
 
@@ -58,14 +59,6 @@ function Profile({ }: ProfileProps) {
         }
     }, [tokenUri])
 
-    const { config } = usePrepareContractWrite({
-        address: EIP5489ForInfluenceMiningContractAddress,
-        abi: EIP5489ForInfluenceMining.abi,
-        functionName: 'mint',
-        args: ['https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg']
-    });
-    const { data, isLoading, isSuccess, write: mint } = useContractWrite(config);
-
     const refreshInfluenceStatus = async (address: string, chainId: number) => {
         getInfluence(address, chainId).then(res => {
             setInfluence(res);
@@ -98,28 +91,9 @@ function Profile({ }: ProfileProps) {
     }
 
     return <>
-        <div>
+        <div className='profile-container'>
             {!nftBalance?.toNumber() && <>
-                <Title level={3}>Choose Your Billboard</Title>
-                <Card title="Common NFT Billboard" style={{ width: '100%', marginBottom: '20px' }}>
-                    <div><b>1X</b> mining speed</div>
-                    <p>Free Mint</p>
-                    <Button type='primary' onClick={() => {
-                        mint?.();
-                    }}>Mint Your Billboard</Button>
-                </Card>
-
-                <Card title="Rare NFT Billboard" style={{ width: '100%', marginBottom: '20px' }}>
-                    <div><b>1.4X</b> mining speed</div>
-                    <p>price: 10 AD3</p>
-                    <Button type='primary' disabled>Coming Soon</Button>
-                </Card>
-
-                <Card title="Epic NFT Billboard" style={{ width: '100%' }}>
-                    <div><b>1.8X</b> mining speed</div>
-                    <p>price: 50 AD3</p>
-                    <Button type='primary' disabled>Coming Soon</Button>
-                </Card>
+                <MintBillboard></MintBillboard>
             </>}
 
             {hnft && <>

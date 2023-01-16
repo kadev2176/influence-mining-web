@@ -16,6 +16,7 @@ import Ad3Transactions from './pages/Ad3Transactions/Ad3Transactions';
 import InfluenceTransactions from './pages/InfluenceTransactions/InfluenceTransactions';
 import Auth from './pages/Auth/Auth';
 import { ConfigProvider } from 'antd';
+import Home from './pages/Home/Home';
 
 // const chains = [arbitrum, mainnet, polygon];
 const chains = [arbitrum, mainnet, polygon, goerli];
@@ -42,13 +43,15 @@ root.render(
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#F4801A',
+            // colorPrimary: '#ffffff',
             borderRadius: 10
           },
         }}
       >
         <HashRouter>
           <Routes>
+            <Route path='/home' element={<Home/>}></Route>
+            
             <Route path="/" element={<App />}>
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />

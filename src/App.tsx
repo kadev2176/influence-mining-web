@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './App.scss';
 import { NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import { Layout, Menu } from 'antd';
 import { useAccount } from 'wagmi'
 import { Link, Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -48,10 +48,6 @@ function App() {
     }
   }, [searchParams, isConnected]);
 
-  const {
-    token: { colorBgContainer }
-  } = theme.useToken();
-
   return (
     <Layout>
       <Header className="header">
@@ -59,25 +55,25 @@ function App() {
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[{ key: '1', label: 'Logo and Name' }]} />
       </Header>
       <Layout>
-        <Sider width={200} style={{ background: colorBgContainer }}>
+        <Sider width={180} breakpoint='lg' trigger={null} collapsedWidth="0">
           <Menu
             mode="inline"
+            className="sider-menu"
             defaultSelectedKeys={['profile']}
             style={{ height: '100%', borderRight: 0 }}
             items={siderMenuItems}
           />
         </Sider>
-        <Layout style={{ padding: '24px' }}>
+        <Layout>
           <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-            }}
+            className='layout-content'
           >
             <Outlet></Outlet>
           </Content>
+          
+          <div className='bottom-menu'>
+            {/* add menu items */}
+          </div>
         </Layout>
       </Layout>
     </Layout>
