@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import './App.scss';
-import { NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import { useAccount } from 'wagmi'
 import { Link, Outlet, useNavigate, useSearchParams } from 'react-router-dom';
@@ -10,21 +9,23 @@ const { Header, Content, Sider } = Layout;
 const siderMenuItems = [
   {
     key: 'profile',
-    icon: <><UserOutlined /></>,
+    icon: <>
+        <i className="fa-solid fa-user"></i>
+    </>,
     label: <>
       <Link to={'/profile'}>Profile</Link>
     </>
   },
   {
     key: 'ad3Tx',
-    icon: <><NotificationOutlined /></>,
+    icon: <><i className="fa-solid fa-money-check-dollar"></i></>,
     label: <>
       <Link to={'/ad3Tx'}>Transactions</Link>
     </>
   },
   {
     key: 'influenceTx',
-    icon: <><UserOutlined /></>,
+    icon: <><i className="fa-solid fa-tower-broadcast"></i></>,
     label: <>
       <Link to={'/influenceTx'}>Influence</Link>
     </>
@@ -70,7 +71,7 @@ function App() {
           >
             <Outlet></Outlet>
           </Content>
-          
+
           <div className='bottom-menu'>
             {/* add menu items */}
           </div>

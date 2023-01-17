@@ -1,9 +1,9 @@
 import { PARAMI_AIRDROP } from "../models/parami";
 
 export type Balance = {
-  total: bigint;
-  withdrawable: bigint;
-  locked: bigint;
+  total: string;
+  withdrawable: string;
+  locked: string;
 }
 
 export type Influence = {
@@ -92,26 +92,15 @@ export const startMining = async (address: string, chainId: number, hnftContract
 }
 
 export const getAd3Balance = async (address: string) => {
-  try {
-    const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3?wallet=${address}`);
-    const balance = await res.json();
-    return balance as Balance;
-  } catch (_) {
-    return { total: BigInt('100'.padEnd(18, '0')), withdrawable: BigInt('50'.padEnd(18, '0')), locked: BigInt('50'.padEnd(18, '0')) }
-  }
+  const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3?wallet=${address}`);
+  const balance = await res.json();
+  return balance as Balance;
 }
 
-export const getAd3Transactions = async (address: string) => {
-  try {
-    const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}`);
+export const getAd3Transactions = async (address: string, chainId: number) => {
+    const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}&chainId=${chainId}`);
     const txs = await res.json();
     return txs as Ad3Tx[];
-  } catch (_) {
-    return [
-      { timestamp: 1672386184, type: "withdrawable", diff: BigInt('-2'.padEnd(18, '0')) },
-      { timestamp: 1672386284, type: "locked", diff: BigInt('1'.padEnd(18, '0')) },
-    ]
-  }
 }
 
 export const getInfluence = async (address: string, chainId: number) => {
@@ -147,8 +136,7 @@ export const getInfluence = async (address: string, chainId: number) => {
         imageUrl: 'https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg'
       };
     }
-
-    // console.log(influence || (influence as { message: string }).message);
+    
     return null;
   } catch (_) {
     return null

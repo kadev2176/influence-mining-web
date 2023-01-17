@@ -9,6 +9,10 @@
     color: #ffffffc5 !important;
     font-weight: 600;
 
+    .ant-menu-title-content {
+      margin-left: 5px;
+    }
+
     &.ant-menu-item-active {
       background-color: #ffffff1f !important;
     }
@@ -24,6 +28,7 @@
   min-height: 100vh !important;
   background: linear-gradient(#23103A 0%, #3a4067 100%);
   padding: 0 20px;
+  padding-bottom: 80px;
 }
 
 .bottom-menu {

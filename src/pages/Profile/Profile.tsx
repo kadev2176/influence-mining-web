@@ -7,6 +7,10 @@ import EIP5489ForInfluenceMining from '../../contracts/EIP5489ForInfluenceMining
 import { EIP5489ForInfluenceMiningContractAddress } from '../../models/parami';
 import { BigNumber } from 'ethers';
 import MintBillboard from '../../components/MintBillboard/MintBillboard';
+import BillboardCommon from '../../components/BillboardCommon/BillboardCommon';
+import './Profile.scss';
+import AD3Balance from '../../components/AD3Balance/AD3Balance';
+import InfluenceStat from '../../components/InfluenceStat/InfluenceStat';
 
 const { Title } = Typography;
 
@@ -17,9 +21,7 @@ function Profile({ }: ProfileProps) {
     const { chain } = useNetwork();
     const navigate = useNavigate();
     const [hnft, setHnft] = useState<any>(); // todo: type this
-    const [ad3Balance, setAd3Balance] = useState<Balance>();
     const [influence, setInfluence] = useState<Influence | null>();
-    const [poolSummary, setPoolSummary] = useState<PoolSummary>();
 
     const { data: nftBalance } = useContractRead<unknown[], string, BigNumber>({
         address: EIP5489ForInfluenceMiningContractAddress,
@@ -42,11 +44,11 @@ function Profile({ }: ProfileProps) {
         args: [tokenId],
     });
 
-    useEffect(() => {
-        getPoolSummary().then(summary => {
-            setPoolSummary(summary);
-        })
-    }, [])
+    // useEffect(() => {
+    //     getPoolSummary().then(summary => {
+    //         setPoolSummary(summary);
+    //     })
+    // }, [])
 
     useEffect(() => {
         if (tokenUri) {
@@ -73,10 +75,6 @@ function Profile({ }: ProfileProps) {
 
     useEffect(() => {
         if (address) {
-            getAd3Balance(address).then(res => {
-                setAd3Balance(res);
-            });
-
             refreshInfluenceStatus(address, chain!.id);
         }
     }, [address])
@@ -97,56 +95,25 @@ function Profile({ }: ProfileProps) {
             </>}
 
             {hnft && <>
-                <div>
-                    <Image src={hnft.image} referrerPolicy='no-referrer'></Image>
-                </div>
-                {(influence?.beginMiningTime && influence?.beginMiningTime > 0) && <>
-                    {ad3Balance && <>
-                        <Title level={3}>AD3 Balance</Title>
-                        <Row gutter={16}>
-                            <Col span={8}>
-                                <Statistic title="Total:" value={`${ad3Balance.total}`} />
-                            </Col>
-                            <Col span={8}>
-                                <Statistic title="Withdrawable" value={`${ad3Balance.withdrawable}`} precision={2} />
-                            </Col>
-                            <Col span={8}>
-                                <Statistic title="Locked" value={`${ad3Balance.locked}`} />
-                            </Col>
-                        </Row>
-                    </>}
+                <div className='billboards'>
+                    <div className='billboard-card'>
+                        <BillboardCommon></BillboardCommon>
 
-                    {influence && <>
-                        <Title level={3}>Your Social Influence</Title>
-                        <Row gutter={16}>
-                            <Col span={8}>
-                                <Statistic title="Social Influence:" value={`${influence.influence}`} />
-                            </Col>
-                            <Col span={8}>
-                                <Statistic title="Total Influence:" value={`${poolSummary?.totalInfluence}`} />
-                            </Col>
-                            <Col span={8}>
-                                <Statistic title="Total Daily Reward:" value={`${poolSummary?.currentDailyOutput}`} />
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
-                            <Col span={8}>
-                                <Statistic title="Referral Count:" value={`${influence.accountReferalCount}`} />
-                            </Col>
-                            <Col span={8}>
-                                <Statistic title="Extension Referral Count:" value={`${influence.pluginReferalCount}`} />
-                            </Col>
-                            {/* <Col span={8}>
-                                <Statistic title="Total Daily Reward:" value={`${poolSummary?.currentDailyOutput}`} />
-                            </Col> */}
-                        </Row>
-                    </>}
-                </>}
-
-                {(!influence?.beginMiningTime || influence?.beginMiningTime == 0) && <>
-                    <div style={{ marginTop: '20px' }}>
-                        <Button type='primary' onClick={handleStartMining}>Start Influence Mining</Button>
+                        {(!influence?.beginMiningTime || influence?.beginMiningTime == 0) && <>
+                            <div className='btn-container'>
+                                <div className='btn active' onClick={handleStartMining}>
+                                    Start Mining
+                                </div>
+                            </div>
+                        </>}
                     </div>
+                    {/* <div className='add-more'></div> */}
+                </div>
+
+                {(influence?.beginMiningTime && influence?.beginMiningTime > 0) && <>
+                    <AD3Balance></AD3Balance>
+
+                    <InfluenceStat influence={influence}></InfluenceStat>
                 </>}
             </>}
         </div>

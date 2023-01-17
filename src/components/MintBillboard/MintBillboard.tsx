@@ -5,6 +5,7 @@ import { EIP5489ForInfluenceMiningContractAddress } from '../../models/parami';
 import EIP5489ForInfluenceMining from '../../contracts/EIP5489ForInfluenceMining.json';
 import './MintBillboard.scss';
 import '../../fonts/NeonRetro.otf';
+import BillboardCommon from '../BillboardCommon/BillboardCommon';
 
 const { Title } = Typography;
 
@@ -25,13 +26,7 @@ function MintBillboard({ }: MintBillboardProps) {
 
             <div className='nft-card'>
                 <div className='content-container'>
-                    <div className='nft-billboard-container' style={{ backgroundImage: 'url(/assets/images/wall_bg.png)' }}>
-                        <div className='neon-wrapper'>
-                            <div className='neon-text'>
-                                COMMON <br /> BILLBOARD
-                            </div>
-                        </div>
-                    </div>
+                    <BillboardCommon />
 
                     <div className='info-container'>
                         <div className='info'>

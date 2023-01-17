@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 import { useNavigate } from "react-router-dom";
 import { Ad3Tx, getAd3Transactions } from '../../services/mining.service';
-import { Table } from 'antd';
+import { ConfigProvider, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
+import './Ad3Transactions.scss';
+
+const { Title } = Typography;
 
 export interface Ad3TransactionsProps { }
 
 function Ad3Transactions({ }: Ad3TransactionsProps) {
     const { address } = useAccount();
+    const {chain} = useNetwork();
     const [transactions, setTransactions] = useState<Ad3Tx[]>();
 
     useEffect(() => {
         if (address) {
-            getAd3Transactions(address).then(res => {
-                console.log('got txs', res);
+            getAd3Transactions(address, chain!.id).then(res => {
                 setTransactions(res);
             })
         }
@@ -45,8 +48,17 @@ function Ad3Transactions({ }: Ad3TransactionsProps) {
     ];
 
     return <>
-        <div>
-            <Table loading={!transactions} dataSource={transactions} columns={columns}></Table>
+        <div className='ad3-txns-container'>
+            <Title level={3}>AD3 Transactions</Title>
+            <ConfigProvider
+                theme={{
+                    token: {
+                        colorPrimary: '#23103A'
+                    }
+                }}
+            >
+                <Table bordered={false} loading={!transactions} dataSource={transactions} columns={columns}></Table>
+            </ConfigProvider>
         </div>
     </>;
 };
