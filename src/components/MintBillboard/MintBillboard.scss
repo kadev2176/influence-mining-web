@@ -4,6 +4,12 @@
   }
 }
 
+@media only screen and (max-width: 991px) {
+  .nft-card {
+    max-width: 300px;
+  }
+}
+
 .nft-card {
   background: #ffffff3c;
   padding: 20px;
@@ -13,23 +19,29 @@
 
   .content-container {
     display: flex;
+    flex-direction: column;
+
+    .billboard {
+      display: flex;
+      justify-content: center;
+    }
 
     .info-container {
-      margin-left: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       flex: 1 1 0%;
+      margin-top: 20px;
 
       .info {
-        .name {
-          font-size: 30px;
-          font-weight: 700;
-        }
+        // .name {
+        //   font-size: 30px;
+        //   font-weight: 700;
+        // }
+        margin-bottom: 10px;
 
         .description {
           font-size: 14px;
-          margin-top: 10px;
         }
       }
 
@@ -81,7 +93,6 @@
     width: 260px;
     height: 260px;
     border-radius: 10px;
-    margin-right: 20px;
     display: flex;
     justify-content: center;
     align-items: center;

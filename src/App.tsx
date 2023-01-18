@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import './App.scss';
 import { Layout, Menu } from 'antd';
-import { useAccount } from 'wagmi'
-import { Link, Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
+import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { getInfluence } from './services/mining.service';
+import { parseUrlParams } from './utils/url.util';
 
 const { Header, Content, Sider } = Layout;
 
@@ -10,7 +12,7 @@ const siderMenuItems = [
   {
     key: 'profile',
     icon: <>
-        <i className="fa-solid fa-user"></i>
+      <i className="fa-solid fa-user"></i>
     </>,
     label: <>
       <Link to={'/profile'}>Profile</Link>
@@ -33,27 +35,52 @@ const siderMenuItems = [
 ];
 
 function App() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const navigate = useNavigate();
+  const { chain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
+  const location = useLocation();
 
   useEffect(() => {
-    if (searchParams.get('oauth_token') && searchParams.get('oauth_verifier')) {
-      window.localStorage.setItem('oauth_token', searchParams.get('oauth_token') as string);
-      window.localStorage.setItem('oauth_verifier', searchParams.get('oauth_verifier') as string);
+    const oauth = parseUrlParams();
+    if (oauth.oauth_token && oauth.oauth_verifier) {
+      window.localStorage.setItem('oauth_token', oauth.oauth_token as string);
+      window.localStorage.setItem('oauth_verifier', oauth.oauth_verifier as string);
       window.close();
-    } else if (!isConnected) {
-      navigate('/auth');
-    } else {
-      navigate('/profile');
     }
-  }, [searchParams, isConnected]);
+  }, []);
+
+  useEffect(() => {
+    if (!isConnected) {
+      navigate('/auth');
+    }
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (address && chain?.id) {
+      getInfluence(address!, chain.id).then(influence => {
+        if (influence?.updatedTime) {
+          navigate('/profile');
+        } else {
+          navigate('/auth');
+        }
+      })
+    }
+  }, [address, chain])
+
+  useEffect(() => {
+    if (chain?.id && chain.id !== 5) {
+      switchNetwork?.(5);
+    }
+  }, [chain])
 
   return (
     <Layout>
       <Header className="header">
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[{ key: '1', label: 'Logo and Name' }]} />
+        <div className='logo'>
+          <img src="/logo-text.svg" style={{ width: '100%' }}></img>
+        </div>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[]} />
       </Header>
       <Layout>
         <Sider width={180} breakpoint='lg' trigger={null} collapsedWidth="0">
@@ -73,7 +100,38 @@ function App() {
           </Content>
 
           <div className='bottom-menu'>
-            {/* add menu items */}
+            <Link to={'/profile'}>
+              <div className={`bottom-menu-item ${location.pathname === '/profile' ? 'active' : ''}`}>
+                <div className='icon'>
+                  <i className="fa-solid fa-user"></i>
+                </div>
+                <div className='label'>
+                  Profile
+                </div>
+              </div>
+            </Link>
+
+            <Link to={'/ad3Tx'}>
+              <div className={`bottom-menu-item ${location.pathname === '/ad3Tx' ? 'active' : ''}`}>
+                <div className='icon'>
+                  <i className="fa-solid fa-money-check-dollar"></i>
+                </div>
+                <div className='label'>
+                  Transactions
+                </div>
+              </div>
+            </Link>
+
+            <Link to={'/influenceTx'}>
+              <div className={`bottom-menu-item ${location.pathname === '/influenceTx' ? 'active' : ''}`}>
+                <div className='icon'>
+                  <i className="fa-solid fa-tower-broadcast"></i>
+                </div>
+                <div className='label'>
+                  Influence
+                </div>
+              </div>
+            </Link>
           </div>
         </Layout>
       </Layout>

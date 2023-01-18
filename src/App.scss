@@ -1,5 +1,13 @@
 .header {
   background: #001529 !important;
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+
+  .logo {
+    width: 110px;
+    height: 100%;
+    display: flex;
+  }
 }
 
 .sider-menu {
@@ -40,6 +48,32 @@
   bottom: 0px;
   left: 0px;
   z-index: 100;
+  display: flex;
+  justify-content: space-around;
+
+  * {
+    color: #ffffff;
+  }
+
+  .bottom-menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 110px;
+    padding: 4px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &.active {
+      background: #2a2f54;
+    }
+
+    .icon {
+      margin-bottom: 4px;
+    }
+
+    .label {}
+  }
 }
 
 @media only screen and (min-width: 991px) {

@@ -22,7 +22,6 @@ function Auth() {
     const { data: ensName } = useEnsName({ address });
     const navigate = useNavigate();
     const { data: userSignature, isError, isLoading, isSuccess, signMessage } = useSignMessage();
-    // const { disconnect } = useDisconnect();
     const [oauthToken, setOauthToken] = useState<string>();
     const [oauthVerifier, setOauthVerifier] = useState<string>();
 
@@ -67,16 +66,7 @@ function Auth() {
             })
         }
     }, [userSignature]);
-
-    useEffect(() => {
-        if (address && chain?.id) {
-            getInfluence(address!, chain.id).then(influence => {
-                if (influence?.updatedTime) {
-                    navigate('/profile');
-                }
-            })
-        }
-    }, [address, chain]);
+    
 
     return <>
         <div className='auth-container'>

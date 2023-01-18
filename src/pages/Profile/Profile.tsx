@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAccount, useNetwork, useContractRead, usePrepareContractWrite, useContractWrite } from 'wagmi';
 import { useNavigate } from "react-router-dom";
 import { Button, Card, Col, Image, notification, Row, Statistic, Typography } from 'antd';
-import { Balance, getAd3Balance, getInfluence, getPoolSummary, Influence, PoolSummary, startMining } from '../../services/mining.service';
+import { Balance, getAd3Balance, getInfluence, getPoolSummary, Influence, PoolSummary, startMining, updateInfluence } from '../../services/mining.service';
 import EIP5489ForInfluenceMining from '../../contracts/EIP5489ForInfluenceMining.json';
 import { EIP5489ForInfluenceMiningContractAddress } from '../../models/parami';
 import { BigNumber } from 'ethers';
@@ -44,12 +44,6 @@ function Profile({ }: ProfileProps) {
         args: [tokenId],
     });
 
-    // useEffect(() => {
-    //     getPoolSummary().then(summary => {
-    //         setPoolSummary(summary);
-    //     })
-    // }, [])
-
     useEffect(() => {
         if (tokenUri) {
             const token = JSON.parse(Buffer.from(tokenUri.slice(29), 'base64').toString())
@@ -79,6 +73,12 @@ function Profile({ }: ProfileProps) {
         }
     }, [address])
 
+    useEffect(() => {
+        if (influence) {
+            updateInfluence(address!, chain!.id);
+        }
+    }, [influence])
+
     const handleStartMining = async () => {
         startMining(address!, chain!.id, hnft.address, hnft.tokenId).then(res => {
             notification.success({
@@ -90,30 +90,33 @@ function Profile({ }: ProfileProps) {
 
     return <>
         <div className='profile-container'>
-            {!nftBalance?.toNumber() && <>
-                <MintBillboard></MintBillboard>
-            </>}
+            <MintBillboard influence={{} as Influence}></MintBillboard>
+            {influence && <>
+                {!nftBalance?.toNumber() && <>
+                    <MintBillboard influence={influence}></MintBillboard>
+                </>}
 
-            {hnft && <>
-                <div className='billboards'>
-                    <div className='billboard-card'>
-                        <BillboardCommon></BillboardCommon>
+                {hnft && <>
+                    <div className='billboards'>
+                        <div className='billboard-card'>
+                            <BillboardCommon></BillboardCommon>
 
-                        {(!influence?.beginMiningTime || influence?.beginMiningTime == 0) && <>
-                            <div className='btn-container'>
-                                <div className='btn active' onClick={handleStartMining}>
-                                    Start Mining
+                            {(!influence?.beginMiningTime || influence?.beginMiningTime == 0) && <>
+                                <div className='btn-container'>
+                                    <div className='btn active' onClick={handleStartMining}>
+                                        Start Mining
+                                    </div>
                                 </div>
-                            </div>
-                        </>}
+                            </>}
+                        </div>
+                        {/* <div className='add-more'></div> */}
                     </div>
-                    {/* <div className='add-more'></div> */}
-                </div>
 
-                {(influence?.beginMiningTime && influence?.beginMiningTime > 0) && <>
-                    <AD3Balance></AD3Balance>
+                    {(influence?.beginMiningTime && influence?.beginMiningTime > 0) && <>
+                        <AD3Balance></AD3Balance>
 
-                    <InfluenceStat influence={influence}></InfluenceStat>
+                        <InfluenceStat influence={influence}></InfluenceStat>
+                    </>}
                 </>}
             </>}
         </div>

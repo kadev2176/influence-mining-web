@@ -98,9 +98,9 @@ export const getAd3Balance = async (address: string) => {
 }
 
 export const getAd3Transactions = async (address: string, chainId: number) => {
-    const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}&chainId=${chainId}`);
-    const txs = await res.json();
-    return txs as Ad3Tx[];
+  const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}&chain_id=${chainId}`);
+  const txs = await res.json();
+  return txs as Ad3Tx[];
 }
 
 export const getInfluence = async (address: string, chainId: number) => {
@@ -119,14 +119,16 @@ export const getInfluence = async (address: string, chainId: number) => {
   //   } as Influence
   // }
   try {
-    const data = JSON.stringify({ wallet: address, chain_id: chainId });
-    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: data
-    });
+
+    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence?wallet=${address}&chain_id=${chainId}`)
+    // const data = JSON.stringify({ wallet: address, chain_id: chainId });
+    // const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence`, {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: data
+    // });
 
     const influence = await resp.json() as Influence;
 
@@ -136,11 +138,23 @@ export const getInfluence = async (address: string, chainId: number) => {
         imageUrl: 'https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg'
       };
     }
-    
+
     return null;
   } catch (_) {
     return null
   }
+}
+
+export const updateInfluence = async (address: string, chainId: number) => {
+  const data = JSON.stringify({ wallet: address, chain_id: chainId });
+  const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  });
+  return await resp.json();
 }
 
 export const getInfluenceTransactions = async (address: string, chainId: number) => {
