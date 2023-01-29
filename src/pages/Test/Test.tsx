@@ -1,6 +1,6 @@
 import { Button, notification } from 'antd';
 import React, { useEffect } from 'react';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import MintBillboard from '../../components/MintBillboard/MintBillboard';
 import { PARAMI_AIRDROP } from '../../models/parami';
 
@@ -8,6 +8,7 @@ export interface TestProps { }
 
 function Test({ }: TestProps) {
     const { address, isConnected } = useAccount();
+    const { disconnect } = useDisconnect();
     const { data: userSignature, isError, isLoading, isSuccess, signMessage } = useSignMessage();
 
     const handleConnectTwitter = async () => {
@@ -34,12 +35,14 @@ function Test({ }: TestProps) {
     }, [userSignature])
 
     return <>
-        <Button onClick={handleConnectTwitter}>
-            Test Connect Twitter
+        <Button onClick={() => {
+            disconnect()
+        }}>
+            Disconnect
         </Button>
         <br></br>
 
-        <MintBillboard influence={{twitterProfileImageUri: ''} as any}></MintBillboard>
+        <MintBillboard influence={{ twitterProfileImageUri: '' } as any}></MintBillboard>
     </>;
 };
 

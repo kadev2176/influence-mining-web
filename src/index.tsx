@@ -45,7 +45,8 @@ root.render(
         theme={{
           token: {
             borderRadius: 10,
-            colorText: '#ffffff'
+            colorText: '#ffffff',
+            colorPrimary: '#A0204C'
           },
         }}
       >

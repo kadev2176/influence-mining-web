@@ -40,12 +40,19 @@ function App() {
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const oauth = parseUrlParams();
-    if (oauth.oauth_token && oauth.oauth_verifier) {
-      window.localStorage.setItem('oauth_token', oauth.oauth_token as string);
-      window.localStorage.setItem('oauth_verifier', oauth.oauth_verifier as string);
+    if (searchParams.get('referer')) {
+      window.localStorage.setItem('referer', searchParams.get('referer') as string);
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    const params = parseUrlParams();
+    if (params.oauth_token && params.oauth_verifier) {
+      window.localStorage.setItem('oauth_token', params.oauth_token as string);
+      window.localStorage.setItem('oauth_verifier', params.oauth_verifier as string);
       window.close();
     }
   }, []);

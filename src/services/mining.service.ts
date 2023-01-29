@@ -56,8 +56,6 @@ export const bindAccount = async (address: string, chainId: number, oauthToken: 
     chainId,
     oauth_token: oauthToken,
     oauth_verifier: oauthVerifier,
-    // sig: signature,
-    // sigPlainText: msg,
     refererWallet: referer
   });
 
@@ -118,14 +116,11 @@ export const getAd3Transactions = async (address: string, chainId: number) => {
 
 export const getInfluence = async (address: string, chainId: number) => {
   const resp = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/influence?wallet=${address}&chain_id=${chainId}`, address);
-
   const influence = await resp.json() as Influence;
 
-  // todo: imageUrl
   if (resp.ok) {
     return {
-      ...influence,
-      imageUrl: 'https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg'
+      ...influence
     };
   }
 

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useWeb3Modal } from "@web3modal/react";
-import { useAccount, useConnect, useDisconnect, useEnsName, useNetwork, useSigner, useSignMessage } from 'wagmi';
-import { Button, notification, Image } from 'antd';
+import { useAccount, useEnsName, useNetwork, useSigner } from 'wagmi';
+import { notification } from 'antd';
 import { bindAccount, getInfluence } from '../../services/mining.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PARAMI_AIRDROP } from '../../models/parami';
 import './Auth.scss';
 
 const ONE_HOUR = 60 * 60 * 1000;
+const ONE_WEEK = 7 * 24 * ONE_HOUR;
 
 const getExpirationTime = () => {
-    return Date.now() + ONE_HOUR;
+    return Date.now() + ONE_WEEK;
 }
 
 const generateSignedMessage = (address: string, expire: number): string => {
@@ -84,7 +85,7 @@ function Auth() {
             window.localStorage.removeItem('oauth_token');
             window.localStorage.removeItem('oauth_verifier');
 
-            bindAccount(address!, chain!.id, oauthToken, oauthVerifier, searchParams.get('referer') ?? '').then(res => {
+            bindAccount(address!, chain!.id, oauthToken, oauthVerifier, window.localStorage.getItem('referer') ?? '').then(res => {
                 if (res.success) {
                     notification.success({
                         message: 'Bind Success!'
