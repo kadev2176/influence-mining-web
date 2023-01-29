@@ -83,67 +83,77 @@ function App() {
   }, [chain])
 
   return (
-    <Layout>
-      <Header className="header">
-        <div className='logo'>
-          <img src="/logo-text.svg" style={{ width: '100%' }}></img>
-        </div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[]} />
-      </Header>
-      <Layout>
-        <Sider width={180} breakpoint='lg' trigger={null} collapsedWidth="0">
-          <Menu
-            mode="inline"
-            className="sider-menu"
-            defaultSelectedKeys={['profile']}
-            style={{ height: '100%', borderRight: 0 }}
-            items={siderMenuItems}
-          />
-        </Sider>
+    <>
+      {location.pathname === '/auth' && <>
+        <Outlet></Outlet>
+      </>}
+      {location.pathname !== '/auth' && <>
         <Layout>
-          <Content
-            className='layout-content'
-          >
-            <Outlet></Outlet>
-          </Content>
+          <Header className="header">
+            <div className='logo'>
+              <img src="/logo-text.svg" style={{ width: '100%' }}></img>
+            </div>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[]} />
+          </Header>
+          <Layout>
+            <Sider width={180} breakpoint='lg' trigger={null} collapsedWidth="0">
+              <Menu
+                mode="inline"
+                className="sider-menu"
+                defaultSelectedKeys={['profile']}
+                style={{ height: '100%', borderRight: 0 }}
+                items={siderMenuItems}
+              />
+            </Sider>
+            <Layout>
+              <Content
+                className='layout-content'
+              >
+                <Outlet></Outlet>
+              </Content>
 
-          <div className='bottom-menu'>
-            <Link to={'/profile'}>
-              <div className={`bottom-menu-item ${location.pathname === '/profile' ? 'active' : ''}`}>
-                <div className='icon'>
-                  <i className="fa-solid fa-user"></i>
-                </div>
-                <div className='label'>
-                  Profile
-                </div>
-              </div>
-            </Link>
+              <div className='bottom-menu'>
+                <Link to={'/profile'}>
+                  <div className={`bottom-menu-item ${location.pathname === '/profile' ? 'active' : ''}`}>
+                    <div className='icon'>
+                      <i className="fa-solid fa-user"></i>
+                    </div>
+                    <div className='label'>
+                      Profile
+                    </div>
+                  </div>
+                </Link>
 
-            <Link to={'/ad3Tx'}>
-              <div className={`bottom-menu-item ${location.pathname === '/ad3Tx' ? 'active' : ''}`}>
-                <div className='icon'>
-                  <i className="fa-solid fa-money-check-dollar"></i>
-                </div>
-                <div className='label'>
-                  Transactions
-                </div>
-              </div>
-            </Link>
+                <Link to={'/ad3Tx'}>
+                  <div className={`bottom-menu-item ${location.pathname === '/ad3Tx' ? 'active' : ''}`}>
+                    <div className='icon'>
+                      <i className="fa-solid fa-money-check-dollar"></i>
+                    </div>
+                    <div className='label'>
+                      Transactions
+                    </div>
+                  </div>
+                </Link>
 
-            <Link to={'/influenceTx'}>
-              <div className={`bottom-menu-item ${location.pathname === '/influenceTx' ? 'active' : ''}`}>
-                <div className='icon'>
-                  <i className="fa-solid fa-tower-broadcast"></i>
-                </div>
-                <div className='label'>
-                  Influence
-                </div>
+                <Link to={'/influenceTx'}>
+                  <div className={`bottom-menu-item ${location.pathname === '/influenceTx' ? 'active' : ''}`}>
+                    <div className='icon'>
+                      <i className="fa-solid fa-tower-broadcast"></i>
+                    </div>
+                    <div className='label'>
+                      Influence
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </Link>
-          </div>
+            </Layout>
+          </Layout>
         </Layout>
-      </Layout>
-    </Layout>
+      </>}
+
+    </>
+
+
   );
 }
 
