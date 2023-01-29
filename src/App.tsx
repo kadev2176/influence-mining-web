@@ -5,6 +5,7 @@ import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { getInfluence } from './services/mining.service';
 import { parseUrlParams } from './utils/url.util';
+import Cookies from 'js-cookie';
 
 const { Header, Content, Sider } = Layout;
 
@@ -40,6 +41,10 @@ function App() {
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const location = useLocation();
+
+  // useEffect(() => {
+  //   Cookies.set('sessionSig', 'kai_signature', { domain: '.parami.io' });
+  // }, [])
 
   useEffect(() => {
     const oauth = parseUrlParams();

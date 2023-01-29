@@ -17,6 +17,7 @@ import InfluenceTransactions from './pages/InfluenceTransactions/InfluenceTransa
 import Auth from './pages/Auth/Auth';
 import { ConfigProvider } from 'antd';
 import Home from './pages/Home/Home';
+import Test from './pages/Test/Test';
 
 // const chains = [arbitrum, mainnet, polygon];
 const chains = [arbitrum, mainnet, polygon, goerli];
@@ -27,7 +28,7 @@ const { provider } = configureChains(chains, [
 ]);
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: modalConnectors({ appName: "web3Modal", chains }),
+  connectors: modalConnectors({ appName: "InfluenceMining", chains }),
   provider,
 });
 
@@ -57,6 +58,7 @@ root.render(
               <Route path="/profile" element={<Profile />} />
               <Route path="/ad3Tx" element={<Ad3Transactions />} />
               <Route path="/influenceTx" element={<InfluenceTransactions />} />
+              <Route path="/test" element={<Test />} />
             </Route>
           </Routes>
         </HashRouter>

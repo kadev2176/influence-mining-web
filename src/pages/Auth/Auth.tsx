@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useWeb3Modal } from "@web3modal/react";
-import { useAccount, useConnect, useEnsName, useNetwork, useSignMessage } from 'wagmi';
+import { useAccount, useConnect, useDisconnect, useEnsName, useNetwork, useSigner, useSignMessage } from 'wagmi';
 import { Button, notification, Image } from 'antd';
 import { bindAccount, getInfluence } from '../../services/mining.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PARAMI_AIRDROP } from '../../models/parami';
 import './Auth.scss';
 
-const generateSignedMessage = (twitter_oauth_verifier: string): string => {
-    return `Parami Influence Mining:
+const ONE_HOUR = 60 * 60 * 1000;
 
-My twitter oauth verifier: ${twitter_oauth_verifier}
-`;
+const getExpirationTime = () => {
+    return Date.now() + ONE_HOUR;
+}
+
+const generateSignedMessage = (address: string, expire: number): string => {
+    return `${address},${expire}`;
+    //     return `Parami Influence Mining:
+
+    // My twitter oauth verifier: ${twitter_oauth_verifier}
+    // `;
 };
 
 function Auth() {
@@ -19,11 +26,12 @@ function Auth() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { address, isConnected } = useAccount();
     const { chain } = useNetwork();
+    const { data: signer } = useSigner();
     const { data: ensName } = useEnsName({ address });
     const navigate = useNavigate();
-    const { data: userSignature, isError, isLoading, isSuccess, signMessage } = useSignMessage();
     const [oauthToken, setOauthToken] = useState<string>();
     const [oauthVerifier, setOauthVerifier] = useState<string>();
+    const [userSignature, setUserSignature] = useState<string>();
 
     const storageHandler = (event: any) => {
         if (event.key === 'oauth_token') {
@@ -40,18 +48,23 @@ function Auth() {
         window.addEventListener('storage', storageHandler);
     }
 
+    const signMessage = async () => {
+        const expire = getExpirationTime();
+        const sig = await signer?.signMessage(generateSignedMessage(address!, expire));
+        // set localStorage
+        window.localStorage.setItem('sessionExpirationTime', `${expire}`);
+        window.localStorage.setItem('sessionSig', `${sig}`);
+
+        setUserSignature(sig);
+    }
+
     useEffect(() => {
         if (oauthToken && oauthVerifier) {
-            signMessage({ message: generateSignedMessage(oauthVerifier) });
             window.removeEventListener('storage', storageHandler);
             window.localStorage.removeItem('oauth_token');
             window.localStorage.removeItem('oauth_verifier');
-        }
-    }, [oauthToken, oauthVerifier])
 
-    useEffect(() => {
-        if (userSignature) {
-            bindAccount(address!, chain!.id, oauthToken!, oauthVerifier!, userSignature, generateSignedMessage(oauthVerifier!), searchParams.get('referer') ?? '').then((res) => {
+            bindAccount(address!, chain!.id, oauthToken, oauthVerifier, searchParams.get('referer') ?? '').then(res => {
                 if (res.success) {
                     notification.success({
                         message: 'Bind Success!'
@@ -65,8 +78,7 @@ function Auth() {
                 })
             })
         }
-    }, [userSignature]);
-    
+    }, [oauthToken, oauthVerifier])
 
     return <>
         <div className='auth-container'>
@@ -76,7 +88,7 @@ function Auth() {
 
             <div className='btn-container'>
                 {!isConnected && <>
-                    <div className='connect-btn active' onClick={() => {
+                    <div className='connect-btn active' onClick={async () => {
                         open();
                     }}>
                         Connect Wallet
@@ -90,9 +102,21 @@ function Auth() {
                         Wallet Connected{ensName ? ` as ${ensName}` : ''}
                     </div>
 
-                    <div className='connect-btn active' onClick={handleConnectTwitter}>
-                        Connect Twitter
-                    </div>
+                    {!userSignature && <>
+                        <div className='connect-btn active' onClick={() => {
+                            signMessage();
+                        }}>
+                            Sign Message
+                        </div>
+
+                        <div className='connect-btn disabled'>Connect Twitter</div>
+                    </>}
+
+                    {userSignature && <>
+                        <div className='connect-btn active' onClick={handleConnectTwitter}>
+                            Connect Twitter
+                        </div>
+                    </>}
                 </>}
             </div>
         </div>

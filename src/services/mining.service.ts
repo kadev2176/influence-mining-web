@@ -1,5 +1,18 @@
 import { PARAMI_AIRDROP } from "../models/parami";
 
+const _fetch = async (input: RequestInfo | URL, address: string, init?: RequestInit) => {
+  const options = init ?? {};
+  return fetch(input, {
+    ...options,
+    headers: {
+      ...options.headers,
+      wallet: address,
+      sessionSig: localStorage.getItem('sessionSig') as string,
+      sessionExpirationTime: localStorage.getItem('sessionExpirationTime') as string
+    }
+  })
+}
+
 export type Balance = {
   total: string;
   withdrawable: string;
@@ -17,7 +30,7 @@ export type Influence = {
   beginMiningTime: number;
   hNFTContractAddr: string;
   hNFTTokenId: string;
-  imageUrl: string;
+  twitterProfileImageUri: string;
 }
 
 export type Ad3Tx = {
@@ -37,18 +50,18 @@ export interface PoolSummary {
   currentDailyOutput: string;
 }
 
-export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, signature: string, msg: string, referer?: string) => {
+export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
   const data = JSON.stringify({
     wallet: address,
     chainId,
     oauth_token: oauthToken,
     oauth_verifier: oauthVerifier,
-    sig: signature,
-    sigPlainText: msg,
+    // sig: signature,
+    // sigPlainText: msg,
     refererWallet: referer
   });
 
-  const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/accounts`, {
+  const resp = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/accounts`, address, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
@@ -78,7 +91,7 @@ export const startMining = async (address: string, chainId: number, hnftContract
       hNFTTokenId: hnftTokenId
     });
 
-    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/beginmining`, {
+    const resp = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/beginmining`, address, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
@@ -92,62 +105,36 @@ export const startMining = async (address: string, chainId: number, hnftContract
 }
 
 export const getAd3Balance = async (address: string) => {
-  const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3?wallet=${address}`);
+  const res = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3?wallet=${address}`, address);
   const balance = await res.json();
   return balance as Balance;
 }
 
 export const getAd3Transactions = async (address: string, chainId: number) => {
-  const res = await fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}&chain_id=${chainId}`);
+  const res = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}&chain_id=${chainId}`, address);
   const txs = await res.json();
   return txs as Ad3Tx[];
 }
 
 export const getInfluence = async (address: string, chainId: number) => {
-  // return null;
-  // if (true) {
-  //   return {
-  //     influence: 500,
-  //     twitFollowerCount: 3,
-  //     twitCountWithHnftTag: 4,
-  //     ad3Balance: 10,
-  //     accountReferalCount: 2,
-  //     pluginReferalCount: 4,
-  //     updatedTime: 170000,
-  //     beginMiningTime: 2000000,
-  //     imageUrl: 'https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg'
-  //   } as Influence
-  // }
-  try {
+  const resp = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/influence?wallet=${address}&chain_id=${chainId}`, address);
 
-    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence?wallet=${address}&chain_id=${chainId}`)
-    // const data = JSON.stringify({ wallet: address, chain_id: chainId });
-    // const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence`, {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: data
-    // });
+  const influence = await resp.json() as Influence;
 
-    const influence = await resp.json() as Influence;
-
-    if (resp.ok) {
-      return {
-        ...influence,
-        imageUrl: 'https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg'
-      };
-    }
-
-    return null;
-  } catch (_) {
-    return null
+  // todo: imageUrl
+  if (resp.ok) {
+    return {
+      ...influence,
+      imageUrl: 'https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg'
+    };
   }
+
+  return null;
 }
 
 export const updateInfluence = async (address: string, chainId: number) => {
   const data = JSON.stringify({ wallet: address, chain_id: chainId });
-  const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence`, {
+  const resp = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/influence`, address, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
@@ -158,16 +145,9 @@ export const updateInfluence = async (address: string, chainId: number) => {
 }
 
 export const getInfluenceTransactions = async (address: string, chainId: number) => {
-  try {
-    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/influence/transactions?wallet=${address}&chain_id=${chainId}`);
-    const txs = await resp.json();
-    return txs as InfluenceTransaction[];
-  } catch (_) {
-    return [
-      { timestamp: 1672386184, type: "referral", diff: 1.3 },
-      { timestamp: 1672386284, type: "tweet", diff: 2.5 },
-    ]
-  }
+  const resp = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/influence/transactions?wallet=${address}&chain_id=${chainId}`, address);
+  const txs = await resp.json();
+  return txs as InfluenceTransaction[];
 }
 
 export const getPoolSummary = async () => {

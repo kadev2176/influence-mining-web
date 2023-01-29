@@ -19,7 +19,7 @@ function MintBillboard({ influence }: MintBillboardProps) {
         address: EIP5489ForInfluenceMiningContractAddress,
         abi: EIP5489ForInfluenceMining.abi,
         functionName: 'mint',
-        args: ['https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU_200x200.jpg']
+        args: [influence.twitterProfileImageUri]
     });
     const { data, isLoading, isSuccess, write: mint } = useContractWrite(config);
 

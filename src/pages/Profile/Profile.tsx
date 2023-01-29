@@ -90,7 +90,6 @@ function Profile({ }: ProfileProps) {
 
     return <>
         <div className='profile-container'>
-            <MintBillboard influence={{} as Influence}></MintBillboard>
             {influence && <>
                 {!nftBalance?.toNumber() && <>
                     <MintBillboard influence={influence}></MintBillboard>
