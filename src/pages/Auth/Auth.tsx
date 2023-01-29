@@ -33,6 +33,26 @@ function Auth() {
     const [oauthVerifier, setOauthVerifier] = useState<string>();
     const [userSignature, setUserSignature] = useState<string>();
 
+    useEffect(() => {
+        if (isConnected) {
+            const sessionExpirationTime = window.localStorage.getItem('sessionExpirationTime');
+            const sig = window.localStorage.getItem('sessionSig');
+            if (sessionExpirationTime && sig && Number(sessionExpirationTime) > Date.now()) {
+                setUserSignature(sig);
+            }
+        }
+    }, [isConnected])
+
+    useEffect(() => {
+        if (userSignature) {
+            getInfluence(address!, chain!.id).then(influence => {
+                if (influence?.updatedTime) {
+                    navigate('/profile');
+                }
+            })
+        }
+    }, [userSignature])
+
     const storageHandler = (event: any) => {
         if (event.key === 'oauth_token') {
             setOauthToken(event.newValue);

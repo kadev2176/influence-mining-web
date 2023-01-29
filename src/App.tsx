@@ -5,7 +5,6 @@ import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { getInfluence } from './services/mining.service';
 import { parseUrlParams } from './utils/url.util';
-import Cookies from 'js-cookie';
 
 const { Header, Content, Sider } = Layout;
 
@@ -42,10 +41,6 @@ function App() {
   const { switchNetwork } = useSwitchNetwork();
   const location = useLocation();
 
-  // useEffect(() => {
-  //   Cookies.set('sessionSig', 'kai_signature', { domain: '.parami.io' });
-  // }, [])
-
   useEffect(() => {
     const oauth = parseUrlParams();
     if (oauth.oauth_token && oauth.oauth_verifier) {
@@ -73,6 +68,7 @@ function App() {
     }
   }, [address, chain])
 
+  // only testnet for now
   useEffect(() => {
     if (chain?.id && chain.id !== 5) {
       switchNetwork?.(5);
