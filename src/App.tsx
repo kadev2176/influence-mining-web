@@ -1,31 +1,33 @@
 import React, { useEffect } from 'react';
 import './App.scss';
-import { NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
-import { useAccount, useNetwork } from 'wagmi'
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Layout, Menu } from 'antd';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
+import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { getInfluence } from './services/mining.service';
+import { parseUrlParams } from './utils/url.util';
 
 const { Header, Content, Sider } = Layout;
 
 const siderMenuItems = [
   {
     key: 'profile',
-    icon: <><UserOutlined /></>,
+    icon: <>
+      <i className="fa-solid fa-user"></i>
+    </>,
     label: <>
       <Link to={'/profile'}>Profile</Link>
     </>
   },
   {
     key: 'ad3Tx',
-    icon: <><NotificationOutlined /></>,
+    icon: <><i className="fa-solid fa-money-check-dollar"></i></>,
     label: <>
       <Link to={'/ad3Tx'}>Transactions</Link>
     </>
   },
   {
     key: 'influenceTx',
-    icon: <><UserOutlined /></>,
+    icon: <><i className="fa-solid fa-tower-broadcast"></i></>,
     label: <>
       <Link to={'/influenceTx'}>Influence</Link>
     </>
@@ -33,57 +35,125 @@ const siderMenuItems = [
 ];
 
 function App() {
-  const { isConnected } = useAccount();
-  const { address } = useAccount();
-  const { chain } = useNetwork();
+  const { isConnected, address } = useAccount();
   const navigate = useNavigate();
+  const { chain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('referer')) {
+      window.localStorage.setItem('referer', searchParams.get('referer') as string);
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    const params = parseUrlParams();
+    if (params.oauth_token && params.oauth_verifier) {
+      window.localStorage.setItem('oauth_token', params.oauth_token as string);
+      window.localStorage.setItem('oauth_verifier', params.oauth_verifier as string);
+      window.close();
+    }
+  }, []);
 
   useEffect(() => {
     if (!isConnected) {
       navigate('/auth');
-    } else if (location.pathname !== '/oauth/twitter') {
-      getInfluence(address!, chain!.id).then(influence => {
-        if (!influence?.updatedTime) {
+    }
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (address && chain?.id) {
+      getInfluence(address!, chain.id).then(influence => {
+        if (influence?.updatedTime) {
+          navigate('/profile');
+        } else {
           navigate('/auth');
         }
       })
     }
-  }, [isConnected])
+  }, [address, chain])
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  // only testnet for now
+  useEffect(() => {
+    if (chain?.id && chain.id !== 5) {
+      switchNetwork?.(5);
+    }
+  }, [chain])
 
   return (
-    <Layout>
-      <Header className="header">
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[{ key: '1', label: 'Logo and Name' }]} />
-      </Header>
-      <Layout>
-        <Sider width={200} style={{ background: colorBgContainer }}>
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['profile']}
-            style={{ height: '100%', borderRight: 0 }}
-            items={siderMenuItems}
-          />
-        </Sider>
-        <Layout style={{ padding: '24px' }}>
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-            }}
-          >
-            <Outlet></Outlet>
-          </Content>
+    <>
+      {location.pathname === '/auth' && <>
+        <Outlet></Outlet>
+      </>}
+      {location.pathname !== '/auth' && <>
+        <Layout>
+          <Header className="header">
+            <div className='logo'>
+              <img src="/logo-text.svg" style={{ width: '100%' }}></img>
+            </div>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[]} />
+          </Header>
+          <Layout>
+            <Sider width={180} breakpoint='lg' trigger={null} collapsedWidth="0">
+              <Menu
+                mode="inline"
+                className="sider-menu"
+                defaultSelectedKeys={['profile']}
+                style={{ height: '100%', borderRight: 0 }}
+                items={siderMenuItems}
+              />
+            </Sider>
+            <Layout>
+              <Content
+                className='layout-content'
+              >
+                <Outlet></Outlet>
+              </Content>
+
+              <div className='bottom-menu'>
+                <Link to={'/profile'}>
+                  <div className={`bottom-menu-item ${location.pathname === '/profile' ? 'active' : ''}`}>
+                    <div className='icon'>
+                      <i className="fa-solid fa-user"></i>
+                    </div>
+                    <div className='label'>
+                      Profile
+                    </div>
+                  </div>
+                </Link>
+
+                <Link to={'/ad3Tx'}>
+                  <div className={`bottom-menu-item ${location.pathname === '/ad3Tx' ? 'active' : ''}`}>
+                    <div className='icon'>
+                      <i className="fa-solid fa-money-check-dollar"></i>
+                    </div>
+                    <div className='label'>
+                      Transactions
+                    </div>
+                  </div>
+                </Link>
+
+                <Link to={'/influenceTx'}>
+                  <div className={`bottom-menu-item ${location.pathname === '/influenceTx' ? 'active' : ''}`}>
+                    <div className='icon'>
+                      <i className="fa-solid fa-tower-broadcast"></i>
+                    </div>
+                    <div className='label'>
+                      Influence
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </Layout>
+          </Layout>
         </Layout>
-      </Layout>
-    </Layout>
+      </>}
+
+    </>
+
+
   );
 }
 

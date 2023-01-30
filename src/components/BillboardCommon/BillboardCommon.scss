@@ -1,0 +1,40 @@
+.nft-billboard-container {
+  width: 260px;
+  height: 260px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: auto 100%;
+  background-color: #00000094;
+  background-blend-mode: multiply;
+  user-select: none;
+
+  .neon-wrapper {
+    box-shadow:
+      0 0 1px 1px #fff7f7,
+      0 0 3px 3px #e97272,
+      0 0 5px 5px #e50b0b,
+
+      inset 0 0 1px 1px #fff7f7,
+      inset 0 0 3px 3px #e97272,
+      inset 0 0 5px 5px #e50b0b,
+    ;
+    border-radius: 1.5rem;
+
+    .neon-text {
+      padding: 15px;
+      font-family: neon;
+      font-size: 40px;
+      color: #fff7f7;
+      text-shadow:
+        0 0 7px #fff7f7,
+        0 0 14px #e97272,
+        0 0 21px #e97272,
+        0 0 28px #e50b0b,
+        0 0 35px #e50b0b,
+        0 0 42px #e50b0b,
+      ;
+    }
+  }
+}

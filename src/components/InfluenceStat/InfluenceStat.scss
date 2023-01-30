@@ -1,0 +1,39 @@
+@import '../../common.scss';
+
+.influence-stat-card {
+  background: $card-background;
+  border-radius: 10px;
+  padding: 10px;
+  color: #ffffff;
+
+  .influence-score {
+    background: #23103A;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    font-weight: 500;
+    
+    .title {
+      font-size: 20px;
+    }
+
+    .value {
+      font-size: 16px;
+      line-height: 18px;
+    }
+  }
+
+  .influence-stat {
+    border: 1px solid #23103A;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+
+    .title {
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+  }
+}

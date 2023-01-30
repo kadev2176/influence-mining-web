@@ -1,0 +1,30 @@
+.page-header {
+  background: #23103A !important;
+}
+
+.header-content {
+  color: white;
+  display: flex;
+
+  .header-logo {
+    margin-right: 100px;
+  }
+
+  .header-menu {
+    display: flex;
+  }
+
+  .menu-item {
+    margin: 0px 20px;
+  }
+}
+
+.page-content {
+  background: #282D4F !important;
+  color: white;
+
+  .section {
+    height: 100px;
+  }
+}
+

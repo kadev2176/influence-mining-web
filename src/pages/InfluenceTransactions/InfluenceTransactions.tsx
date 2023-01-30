@@ -1,9 +1,12 @@
-import { Table } from 'antd';
+import { ConfigProvider, Table, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi';
 import { getInfluenceTransactions, InfluenceTransaction } from '../../services/mining.service';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
+import './InfluenceTransactions.scss';
+
+const { Title } = Typography;
 
 export interface InfluenceTransactionsProps { }
 
@@ -44,8 +47,17 @@ function InfluenceTransactions({ }: InfluenceTransactionsProps) {
     ];
 
     return <>
-        <div>
-            <Table loading={!transactions} dataSource={transactions} columns={columns}></Table>
+        <div className='influence-txns-container'>
+            <Title level={3}>Social Influence</Title>
+            <ConfigProvider
+                theme={{
+                    token: {
+                        colorPrimary: '#23103A'
+                    }
+                }}
+            >
+                <Table bordered={false} loading={!transactions} dataSource={transactions} columns={columns}></Table>
+            </ConfigProvider>
         </div>
     </>;
 };

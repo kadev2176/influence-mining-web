@@ -10,13 +10,14 @@ import {
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { arbitrum, mainnet, polygon, goerli } from "wagmi/chains";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import TwitterOauth from './pages/TwitterOauth/TwitterOauth';
+import { BrowserRouter, Routes, Route, Navigate, HashRouter } from "react-router-dom";
 import Profile from './pages/Profile/Profile';
 import Ad3Transactions from './pages/Ad3Transactions/Ad3Transactions';
 import InfluenceTransactions from './pages/InfluenceTransactions/InfluenceTransactions';
 import Auth from './pages/Auth/Auth';
 import { ConfigProvider } from 'antd';
+import Home from './pages/Home/Home';
+import Test from './pages/Test/Test';
 
 // const chains = [arbitrum, mainnet, polygon];
 const chains = [arbitrum, mainnet, polygon, goerli];
@@ -27,7 +28,7 @@ const { provider } = configureChains(chains, [
 ]);
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: modalConnectors({ appName: "web3Modal", chains }),
+  connectors: modalConnectors({ appName: "InfluenceMining", chains }),
   provider,
 });
 
@@ -43,22 +44,25 @@ root.render(
       <ConfigProvider
         theme={{
           token: {
-            colorPrimary: '#F4801A',
-            borderRadius: 10
+            borderRadius: 10,
+            colorText: '#ffffff',
+            colorPrimary: '#A0204C'
           },
         }}
       >
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
+            <Route path='/home' element={<Home/>}></Route>
+            
             <Route path="/" element={<App />}>
               <Route path="/auth" element={<Auth />} />
-              <Route path="/oauth/twitter" element={<TwitterOauth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/ad3Tx" element={<Ad3Transactions />} />
               <Route path="/influenceTx" element={<InfluenceTransactions />} />
+              <Route path="/test" element={<Test />} />
             </Route>
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </ConfigProvider>
     </WagmiConfig>
 
