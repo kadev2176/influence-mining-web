@@ -1,0 +1,82 @@
+.nft-billboard-container.rare {
+  width: 260px;
+  height: 260px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: auto 100%;
+  background-color: #00000094;
+  background-blend-mode: multiply;
+  user-select: none;
+
+  .neon-wrapper {
+    border-radius: 1.5rem;
+    animation: pulsate-border 0.11s ease-in-out infinite alternate;
+
+    .neon-text {
+      padding: 15px;
+      font-family: neon;
+      font-size: 40px;
+      color: #fafff7;
+      animation: pulsate 0.11s ease-in-out infinite alternate;
+    }
+  }
+
+  &.rare {
+    .neon-wrapper {
+      border-radius: 1.5rem;
+      animation: pulsate-border 0.11s ease-in-out infinite alternate;
+    }
+  }
+}
+
+@keyframes pulsate-border {
+  100% {
+    box-shadow:
+      0 0 1px 1px #fafff7,
+      0 0 3px 3px #ace972,
+      0 0 5px 5px #69e50b,
+
+      inset 0 0 1px 1px #fafff7,
+      inset 0 0 3px 3px #ace972,
+      inset 0 0 5px 5px #69e50b,
+    ;
+  }
+
+  0% {
+    box-shadow:
+      0 0 1px 1px #fafff7,
+      0 0 3px 2.8px #ace972,
+      0 0 5px 4.8px #69e50b,
+
+      inset 0 0 1px 1px #fafff7,
+      inset 0 0 3px 2.8px #ace972,
+      inset 0 0 5px 4.6px #69e50b,
+    ;
+  }
+}
+
+@keyframes pulsate {
+  100% {
+    text-shadow:
+      0 0 7px #fafff7,
+      0 0 14px #ace972,
+      0 0 21px #ace972,
+      0 0 28px #69e50b,
+      0 0 35px #69e50b,
+      0 0 42px #69e50b,
+    ;
+  }
+
+  0% {
+    text-shadow:
+      0 0 7px #fafff7,
+      0 0 13px #ace972,
+      0 0 19px #ace972,
+      0 0 25px #69e50b,
+      0 0 30px #69e50b,
+      0 0 35px #69e50b,
+    ;
+  }
+}

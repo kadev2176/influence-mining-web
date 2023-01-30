@@ -18,6 +18,7 @@ import Auth from './pages/Auth/Auth';
 import { ConfigProvider } from 'antd';
 import Home from './pages/Home/Home';
 import Test from './pages/Test/Test';
+import MintBillboard from './components/MintBillboard/MintBillboard';
 
 // const chains = [arbitrum, mainnet, polygon];
 const chains = [arbitrum, mainnet, polygon, goerli];
@@ -56,6 +57,7 @@ root.render(
             
             <Route path="/" element={<App />}>
               <Route path="/auth" element={<Auth />} />
+              <Route path="/market" element={<MintBillboard />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/ad3Tx" element={<Ad3Transactions />} />
               <Route path="/influenceTx" element={<InfluenceTransactions />} />

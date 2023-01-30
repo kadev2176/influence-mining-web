@@ -8,9 +8,11 @@ import { parseUrlParams } from './utils/url.util';
 
 const { Header, Content, Sider } = Layout;
 
-const siderMenuItems = [
+const menuItems = [
   {
     key: 'profile',
+    name: 'Profile',
+    path: '/profile',
     icon: <>
       <i className="fa-solid fa-user"></i>
     </>,
@@ -20,6 +22,8 @@ const siderMenuItems = [
   },
   {
     key: 'ad3Tx',
+    name: 'Transactions',
+    path: '/ad3Tx',
     icon: <><i className="fa-solid fa-money-check-dollar"></i></>,
     label: <>
       <Link to={'/ad3Tx'}>Transactions</Link>
@@ -27,9 +31,20 @@ const siderMenuItems = [
   },
   {
     key: 'influenceTx',
+    name: 'Influence',
+    path: '/influenceTx',
     icon: <><i className="fa-solid fa-tower-broadcast"></i></>,
     label: <>
       <Link to={'/influenceTx'}>Influence</Link>
+    </>
+  },
+  {
+    key: 'market',
+    name: 'Market',
+    path: '/market',
+    icon: <><i className="fa-solid fa-store"></i></>,
+    label: <>
+      <Link to={'/market'}>Market</Link>
     </>
   }
 ];
@@ -102,7 +117,7 @@ function App() {
                 className="sider-menu"
                 defaultSelectedKeys={['profile']}
                 style={{ height: '100%', borderRight: 0 }}
-                items={siderMenuItems}
+                items={menuItems}
               />
             </Sider>
             <Layout>
@@ -113,38 +128,20 @@ function App() {
               </Content>
 
               <div className='bottom-menu'>
-                <Link to={'/profile'}>
-                  <div className={`bottom-menu-item ${location.pathname === '/profile' ? 'active' : ''}`}>
-                    <div className='icon'>
-                      <i className="fa-solid fa-user"></i>
-                    </div>
-                    <div className='label'>
-                      Profile
-                    </div>
-                  </div>
-                </Link>
-
-                <Link to={'/ad3Tx'}>
-                  <div className={`bottom-menu-item ${location.pathname === '/ad3Tx' ? 'active' : ''}`}>
-                    <div className='icon'>
-                      <i className="fa-solid fa-money-check-dollar"></i>
-                    </div>
-                    <div className='label'>
-                      Transactions
-                    </div>
-                  </div>
-                </Link>
-
-                <Link to={'/influenceTx'}>
-                  <div className={`bottom-menu-item ${location.pathname === '/influenceTx' ? 'active' : ''}`}>
-                    <div className='icon'>
-                      <i className="fa-solid fa-tower-broadcast"></i>
-                    </div>
-                    <div className='label'>
-                      Influence
-                    </div>
-                  </div>
-                </Link>
+                {menuItems.map(item => {
+                  return <>
+                    <Link to={item.path} key={item.key}>
+                      <div className={`bottom-menu-item ${location.pathname === item.path ? 'active' : ''}`}>
+                        <div className='icon'>
+                          {item.icon}
+                        </div>
+                        <div className='label'>
+                          {item.name}
+                        </div>
+                      </div>
+                    </Link>
+                  </>
+                })}
               </div>
             </Layout>
           </Layout>

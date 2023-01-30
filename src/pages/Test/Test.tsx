@@ -42,7 +42,7 @@ function Test({ }: TestProps) {
         </Button>
         <br></br>
 
-        <MintBillboard influence={{ twitterProfileImageUri: '' } as any}></MintBillboard>
+        <MintBillboard></MintBillboard>
     </>;
 };
 

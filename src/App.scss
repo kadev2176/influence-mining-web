@@ -59,7 +59,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 110px;
+    width: 90px;
     padding: 4px;
     border-radius: 8px;
     cursor: pointer;
@@ -80,4 +80,9 @@
   .bottom-menu {
     display: none;
   }
+}
+
+@font-face {
+  font-family: neon;
+  src: url(./fonts/NeonRetro.otf);
 }
