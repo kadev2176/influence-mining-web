@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi'
-import { useNavigate } from "react-router-dom";
 import { Ad3Tx, getAd3Transactions } from '../../services/mining.service';
-import { ConfigProvider, Table, Typography } from 'antd';
+import { Button, ConfigProvider, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import './Ad3Transactions.scss';
@@ -13,7 +12,7 @@ export interface Ad3TransactionsProps { }
 
 function Ad3Transactions({ }: Ad3TransactionsProps) {
     const { address } = useAccount();
-    const {chain} = useNetwork();
+    const { chain } = useNetwork();
     const [transactions, setTransactions] = useState<Ad3Tx[]>();
 
     useEffect(() => {
@@ -23,6 +22,11 @@ function Ad3Transactions({ }: Ad3TransactionsProps) {
             })
         }
     }, [address]);
+
+    const claimAd3 = async (txId: string) => {
+        // get sig of withdraw tx id
+        // claim ad3 on eth
+    }
 
     const columns: ColumnsType<Ad3Tx> = [
         {
@@ -42,7 +46,15 @@ function Ad3Transactions({ }: Ad3TransactionsProps) {
             title: 'Change',
             key: 'diff',
             render: (_, record) => {
-                return <>{`${record.diff}`}</>
+                return <>
+                    {`${record.diff}`}
+                    
+                    {record.type === 'withdraw' && <>
+                        <Button type='primary' onClick={() => {
+                            claimAd3(record.txId);
+                        }}>Claim</Button>
+                    </>}
+                </>
             }
         },
     ];

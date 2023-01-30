@@ -1,7 +1,8 @@
 import { Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { Balance, getAd3Balance } from '../../services/mining.service';
+import WithdrawAd3Modal from '../WithdrawAd3Modal/WithdrawAd3Modal';
 import './AD3Balance.scss';
 
 const { Title } = Typography;
@@ -10,14 +11,18 @@ export interface AD3BalanceProps { }
 
 function AD3Balance({ }: AD3BalanceProps) {
     const { address } = useAccount();
+    const { chain } = useNetwork();
     const [balance, setBalance] = useState<Balance>();
+    const [withdrawModal, setWithdrawModal] = useState<boolean>(false);
+
     useEffect(() => {
-        if (address) {
-            getAd3Balance(address).then(res => {
+        if (address && chain?.id) {
+            getAd3Balance(address, chain.id).then(res => {
                 setBalance(res);
             });
         }
-    }, [address])
+    }, [address, chain])
+
     return <>
         <div className='balance-container'>
             <Title level={3}>Balance</Title>
@@ -48,6 +53,13 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <div className='balance'>{balance.withdrawable}</div>
                                     <div className='unit'>$AD3</div>
                                 </Col>
+                                <Col className='action'>
+                                    <div>
+                                        <div className='action-btn active' onClick={() => {
+                                            setWithdrawModal(true);
+                                        }}>Withdraw</div>
+                                    </div>
+                                </Col>
                             </Row>
                             <Row justify="space-between" className='sub-balance-row'>
                                 <Col className='label'>
@@ -62,9 +74,14 @@ function AD3Balance({ }: AD3BalanceProps) {
                         </Col>
                     </Row>
                 </>}
-
             </div>
         </div>
+
+        {withdrawModal && <>
+            <WithdrawAd3Modal onCancel={() => {
+                setWithdrawModal(false);
+            }}></WithdrawAd3Modal>
+        </>}
     </>;
 };
 

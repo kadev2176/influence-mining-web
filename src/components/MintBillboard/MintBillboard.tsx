@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row, Typography, Spin } from 'antd';
 import './MintBillboard.scss';
-import '../../fonts/NeonRetro.otf';
 import BillboardCommon from '../BillboardCommon/BillboardCommon';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useInfluence } from '../../hooks/useInfluence';
