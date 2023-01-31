@@ -3,14 +3,13 @@ import { EIP5489ForInfluenceMiningContractAddress } from "../models/parami";
 import EIP5489ForInfluenceMining from '../contracts/EIP5489ForInfluenceMining.json';
 
 export const useMintBillboard = (level: number | undefined, imageUrl: string) => {
-  // todo: mint at level
   const { config } = usePrepareContractWrite({
     address: EIP5489ForInfluenceMiningContractAddress,
     abi: EIP5489ForInfluenceMining.abi,
     functionName: 'mint',
-    args: [imageUrl]
+    args: [imageUrl, level]
   });
-  const { data, isLoading: writeLoading, write: mint } = useContractWrite(config);
+  const { data, isLoading: writeLoading, write: mint, isError } = useContractWrite(config);
   const { isLoading: waitTxLoading, isSuccess: mintSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
@@ -18,6 +17,7 @@ export const useMintBillboard = (level: number | undefined, imageUrl: string) =>
   return {
     mint,
     isLoading: writeLoading || waitTxLoading,
-    isSuccess: mintSuccess
+    isSuccess: mintSuccess,
+    isError
   }
 }

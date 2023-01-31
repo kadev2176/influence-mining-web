@@ -38,6 +38,13 @@ export const useHNFT = () => {
     args: [tokenId],
   });
 
+  const { data: level } = useContractRead<unknown[], string, string>({
+    address: EIP5489ForInfluenceMiningContractAddress,
+    abi: EIP5489ForInfluenceMining.abi,
+    functionName: 'token2Level',
+    args: [tokenId],
+  });
+
   const token = tokenUri ? JSON.parse(Buffer.from(tokenUri.slice(29), 'base64').toString()) : {}
 
   const hnft: HNFT = {
@@ -45,7 +52,7 @@ export const useHNFT = () => {
     tokenId: tokenId?.toString(),
     address: EIP5489ForInfluenceMiningContractAddress,
     balance: nftBalance?.toNumber() ?? 0,
-    level: 0
+    level
   };
 
   return hnft;

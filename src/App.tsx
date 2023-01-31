@@ -81,9 +81,7 @@ function App() {
   useEffect(() => {
     if (address && chain?.id) {
       getInfluence(address!, chain.id).then(influence => {
-        if (influence?.updatedTime) {
-          navigate('/profile');
-        } else {
+        if (!influence?.updatedTime) {
           navigate('/auth');
         }
       })
@@ -108,14 +106,13 @@ function App() {
             <div className='logo'>
               <img src="/logo-text.svg" style={{ width: '100%' }}></img>
             </div>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={[]} />
           </Header>
           <Layout>
             <Sider width={180} breakpoint='lg' trigger={null} collapsedWidth="0">
               <Menu
                 mode="inline"
                 className="sider-menu"
-                defaultSelectedKeys={['profile']}
+                defaultSelectedKeys={[location.pathname.slice(1)]}
                 style={{ height: '100%', borderRight: 0 }}
                 items={menuItems}
               />

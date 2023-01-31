@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Typography, Spin } from 'antd';
+import { Col, Row, Typography, Spin, notification } from 'antd';
 import './MintBillboard.scss';
 import BillboardCommon from '../BillboardCommon/BillboardCommon';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useInfluence } from '../../hooks/useInfluence';
 import { useMintBillboard } from '../../hooks/useMintBillboard';
 import { useUpgradeBillboard } from '../../hooks/useUpgradeBillboard';
+import { useBillboardPrices } from '../../hooks/useBillboardPrices';
+import { BigNumber } from 'ethers';
+import { useApproveAD3 } from '../../hooks/useApproveAD3';
 
 const { Title } = Typography;
 
@@ -45,10 +48,26 @@ const BillboardOptions = [
 function MintBillboard() {
     const [mintLevel, setMintLevel] = useState<number>();
     const [upgradeToLevel, setUpgradeToLevel] = useState<number>();
+    const [price, setPrice] = useState<string>();
     const hnft = useHNFT();
     const { influence } = useInfluence();
-    const { mint, isSuccess: mintSuccess, isLoading: mintLoading } = useMintBillboard(mintLevel, influence?.twitterProfileImageUri ?? ''); // default image?
-    const { upgradeBillboardLevel, isSuccess: upgradeSuccess, isLoading: upgradeLoading } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
+    const { mint, isSuccess: mintSuccess, isLoading: mintLoading, isError: mintError } = useMintBillboard(mintLevel, influence?.twitterProfileImageUri ?? ''); // default image?
+    const { upgradeBillboardLevel, isSuccess: upgradeSuccess, isLoading: upgradeLoading, isError: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
+    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, isError: approveError } = useApproveAD3(price);
+
+    const clearState = () => {
+        setMintLevel(undefined);
+        setUpgradeToLevel(undefined);
+        setPrice(undefined);
+    }
+
+    useEffect(() => {
+        if (approveError || mintError || upgradeError) {
+            clearState();
+        }
+    }, [approveError, mintError, upgradeError])
+
+    const prices = useBillboardPrices();
 
     useEffect(() => {
         if (mintSuccess || upgradeSuccess) {
@@ -57,20 +76,40 @@ function MintBillboard() {
     }, [mintSuccess, upgradeSuccess]);
 
     useEffect(() => {
-        if (mintLevel !== undefined && mint) {
-            mint();
+        if (upgradeToLevel !== undefined) {
+            const priceDiff = BigNumber.from(prices[upgradeToLevel]).sub(prices[hnft.level!]).toString();
+            setPrice(priceDiff);
         }
-    }, [mintLevel, mint])
+    }, [upgradeToLevel])
 
     useEffect(() => {
-        if (upgradeToLevel !== undefined && upgradeBillboardLevel) {
+        if (price && approve) {
+            approve();
+        }
+    }, [price])
+
+    useEffect(() => {
+        if (upgradeToLevel !== undefined && upgradeBillboardLevel && approveSuccess) {
             upgradeBillboardLevel();
         }
-    }, [upgradeToLevel, upgradeBillboardLevel])
+    }, [upgradeToLevel, approveSuccess]);
 
     useEffect(() => {
-        console.log('hnft', hnft);
-    }, [hnft])
+        if (mintLevel !== undefined) {
+            const price = prices[mintLevel];
+            if (Number(price) > 0) {
+                setPrice(price);
+            } else {
+                mint?.();
+            }
+        }
+    }, [mintLevel])
+
+    useEffect(() => {
+        if (mintLevel !== undefined && mint && approveSuccess) {
+            mint();
+        }
+    }, [mintLevel, approveSuccess]);
 
     const billboards = BillboardOptions.map(billboard => {
         return <>
@@ -89,7 +128,14 @@ function MintBillboard() {
                             </div>
                             <div className='price'>
                                 <div className='price-title'>Price:</div>
-                                <div className='price-value'>{billboard.price}</div>
+                                <div className='price-value'>
+                                    {Number(prices[billboard.level]) > 0 && <>
+                                        {prices[billboard.level]} AD3
+                                    </>}
+                                    {Number(prices[billboard.level]) === 0 && <>
+                                        Free
+                                    </>}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -100,7 +146,7 @@ function MintBillboard() {
                                 setMintLevel(billboard.level);
                             }}>Mint</div>
                         </>}
-                        {hnft?.balance && hnft?.balance > 0 && <>
+                        {!!hnft?.balance && hnft?.balance > 0 && <>
                             {hnft.level! >= billboard.level && <>
                                 <div className='btn disabled'>Owned</div>
                             </>}
@@ -117,7 +163,7 @@ function MintBillboard() {
     });
 
     return <>
-        <Spin spinning={mintLoading || upgradeLoading}>
+        <Spin spinning={mintLoading || upgradeLoading || approveLoading}>
             <div className='mint-billboard-container'>
                 <Title level={3} className='title'>Choose Your Billboard</Title>
 
