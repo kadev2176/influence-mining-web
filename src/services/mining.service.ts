@@ -37,7 +37,7 @@ export type Ad3Tx = {
   txId: string;
   timestamp: number;
   type: string;
-  diff: bigint;
+  diff: number;
 }
 
 export type InfluenceTransaction = {
@@ -49,6 +49,11 @@ export type InfluenceTransaction = {
 export interface PoolSummary {
   totalInfluence: string;
   currentDailyOutput: string;
+}
+
+export interface WithdrawAd3Signature {
+  signature: string;
+  nonce: number;
 }
 
 export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
@@ -152,6 +157,19 @@ export const getPoolSummary = async () => {
   return summary as PoolSummary;
 }
 
-export const generateWithdrawSignature = async () => {
-  return 'withdraw-sig';
+export const generateWithdrawSignature = async (address: string, chainId: number, amount: string) => {
+  return {
+    signature: `withdraw-sig-${address}-${chainId}-${amount}`,
+    nonce: 1
+  } as WithdrawAd3Signature;
+}
+
+export const getWithdrawInfoOfTxId = async (txId: string) => {
+  return {
+    amount: '100',
+    sig: {
+      signature: '123-123',
+      nonce: 2
+    } as WithdrawAd3Signature
+  };
 }

@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
 
     img {
@@ -26,7 +26,6 @@
   }
 
   .ad3-input {
-    height: 100%;
     margin: 4px 10px 4px 0;
 
     input {
@@ -35,6 +34,25 @@
       background: none;
       outline: transparent;
       font-size: 20px;
+      width: 90%;
+    }
+  }
+}
+
+.balance {
+  display: flex;
+
+  .value {
+    margin-right: 8px;
+  }
+
+  .btn {
+    font-weight: 600;
+    color: #cf4172;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
     }
   }
 }

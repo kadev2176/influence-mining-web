@@ -9,6 +9,8 @@ import { useUpgradeBillboard } from '../../hooks/useUpgradeBillboard';
 import { useBillboardPrices } from '../../hooks/useBillboardPrices';
 import { BigNumber } from 'ethers';
 import { useApproveAD3 } from '../../hooks/useApproveAD3';
+import { formatBalance } from '@polkadot/util';
+import { formatAd3Amount } from '../../utils/format.util';
 
 const { Title } = Typography;
 
@@ -17,31 +19,26 @@ const BillboardOptions = [
         level: 0,
         name: 'Common Billboard',
         description: 'Entry level billboard. Monetize your social influence for free.',
-        price: 'Free',
     },
     {
         level: 1,
         name: 'Uncommon Billboard',
         description: 'Earn AD3 1.2x faster with this uncommon billboard.',
-        price: '50 AD3'
     },
     {
         level: 2,
         name: 'Rare Billboard',
         description: 'Earn AD3 1.4x faster with this rare billboard.',
-        price: '100 AD3'
     },
     {
         level: 3,
         name: 'Epic Billboard',
         description: 'Earn AD3 1.6x faster with this epic billboard.',
-        price: '150 AD3'
     },
     {
         level: 4,
         name: 'Legendary Billboard',
         description: 'Earn AD3 1.8x faster with this epic billboard.',
-        price: '200 AD3'
     }
 ]
 
@@ -130,7 +127,7 @@ function MintBillboard() {
                                 <div className='price-title'>Price:</div>
                                 <div className='price-value'>
                                     {Number(prices[billboard.level]) > 0 && <>
-                                        {prices[billboard.level]} AD3
+                                        {formatAd3Amount(prices[billboard.level])} AD3
                                     </>}
                                     {Number(prices[billboard.level]) === 0 && <>
                                         Free

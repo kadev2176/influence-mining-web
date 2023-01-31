@@ -5,6 +5,8 @@ import { Button, ConfigProvider, Table, Typography } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import './Ad3Transactions.scss';
+import WithdrawAd3Modal from '../../components/WithdrawAd3Modal/WithdrawAd3Modal';
+import { formatAd3Amount } from '../../utils/format.util';
 
 const { Title } = Typography;
 
@@ -14,19 +16,18 @@ function Ad3Transactions({ }: Ad3TransactionsProps) {
     const { address } = useAccount();
     const { chain } = useNetwork();
     const [transactions, setTransactions] = useState<Ad3Tx[]>();
+    const [withdrawTxId, setWithdrawTxId] = useState<string>();
+
+    const fetchTx = async (address: string, chainId: number) => {
+        const txs = await getAd3Transactions(address, chainId);
+        setTransactions(txs);
+    }
 
     useEffect(() => {
         if (address) {
-            getAd3Transactions(address, chain!.id).then(res => {
-                setTransactions(res);
-            })
+            fetchTx(address, chain!.id);
         }
     }, [address]);
-
-    const claimAd3 = async (txId: string) => {
-        // get sig of withdraw tx id
-        // claim ad3 on eth
-    }
 
     const columns: ColumnsType<Ad3Tx> = [
         {
@@ -46,12 +47,13 @@ function Ad3Transactions({ }: Ad3TransactionsProps) {
             title: 'Change',
             key: 'diff',
             render: (_, record) => {
+                // todo: can claim or not
                 return <>
-                    {`${record.diff}`}
-                    
+                    {formatAd3Amount(`${record.diff}`)}
+
                     {record.type === 'withdraw' && <>
                         <Button type='primary' onClick={() => {
-                            claimAd3(record.txId);
+                            setWithdrawTxId(record.txId);
                         }}>Claim</Button>
                     </>}
                 </>
@@ -72,6 +74,18 @@ function Ad3Transactions({ }: Ad3TransactionsProps) {
                 <Table bordered={false} loading={!transactions} dataSource={transactions} columns={columns}></Table>
             </ConfigProvider>
         </div>
+
+        {withdrawTxId && <>
+            <WithdrawAd3Modal
+                onCancel={() => {
+                    setWithdrawTxId('');
+                }}
+                onSuccess={() => {
+                    setWithdrawTxId('');
+                    fetchTx(address!, chain!.id);
+                }}
+            ></WithdrawAd3Modal>
+        </>}
     </>;
 };
 
