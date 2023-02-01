@@ -78,29 +78,5 @@
         color: #b7b7b7;
       }
     }
-
-    .action {
-      .action-btn {
-        padding: 4px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 100px;
-        border: none;
-        background: linear-gradient(135deg, #A0204C 0%, #A0204C 10%, #FF6C00 100%);
-        color: rgb(255, 255, 255);
-        opacity: 0.8;
-        font-weight: 700;
-  
-        &.disabled {
-          opacity: 0.4;
-        }
-    
-        &.active:hover {
-          opacity: 1;
-          cursor: pointer;     
-        }
-      }
-    }
   }
 }

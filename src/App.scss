@@ -76,6 +76,32 @@
   }
 }
 
+.ant-btn.ant-btn-primary {
+  padding: 4px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  border: none;
+  background: linear-gradient(135deg, #A0204C 0%, #A0204C 10%, #FF6C00 100%);
+  color: rgb(255, 255, 255);
+  opacity: 0.8;
+  font-weight: 700;
+
+  &:disabled {
+    opacity: 0.4;
+  }
+
+  &.ant-btn-loading {
+    opacity: 0.6;
+  }
+  
+  &:not(:disabled):not(.ant-btn-loading):hover {
+    opacity: 1;
+    cursor: pointer;
+  }
+}
+
 @media only screen and (min-width: 991px) {
   .bottom-menu {
     display: none;

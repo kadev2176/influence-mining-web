@@ -70,13 +70,15 @@ function WithdrawAd3Modal({ onCancel, onSuccess, withdrawTxId, withdrawableAmoun
             title="Withdraw"
             onCancel={() => { onCancel() }}
             footer={[
-                <Button key="submit" type="primary" loading={loading || isLoading}
-                    disabled={!amount || BigInt(inputFloatStringToAmount(amount)) > BigInt(withdrawableAmount ?? '0')}
-                    onClick={() => {
-                        handleWithdraw();
-                    }}>
-                    Submit
-                </Button>
+                <div className='submit-btn-container'>
+                    <Button key="submit" type="primary" loading={loading || isLoading}
+                        disabled={!amount || BigInt(inputFloatStringToAmount(amount)) > BigInt(withdrawableAmount ?? '0')}
+                        onClick={() => {
+                            handleWithdraw();
+                        }}>
+                        Submit
+                    </Button>
+                </div>
             ]}
         >
             <Row className='input-row'>

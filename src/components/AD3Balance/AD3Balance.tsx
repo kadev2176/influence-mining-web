@@ -1,4 +1,4 @@
-import { Col, Row, Typography } from 'antd';
+import { Button, Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi';
 import { Balance, getAd3Balance } from '../../services/mining.service';
@@ -59,9 +59,9 @@ function AD3Balance({ }: AD3BalanceProps) {
                                 </Col>
                                 <Col className='action'>
                                     <div>
-                                        <div className='action-btn active' onClick={() => {
+                                        <Button type='primary' onClick={() => {
                                             setWithdrawModal(true);
-                                        }}>Withdraw</div>
+                                        }}>Withdraw</Button>
                                     </div>
                                 </Col>
                             </Row>
