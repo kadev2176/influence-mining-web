@@ -40,7 +40,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  <>
     <WagmiConfig client={wagmiClient}>
       <ConfigProvider
         theme={{
@@ -53,8 +53,8 @@ root.render(
       >
         <HashRouter>
           <Routes>
-            <Route path='/home' element={<Home/>}></Route>
-            
+            <Route path='/home' element={<Home />}></Route>
+
             <Route path="/" element={<App />}>
               <Route path="/auth" element={<Auth />} />
               <Route path="/market" element={<MintBillboard />} />
@@ -73,5 +73,5 @@ root.render(
       projectId="2e586b0807500a0da3a4f7b66418295e"
       ethereumClient={ethereumClient}
     />
-  </React.StrictMode>
+  </>
 );

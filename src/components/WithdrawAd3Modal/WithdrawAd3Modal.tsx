@@ -2,7 +2,7 @@ import { Button, Modal, Row, Col } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi';
 import { useWithdrawAD3 } from '../../hooks/useWithdrawAD3';
-import { generateWithdrawSignature, getWithdrawInfoOfTxId, WithdrawAd3Signature } from '../../services/mining.service';
+import { generateWithdrawSignature, getWithdrawSignatureOfTxId, WithdrawAd3Signature } from '../../services/mining.service';
 import { amountToFloatString, formatAd3Amount, inputFloatStringToAmount } from '../../utils/format.util';
 import './WithdrawAd3Modal.scss';
 
@@ -19,22 +19,29 @@ function WithdrawAd3Modal({ onCancel, onSuccess, withdrawTxId, withdrawableAmoun
     const [amount, setAmount] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false);
     const [withdrawSig, setWithdrawSig] = useState<WithdrawAd3Signature>();
-    const { withdraw, isError, isLoading, isSuccess } = useWithdrawAD3(inputFloatStringToAmount(amount, 18), withdrawSig?.nonce, withdrawSig?.signature);
+    const { withdraw, isError, isLoading, isSuccess } = useWithdrawAD3(withdrawSig?.amount, withdrawSig?.nounce, withdrawSig?.sig);
 
     useEffect(() => {
         if (withdrawTxId) {
             setLoading(true);
-            getWithdrawInfoOfTxId(withdrawTxId).then(res => {
-                setAmount(res.amount);
-                setWithdrawSig(res.sig);
-            })
+            getWithdrawSignatureOfTxId(withdrawTxId, chain!.id, address!).then(res => {
+                setAmount(amountToFloatString(res.amount));
+                setWithdrawSig(res);
+            }).catch(e => {
+                // todo: error message
+                setLoading(false);
+            });
         }
     }, [withdrawTxId]);
 
     const handleWithdraw = async () => {
         setLoading(true);
-        const sig = await generateWithdrawSignature(address!, chain!.id, inputFloatStringToAmount(amount, 18));
-        setWithdrawSig(sig);
+        try {
+            const sig = await generateWithdrawSignature(address!, chain!.id, inputFloatStringToAmount(amount, 18));
+            setWithdrawSig(sig);
+        } catch (e) {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -63,11 +70,11 @@ function WithdrawAd3Modal({ onCancel, onSuccess, withdrawTxId, withdrawableAmoun
             title="Withdraw"
             onCancel={() => { onCancel() }}
             footer={[
-                <Button key="submit" type="primary" loading={loading || isLoading} 
-                disabled={!amount || BigInt(inputFloatStringToAmount(amount)) > BigInt(withdrawableAmount ?? '0')}
-                onClick={() => {
-                    handleWithdraw();
-                }}>
+                <Button key="submit" type="primary" loading={loading || isLoading}
+                    disabled={!amount || BigInt(inputFloatStringToAmount(amount)) > BigInt(withdrawableAmount ?? '0')}
+                    onClick={() => {
+                        handleWithdraw();
+                    }}>
                     Submit
                 </Button>
             ]}

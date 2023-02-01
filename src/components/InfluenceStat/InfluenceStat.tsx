@@ -1,5 +1,6 @@
 import { Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { getPoolSummary, Influence, PoolSummary } from '../../services/mining.service';
 import { formatAd3Amount } from '../../utils/format.util';
 import './InfluenceStat.scss';
@@ -12,12 +13,15 @@ export interface InfluenceStatProps {
 
 function InfluenceStat({ influence }: InfluenceStatProps) {
     const [poolSummary, setPoolSummary] = useState<PoolSummary>();
+    const { address } = useAccount();
 
     useEffect(() => {
-        getPoolSummary().then((res) => {
-            setPoolSummary(res);
-        })
-    }, [])
+        if (address) {
+            getPoolSummary(address).then((res) => {
+                setPoolSummary(res);
+            })
+        }
+    }, [address])
 
     const getStatCard = (title: string, value: string | number) => {
         return <Col xl={6} lg={6} md={12} sm={12} xs={12}>
