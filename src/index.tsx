@@ -20,6 +20,13 @@ import Home from './pages/Home/Home';
 import Test from './pages/Test/Test';
 import MintBillboard from './components/MintBillboard/MintBillboard';
 import BidWar from './pages/BidWar/BidWar';
+import { ApiPromise } from '@polkadot/api';
+
+declare global {
+  interface Window {
+    apiWs: ApiPromise;
+  }
+}
 
 const chains = [arbitrum, mainnet, polygon, goerli];
 

@@ -1,7 +1,10 @@
 // export const PARAMI_AIRDROP = 'https://airdrop.parami.io';
 export const PARAMI_AIRDROP = 'https://staging.parami.io/airdrop';
 
-export const PARAMI_WALLET = 'https://app.parami.io';
+// export const PARAMI_WALLET = 'https://app.parami.io';
+export const PARAMI_WALLET = 'http://local.parami.io:1024';
+
+export const PARAMI_SUBQUERY = 'https://graph.parami.io';
 
 export const EIP5489ForInfluenceMiningContractAddress = '0x38e151C51fa45779a4DF8Ce0b7F9E051fF389D99'; // goerli
 

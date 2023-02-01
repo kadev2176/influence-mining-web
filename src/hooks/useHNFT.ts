@@ -52,7 +52,7 @@ export const useHNFT = () => {
     tokenId: tokenId?.toString(),
     address: EIP5489ForInfluenceMiningContractAddress,
     balance: nftBalance?.toNumber() ?? 0,
-    level
+    level: level?.toString()
   };
 
   return hnft;
