@@ -83,6 +83,8 @@ function App() {
       getInfluence(address!, chain.id).then(influence => {
         if (!influence?.updatedTime) {
           navigate('/auth');
+        } else if (location.pathname === '/') {
+          navigate('/profile');
         }
       })
     }
