@@ -34,9 +34,10 @@ export type Influence = {
 }
 
 export type Ad3Tx = {
+  txId: string;
   timestamp: number;
   type: string;
-  diff: bigint;
+  diff: number;
 }
 
 export type InfluenceTransaction = {
@@ -48,6 +49,11 @@ export type InfluenceTransaction = {
 export interface PoolSummary {
   totalInfluence: string;
   currentDailyOutput: string;
+}
+
+export interface WithdrawAd3Signature {
+  signature: string;
+  nonce: number;
 }
 
 export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
@@ -102,8 +108,8 @@ export const startMining = async (address: string, chainId: number, hnftContract
   }
 }
 
-export const getAd3Balance = async (address: string) => {
-  const res = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3?wallet=${address}`, address);
+export const getAd3Balance = async (address: string, chainId: number) => {
+  const res = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3?wallet=${address}&chain_id=${chainId}`, address);
   const balance = await res.json();
   return balance as Balance;
 }
@@ -111,7 +117,7 @@ export const getAd3Balance = async (address: string) => {
 export const getAd3Transactions = async (address: string, chainId: number) => {
   const res = await _fetch(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}&chain_id=${chainId}`, address);
   const txs = await res.json();
-  return txs as Ad3Tx[];
+  return [{ txId: '1321', timestamp: 1675068143, type: 'withdraw', diff: -3 }, ...txs] as Ad3Tx[];
 }
 
 export const getInfluence = async (address: string, chainId: number) => {
@@ -149,4 +155,21 @@ export const getPoolSummary = async () => {
   const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/pool/summary`);
   const summary = await resp.json();
   return summary as PoolSummary;
+}
+
+export const generateWithdrawSignature = async (address: string, chainId: number, amount: string) => {
+  return {
+    signature: `withdraw-sig-${address}-${chainId}-${amount}`,
+    nonce: 1
+  } as WithdrawAd3Signature;
+}
+
+export const getWithdrawInfoOfTxId = async (txId: string) => {
+  return {
+    amount: '100',
+    sig: {
+      signature: '123-123',
+      nonce: 2
+    } as WithdrawAd3Signature
+  };
 }

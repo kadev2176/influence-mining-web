@@ -1,0 +1,58 @@
+.ant-modal-mask {
+  background-color: #ffffff7c !important;
+}
+
+.ant-modal-content {
+  background-color: #282d4fce !important;
+
+  .ant-modal-header {
+    background-color: #ffffff00 !important;
+  }
+}
+
+.input-row {
+  margin: 10px 0;
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 18px;
+    font-weight: 600;
+
+    img {
+      width: 32px;
+    }
+  }
+
+  .ad3-input {
+    margin: 4px 10px 4px 0;
+
+    input {
+      color: #ffffffb2;
+      border: none;
+      background: none;
+      outline: transparent;
+      font-size: 20px;
+      width: 90%;
+    }
+  }
+}
+
+.balance {
+  display: flex;
+
+  .value {
+    margin-right: 8px;
+  }
+
+  .btn {
+    font-weight: 600;
+    color: #cf4172;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}

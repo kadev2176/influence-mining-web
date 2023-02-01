@@ -1,7 +1,9 @@
 import { Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { Balance, getAd3Balance } from '../../services/mining.service';
+import { formatAd3Amount } from '../../utils/format.util';
+import WithdrawAd3Modal from '../WithdrawAd3Modal/WithdrawAd3Modal';
 import './AD3Balance.scss';
 
 const { Title } = Typography;
@@ -10,14 +12,21 @@ export interface AD3BalanceProps { }
 
 function AD3Balance({ }: AD3BalanceProps) {
     const { address } = useAccount();
+    const { chain } = useNetwork();
     const [balance, setBalance] = useState<Balance>();
+    const [withdrawModal, setWithdrawModal] = useState<boolean>(false);
+
+    const fetchBalance = async (address: string, chainId: number) => {
+        const balance = await getAd3Balance(address, chainId);
+        setBalance(balance);
+    }
+
     useEffect(() => {
-        if (address) {
-            getAd3Balance(address).then(res => {
-                setBalance(res);
-            });
+        if (address && chain?.id) {
+            fetchBalance(address, chain.id);
         }
-    }, [address])
+    }, [address, chain]);
+
     return <>
         <div className='balance-container'>
             <Title level={3}>Balance</Title>
@@ -32,7 +41,7 @@ function AD3Balance({ }: AD3BalanceProps) {
                                 </div>
                                 <div className='value'>
                                     <div className='balance'>
-                                        {balance.total}
+                                        {formatAd3Amount(balance.total)}
                                     </div>
                                     <div className='unit'>$AD3</div>
                                 </div>
@@ -45,8 +54,15 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <span className='text'>Withdrawable Balance</span>
                                 </Col>
                                 <Col className='value'>
-                                    <div className='balance'>{balance.withdrawable}</div>
+                                    <div className='balance'>{formatAd3Amount(balance.withdrawable)}</div>
                                     <div className='unit'>$AD3</div>
+                                </Col>
+                                <Col className='action'>
+                                    <div>
+                                        <div className='action-btn active' onClick={() => {
+                                            setWithdrawModal(true);
+                                        }}>Withdraw</div>
+                                    </div>
                                 </Col>
                             </Row>
                             <Row justify="space-between" className='sub-balance-row'>
@@ -55,16 +71,28 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <span className='text'>Locked Balance</span>
                                 </Col>
                                 <Col className='value'>
-                                    <div className='balance'>{balance.locked}</div>
+                                    <div className='balance'>{formatAd3Amount(balance.locked)}</div>
                                     <div className='unit'>$AD3</div>
                                 </Col>
                             </Row>
                         </Col>
                     </Row>
                 </>}
-
             </div>
         </div>
+
+        {withdrawModal && <>
+            <WithdrawAd3Modal
+                onCancel={() => {
+                    setWithdrawModal(false);
+                }}
+                onSuccess={() => {
+                    setWithdrawModal(false);
+                    fetchBalance(address!, chain!.id);
+                }}
+                withdrawableAmount={balance?.withdrawable}
+            ></WithdrawAd3Modal>
+        </>}
     </>;
 };
 

@@ -1,105 +1,171 @@
-import React, { useEffect } from 'react';
-import { Button, Card, Col, Row, Typography, Spin } from 'antd';
-import { usePrepareContractWrite, useContractWrite } from 'wagmi';
-import { EIP5489ForInfluenceMiningContractAddress } from '../../models/parami';
-import EIP5489ForInfluenceMining from '../../contracts/EIP5489ForInfluenceMining.json';
+import React, { useEffect, useState } from 'react';
+import { Col, Row, Typography, Spin, notification } from 'antd';
 import './MintBillboard.scss';
-import '../../fonts/NeonRetro.otf';
 import BillboardCommon from '../BillboardCommon/BillboardCommon';
-import { Influence } from '../../services/mining.service';
+import { useHNFT } from '../../hooks/useHNFT';
+import { useInfluence } from '../../hooks/useInfluence';
+import { useMintBillboard } from '../../hooks/useMintBillboard';
+import { useUpgradeBillboard } from '../../hooks/useUpgradeBillboard';
+import { useBillboardPrices } from '../../hooks/useBillboardPrices';
+import { BigNumber } from 'ethers';
+import { useApproveAD3 } from '../../hooks/useApproveAD3';
+import { formatBalance } from '@polkadot/util';
+import { formatAd3Amount } from '../../utils/format.util';
 
 const { Title } = Typography;
 
-export interface MintBillboardProps {
-    influence: Influence
-}
+const BillboardOptions = [
+    {
+        level: 0,
+        name: 'Common Billboard',
+        description: 'Entry level billboard. Monetize your social influence for free.',
+    },
+    {
+        level: 1,
+        name: 'Uncommon Billboard',
+        description: 'Earn AD3 1.2x faster with this uncommon billboard.',
+    },
+    {
+        level: 2,
+        name: 'Rare Billboard',
+        description: 'Earn AD3 1.4x faster with this rare billboard.',
+    },
+    {
+        level: 3,
+        name: 'Epic Billboard',
+        description: 'Earn AD3 1.6x faster with this epic billboard.',
+    },
+    {
+        level: 4,
+        name: 'Legendary Billboard',
+        description: 'Earn AD3 1.8x faster with this epic billboard.',
+    }
+]
 
-function MintBillboard({ influence }: MintBillboardProps) {
-    const { config } = usePrepareContractWrite({
-        address: EIP5489ForInfluenceMiningContractAddress,
-        abi: EIP5489ForInfluenceMining.abi,
-        functionName: 'mint',
-        args: [influence.twitterProfileImageUri ?? '']
-    });
-    const { data, isLoading, isSuccess, write: mint } = useContractWrite(config);
-    
+function MintBillboard() {
+    const [mintLevel, setMintLevel] = useState<number>();
+    const [upgradeToLevel, setUpgradeToLevel] = useState<number>();
+    const [price, setPrice] = useState<string>();
+    const hnft = useHNFT();
+    const { influence } = useInfluence();
+    const { mint, isSuccess: mintSuccess, isLoading: mintLoading, isError: mintError } = useMintBillboard(mintLevel, influence?.twitterProfileImageUri ?? ''); // default image?
+    const { upgradeBillboardLevel, isSuccess: upgradeSuccess, isLoading: upgradeLoading, isError: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
+    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, isError: approveError } = useApproveAD3(price);
+
+    const clearState = () => {
+        setMintLevel(undefined);
+        setUpgradeToLevel(undefined);
+        setPrice(undefined);
+    }
+
     useEffect(() => {
-        if (isSuccess) {
+        if (approveError || mintError || upgradeError) {
+            clearState();
+        }
+    }, [approveError, mintError, upgradeError])
+
+    const prices = useBillboardPrices();
+
+    useEffect(() => {
+        if (mintSuccess || upgradeSuccess) {
             window.location.reload();
         }
-    }, [isSuccess])
+    }, [mintSuccess, upgradeSuccess]);
+
+    useEffect(() => {
+        if (upgradeToLevel !== undefined) {
+            const priceDiff = BigNumber.from(prices[upgradeToLevel]).sub(prices[hnft.level!]).toString();
+            setPrice(priceDiff);
+        }
+    }, [upgradeToLevel])
+
+    useEffect(() => {
+        if (price && approve) {
+            approve();
+        }
+    }, [price])
+
+    useEffect(() => {
+        if (upgradeToLevel !== undefined && upgradeBillboardLevel && approveSuccess) {
+            upgradeBillboardLevel();
+        }
+    }, [upgradeToLevel, approveSuccess]);
+
+    useEffect(() => {
+        if (mintLevel !== undefined) {
+            const price = prices[mintLevel];
+            if (Number(price) > 0) {
+                setPrice(price);
+            } else {
+                mint?.();
+            }
+        }
+    }, [mintLevel])
+
+    useEffect(() => {
+        if (mintLevel !== undefined && mint && approveSuccess) {
+            mint();
+        }
+    }, [mintLevel, approveSuccess]);
+
+    const billboards = BillboardOptions.map(billboard => {
+        return <>
+            <Col xl={12} lg={12} md={24} sm={24} xs={24} key={billboard.name}>
+                <div className='nft-card'>
+                    <div className='content-container'>
+                        <div className='billboard'>
+                            <BillboardCommon />
+                        </div>
+
+                        <div className='info-container'>
+                            <div className='info'>
+                                <div className='description'>
+                                    {billboard.description}
+                                </div>
+                            </div>
+                            <div className='price'>
+                                <div className='price-title'>Price:</div>
+                                <div className='price-value'>
+                                    {Number(prices[billboard.level]) > 0 && <>
+                                        {formatAd3Amount(prices[billboard.level])} AD3
+                                    </>}
+                                    {Number(prices[billboard.level]) === 0 && <>
+                                        Free
+                                    </>}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className='btn-container'>
+                        {hnft?.balance === 0 && <>
+                            <div className='btn active' onClick={() => {
+                                setMintLevel(billboard.level);
+                            }}>Mint</div>
+                        </>}
+                        {!!hnft?.balance && hnft?.balance > 0 && <>
+                            {hnft.level! >= billboard.level && <>
+                                <div className='btn disabled'>Owned</div>
+                            </>}
+                            {hnft.level! < billboard.level && <>
+                                <div className='btn active' onClick={() => {
+                                    setUpgradeToLevel(billboard.level);
+                                }}>Upgrade</div>
+                            </>}
+                        </>}
+                    </div>
+                </div>
+            </Col>
+        </>
+    });
 
     return <>
-        <Spin spinning={isLoading}>
+        <Spin spinning={mintLoading || upgradeLoading || approveLoading}>
             <div className='mint-billboard-container'>
                 <Title level={3} className='title'>Choose Your Billboard</Title>
 
                 <Row gutter={12}>
-                    <Col xl={12} lg={12} md={24} sm={24} xs={24}>
-                        <div className='nft-card'>
-                            <div className='content-container'>
-                                <div className='billboard'>
-                                    <BillboardCommon />
-                                </div>
-
-                                <div className='info-container'>
-                                    <div className='info'>
-                                        {/* <div className='name'>Common Billboard</div> */}
-                                        <div className='description'>
-                                            Entry level billboard. Monetize your social influence for free.
-                                        </div>
-                                    </div>
-                                    <div className='price'>
-                                        <div className='price-title'>Price:</div>
-                                        <div className='price-value'>Free</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className='btn-container'>
-                                <div className='btn active' onClick={() => {
-                                    mint?.();
-                                }}>
-                                    Mint
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
-
-                    <Col xl={12} lg={12} md={24} sm={24} xs={24}>
-                        <div className='nft-card'>
-                            <div className='content-container'>
-                                <div className='billboard'>
-                                    <div className='nft-billboard-container rare' style={{ backgroundImage: 'url(/assets/images/rare_wall_bg.png)' }}>
-                                        <div className='neon-wrapper'>
-                                            <div className='neon-text'>
-                                                RARE <br /> BILLBOARD
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className='info-container'>
-                                    <div className='info'>
-                                        {/* <div className='name'>Rare Billboard</div> */}
-                                        <div className='description'>
-                                            Earn AD3 1.5x faster with this rare billboard.
-                                        </div>
-                                    </div>
-                                    <div className='price'>
-                                        <div className='price-title'>Price:</div>
-                                        <div className='price-value'>50 AD3</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className='btn-container'>
-                                <div className='btn disabled'>
-                                    Coming Soon
-                                </div>
-                            </div>
-                        </div>
-                    </Col>
+                    {billboards}
                 </Row>
             </div>
         </Spin>

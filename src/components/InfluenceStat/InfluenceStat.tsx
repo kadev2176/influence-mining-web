@@ -1,6 +1,7 @@
 import { Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getPoolSummary, Influence, PoolSummary } from '../../services/mining.service';
+import { formatAd3Amount } from '../../utils/format.util';
 import './InfluenceStat.scss';
 
 const { Title } = Typography;
@@ -43,7 +44,7 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
                 {getStatCard('Referral Count', influence.accountReferalCount)}
                 {getStatCard('Extension Referral Count', influence.pluginReferalCount)}
                 {poolSummary && getStatCard('Total Influence', poolSummary.totalInfluence)}
-                {poolSummary && getStatCard('Total Daily AD3 Rewards', poolSummary.currentDailyOutput)}
+                {poolSummary && getStatCard('Total Daily AD3 Rewards', formatAd3Amount(poolSummary.currentDailyOutput))}
             </Row>
         </div>
     </>;
