@@ -176,3 +176,12 @@ export const getWithdrawSignatureOfTxId = async (txId: string, chainId: number, 
   const sig = await resp.json();
   return sig as WithdrawAd3Signature;
 }
+
+export const getIMAccountOfBillboard = async (contractAddress: string, tokenId: string) => {
+  return new Promise((res) => {
+    res({
+      influence: 125,
+      nftImage: 'https://i.seadn.io/gcs/files/3b34b743096f0e5c201c3a7b38e1f795.png?auto=format&w=1000'
+    })
+  })
+}

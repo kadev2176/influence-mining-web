@@ -61,3 +61,6 @@ export const amountToFloatString = (value: string | bigint, decimals: number = 1
 	return intPart + '.' + floatPart;
 }
 
+export const deleteComma = (value: string) => {
+	return value?.replace(/,/g, '');
+};
