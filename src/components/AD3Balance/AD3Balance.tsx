@@ -1,5 +1,6 @@
 import { Button, Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAccount, useNetwork } from 'wagmi';
 import { Balance, getAd3Balance } from '../../services/mining.service';
 import { formatAd3Amount } from '../../utils/format.util';
@@ -11,6 +12,7 @@ const { Title } = Typography;
 export interface AD3BalanceProps { }
 
 function AD3Balance({ }: AD3BalanceProps) {
+    const navigate = useNavigate();
     const { address } = useAccount();
     const { chain } = useNetwork();
     const [balance, setBalance] = useState<Balance>();
@@ -39,7 +41,9 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <img src='/logo-round-core.svg'></img>
                                     Total
                                 </div>
-                                <div className='value'>
+                                <div className='value' onClick={() => {
+                                    navigate('/ad3Tx')
+                                }}>
                                     <div className='balance'>
                                         {formatAd3Amount(balance.total)}
                                     </div>

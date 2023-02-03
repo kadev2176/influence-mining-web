@@ -39,6 +39,14 @@
         font-size: 10px;
         color: #b7b7b7;
       }
+
+      &:hover {
+        cursor: pointer;
+        
+        .balance {
+          text-decoration: underline;
+        }
+      }
     }
   }
 

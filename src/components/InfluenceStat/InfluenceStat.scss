@@ -23,6 +23,11 @@
       font-size: 16px;
       line-height: 18px;
     }
+
+    &:hover {
+      cursor: pointer;
+      background-color: #23103aad;
+    }
   }
 
   .influence-stat {

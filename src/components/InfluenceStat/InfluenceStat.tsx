@@ -1,5 +1,6 @@
 import { Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { getPoolSummary, Influence, PoolSummary } from '../../services/mining.service';
 import { formatAd3Amount } from '../../utils/format.util';
@@ -12,6 +13,7 @@ export interface InfluenceStatProps {
 }
 
 function InfluenceStat({ influence }: InfluenceStatProps) {
+    const navigate = useNavigate();
     const [poolSummary, setPoolSummary] = useState<PoolSummary>();
     const { address } = useAccount();
 
@@ -37,7 +39,9 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
         <div className='influence-stat-card'>
             <Row gutter={12} style={{ marginBottom: '10px' }}>
                 <Col span={12}>
-                    <div className='influence-score'>
+                    <div className='influence-score' onClick={() => {
+                        navigate('/influenceTx')
+                    }}>
                         <div className='title'>Social Influence</div>
                         <div className='value'>{influence.influence}</div>
                     </div>

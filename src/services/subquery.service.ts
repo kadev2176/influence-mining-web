@@ -42,6 +42,21 @@ export const getNFTIdsOfOwnerDid = async (did: string) => {
 }
 
 export const getBillboardList = async () => {
+
+  // query im accounts by (chainId, hnftContractAddr, hnftTokenId) => influence
+
+  // {
+  //   allImAccounts(filter:{ and: [{chainId: {equalTo: 5}}, {hnftContractAddr: {equalTo: "1"}}, {hnftTokenId: {in: [1,2,3]}}]}, first: 10) {
+  //     totalCount
+  //     nodes {
+  //       wallet
+  //       chainId
+  //     }
+  //     pageInfo {
+  //       hasNextPage
+  //     }
+  //   }
+  //   }
   return new Promise((res, rej) => {
     res([
       {

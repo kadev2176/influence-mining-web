@@ -21,24 +21,6 @@ const menuItems = [
     </>
   },
   {
-    key: 'ad3Tx',
-    name: 'Transactions',
-    path: '/ad3Tx',
-    icon: <><i className="fa-solid fa-money-check-dollar"></i></>,
-    label: <>
-      <Link to={'/ad3Tx'}>Transactions</Link>
-    </>
-  },
-  {
-    key: 'influenceTx',
-    name: 'Influence',
-    path: '/influenceTx',
-    icon: <><i className="fa-solid fa-tower-broadcast"></i></>,
-    label: <>
-      <Link to={'/influenceTx'}>Influence</Link>
-    </>
-  },
-  {
     key: 'market',
     name: 'Market',
     path: '/market',
@@ -46,7 +28,16 @@ const menuItems = [
     label: <>
       <Link to={'/market'}>Market</Link>
     </>
-  }
+  },
+  {
+    key: 'war',
+    name: 'War',
+    path: '/war',
+    icon: <><i className="fa-solid fa-flag"></i></>,
+    label: <>
+      <Link to={'/war'}>War</Link>
+    </>
+  },
 ];
 
 function App() {
