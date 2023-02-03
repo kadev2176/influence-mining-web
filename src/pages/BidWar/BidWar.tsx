@@ -5,7 +5,7 @@ import { useHNFT } from '../../hooks/useHNFT';
 import { useEffect } from 'react';
 import { getActiveBidNftIds, getBillboardList, getNFTIdsOfOwnerDid } from '../../services/subquery.service';
 import { useApiWs } from '../../hooks/useApiWs';
-import { getAdIdOfNftId, getAvailableAd3BalanceOnParami, getParamiNftExternal } from '../../services/parami.service';
+import { getAdSlotOfNftId, getAvailableAd3BalanceOnParami, getBalanceOfBudgetPot, getParamiNftExternal } from '../../services/parami.service';
 import { amountToFloatString } from '../../utils/format.util';
 import { getIMAccountOfBillboard } from '../../services/mining.service';
 
@@ -75,41 +75,52 @@ function BidWar({ }: BidWarProps) {
         }
     }, [did, apiWs])
 
+    const queryActiveBidImAccounts = async (did: string) => {
+        const activeBidNftIds = await getActiveBidNftIds(did);
+        const billboards = await Promise.all((activeBidNftIds as string[]).map(nftId => {
+            return getParamiNftExternal(nftId);
+        }));
+
+        const imAccounts = await Promise.all((billboards as any[]).map(billboard => {
+            return getIMAccountOfBillboard(billboard.address, billboard.tokenId);
+        }));
+
+        const adSlots = await Promise.all((activeBidNftIds as string[]).map(nftId => {
+            return getAdSlotOfNftId(nftId);
+        }))
+        const budgetBalances = await Promise.all((adSlots).map(slot => {
+            if (!slot) {
+                return null;
+            } 
+            return getBalanceOfBudgetPot(slot?.budgetPot, slot?.fractionId)
+        }));
+
+        const activeBidImAccounts = (activeBidNftIds as string[]).map((nftId, index) => {
+            return {
+                paramiNftId: nftId,
+                influence: (imAccounts[index] as any).influence,
+                nftImage: (imAccounts[index] as any).nftImage,
+                price: budgetBalances[index]
+            }
+        })
+
+        setActiveBidImAccounts(activeBidImAccounts);
+    }
+
     useEffect(() => {
         if (paramiNftId) {
-            getAdIdOfNftId(paramiNftId).then(adId => {
-                if (adId) {
-                    setOccupiedAdId(adId);
+            getAdSlotOfNftId(paramiNftId).then(slot => {
+                if (slot?.adId) {
+                    setOccupiedAdId(slot?.adId);
                 }
             })
 
-            getActiveBidNftIds(did!).then(nftIds => {
-                if (!(nftIds as any)?.length) {
-                    return [];
-                }
-
-                return Promise.all((nftIds as string[]).map(nftId => {
-                    return getParamiNftExternal(nftId);
-                }))
-            }).then(nfts => {
-                if (!nfts?.length) {
-                    return [];
-                }
-
-                return Promise.all(nfts.map(nft => {
-                    if (!nft?.address || !nft.tokenId) {
-                        return null;
-                    }
-                    return getIMAccountOfBillboard(nft?.address, nft?.tokenId)
-                }))
-            }).then(imAccounts => {
-                setActiveBidImAccounts(imAccounts);
-            })
+            queryActiveBidImAccounts(did!);
         }
     }, [paramiNftId])
 
     return <>
-        <Title level={3}>Bid War</Title>
+        <Title level={3}>Billboard Steal</Title>
         <Spin spinning={!hnft}>
             {hnft && !paramiNftId && <>
                 <Title level={4}>You haven't enlisted</Title>
@@ -141,7 +152,7 @@ function BidWar({ }: BidWarProps) {
 
             {hnft && !!paramiNftId && <>
                 <Title level={4}>War is on!</Title>
-                <Title level={5}>Bid on others and hijack their influence power!</Title>
+                <Title level={5}>Bid on others and steal their influence power!</Title>
                 <Row>
                     {occupiedAdId && <>
                         <Col>
@@ -169,7 +180,7 @@ function BidWar({ }: BidWarProps) {
                                         <Image src={imAccount.nftImage}></Image>
                                     </div>
                                     <div>Influence hijacked: {imAccount.influence}</div>
-                                    <div>Current price: xxx AD3</div>
+                                    <div>Current price: {amountToFloatString(imAccount.price)} AD3</div>
                                 </div>
                             </Col>
                         })}
@@ -180,7 +191,7 @@ function BidWar({ }: BidWarProps) {
             <Row>
                 <Col>
                     <Title level={4}>
-                        List of billboards (you can bid)
+                        List of billboards you can steal
                     </Title>
                     <Spin spinning={!nfts}>
                         {nfts?.length === 0 && <>
@@ -205,7 +216,7 @@ function BidWar({ }: BidWarProps) {
                                                             // todo: if event bid success
                                                         }
                                                     })
-                                                }}>Hijack</Button>
+                                                }}>Steal</Button>
                                             </div>
                                         </div>
                                     </Col>

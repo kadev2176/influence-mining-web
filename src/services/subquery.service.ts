@@ -94,7 +94,7 @@ export const getActiveBidNftIds = async (account: string) => {
   // }
   // return ['42'];
 
-  return new Promise((r) => r(['42'] as string[]))
+  return new Promise((r) => r(['42'] as string[])) // return parami nft id
 }
 
 // query my active bids

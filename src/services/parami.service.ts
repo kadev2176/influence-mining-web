@@ -21,14 +21,24 @@ export const getParamiNftExternal = async (nftId: string) => {
   }
 }
 
-export const getAdIdOfNftId = async (nftId: string) => {
+export const getAdSlotOfNftId = async (nftId: string) => {
   const slotRes = await window.apiWs.query.ad.slotOf(nftId);
   if (slotRes.isEmpty) {
     return null;
   }
 
-  const { adId } = await slotRes.toHuman() as { adId: string };
-  return adId;
+  // todo: bid with ad3, no fractionId?
+  return await slotRes.toHuman() as { adId: string, budgetPot: string, fractionId: string };
+}
+
+export const getBalanceOfBudgetPot = async (budgetPotId: string, assetId: string) => {
+  // todo: when bid with ad3, still need assetId?
+  const balanceRes = await window.apiWs.query.assets.account(assetId, budgetPotId);
+  if (balanceRes.isEmpty) {
+    return null;
+  }
+  const { balance } = balanceRes.toHuman() as { balance: string };
+  return balance;
 }
 
 export const getAvailableAd3BalanceOnParami = async (account: string) => {

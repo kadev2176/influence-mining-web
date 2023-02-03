@@ -31,11 +31,11 @@ const menuItems = [
   },
   {
     key: 'war',
-    name: 'War',
+    name: 'Billboard Steal',
     path: '/war',
     icon: <><i className="fa-solid fa-flag"></i></>,
     label: <>
-      <Link to={'/war'}>War</Link>
+      <Link to={'/war'}>Billboard Steal</Link>
     </>
   },
 ];
@@ -139,8 +139,6 @@ function App() {
       </>}
 
     </>
-
-
   );
 }
 
