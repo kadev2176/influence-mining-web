@@ -64,3 +64,10 @@ export const amountToFloatString = (value: string | bigint, decimals: number = 1
 export const deleteComma = (value: string) => {
 	return value?.replace(/,/g, '');
 };
+
+export const formatTwitterImageUrl = (url?: string) => {
+	if (!url) {
+		return '';
+	}
+	return url.replace('_normal', '');
+}

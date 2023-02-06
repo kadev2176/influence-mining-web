@@ -6,8 +6,8 @@ import BillboardCommon from '../../components/BillboardCommon/BillboardCommon';
 import './Profile.scss';
 import AD3Balance from '../../components/AD3Balance/AD3Balance';
 import InfluenceStat from '../../components/InfluenceStat/InfluenceStat';
-import { useInfluence } from '../../hooks/useInfluence';
 import { useHNFT } from '../../hooks/useHNFT';
+import { useImAccount } from '../../hooks/useImAccount';
 
 const { Title } = Typography;
 
@@ -16,14 +16,14 @@ export interface ProfileProps { }
 function Profile({ }: ProfileProps) {
     const { address } = useAccount();
     const { chain } = useNetwork();
-    const { influence, refresh } = useInfluence();
+    const { imAccount, refresh, loading }  = useImAccount()
     const hnft = useHNFT();
 
     useEffect(() => {
-        if (influence) {
+        if (imAccount) {
             updateInfluence(address!, chain!.id);
         }
-    }, [influence])
+    }, [imAccount])
 
     const handleStartMining = async () => {
         startMining(address!, chain!.id, hnft.address!, hnft.tokenId!).then(res => {
@@ -42,7 +42,7 @@ function Profile({ }: ProfileProps) {
                     <div className='billboard-card'>
                         <BillboardCommon></BillboardCommon>
 
-                        {(!influence?.beginMiningTime || influence?.beginMiningTime == 0) && <>
+                        {(!imAccount?.beginMiningTime || imAccount?.beginMiningTime == 0) && <>
                             <div className='btn-container'>
                                 <div className='btn active' onClick={handleStartMining}>
                                     Start Mining
@@ -53,11 +53,11 @@ function Profile({ }: ProfileProps) {
                 </div>
             </>}
 
-            {influence && <>
-                {!!influence?.beginMiningTime && <>
+            {imAccount && <>
+                {!!imAccount?.beginMiningTime && <>
                     <AD3Balance></AD3Balance>
 
-                    <InfluenceStat influence={influence}></InfluenceStat>
+                    <InfluenceStat influence={imAccount}></InfluenceStat>
                 </>}
             </>}
         </div>

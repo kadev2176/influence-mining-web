@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Typography, Button, Spin, Row, Col, Image } from 'antd';
-import { PARAMI_WALLET } from '../../models/parami';
+import { Typography, Button, Spin, Row, Col, Image, notification } from 'antd';
+import { PARAMI_WALLET, POST_MESSAGE } from '../../models/parami';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useEffect } from 'react';
-import { getActiveBidNftIds, getBillboardList, getNFTIdsOfOwnerDid } from '../../services/subquery.service';
 import { useApiWs } from '../../hooks/useApiWs';
-import { getAdSlotOfNftId, getAvailableAd3BalanceOnParami, getBalanceOfBudgetPot, getParamiNftExternal } from '../../services/parami.service';
-import { amountToFloatString } from '../../utils/format.util';
-import { getIMAccountOfBillboard } from '../../services/mining.service';
+import { getActiveBidNftIdsOfDid, getAdSlotOfNftId, getAvailableAd3BalanceOnParami, getCurrentPriceOfNftId, getParamiNftExternal, getPortedNftIdOfHnft } from '../../services/parami.service';
+import { amountToFloatString, formatTwitterImageUrl } from '../../utils/format.util';
+import { useAccount, useNetwork } from 'wagmi';
+import { useImAccount } from '../../hooks/useImAccount';
+import { getIMAccountOfBillboard, getImAccountsReadyForBid, startPreempt } from '../../services/mining.service';
 
 const { Title } = Typography;
 
@@ -17,16 +18,25 @@ const openPopup = (url: string) => {
     window.open(url, 'Parami', 'popup,width=400,height=600');
 }
 
+interface Billboard {
+    paramiNftId: string;
+    influence: number;
+    nftImage: string;
+    price: string;
+}
+
 function BidWar({ }: BidWarProps) {
+    const { address } = useAccount();
+    const { chain } = useNetwork();
     const hnft = useHNFT();
     const [did, setDid] = useState<string | null>(window.localStorage.getItem('did'));
     const [account, setAccount] = useState<string | null>(window.localStorage.getItem('account'));
     const [paramiNftId, setParamiNftId] = useState<string>();
     const [occupiedAdId, setOccupiedAdId] = useState<string>();
     const apiWs = useApiWs();
-    const [nfts, setNfts] = useState<any[]>(); // todo: type this
-
-    const [activeBidImAccounts, setActiveBidImAccounts] = useState<any[]>(); // todo: type this
+    const [availableBillboards, setAvailableBillboards] = useState<Billboard[]>();
+    const { imAccount, refresh } = useImAccount();
+    const [activeBidBillboards, setActiveBidBillboards] = useState<Billboard[]>();
 
     useEffect(() => {
         if (account && apiWs) {
@@ -35,76 +45,73 @@ function BidWar({ }: BidWarProps) {
             })
         }
     }, [account, apiWs])
-    
-    useEffect(() => {
-        getBillboardList().then(list => {
-            setNfts(list as any);
-        })
-    }, [])
+
+    const fetchAvailableBillboards = async (address: string, chainId: number) => {
+        const imAccounts = await getImAccountsReadyForBid(address, chainId) ?? [];
+        const portedNftIds = await Promise.all(imAccounts.map(imAccount => {
+            return getPortedNftIdOfHnft(imAccount.hnftContractAddr, imAccount.hnftTokenId);
+        }));
+        const balances = await Promise.all(portedNftIds.map(nftId => {
+            if (!nftId) {
+                return '0';
+            }
+            return getCurrentPriceOfNftId(nftId);
+        }));
+
+        const billboards = imAccounts.map((imAccount, index) => {
+            const billboard: Billboard = {
+                paramiNftId: portedNftIds[index] ?? '',
+                influence: imAccount.influence,
+                nftImage: formatTwitterImageUrl(imAccount.twitterProfileImageUri),
+                price: balances[index] ?? ''
+            }
+            return billboard;
+        });
+        
+        setAvailableBillboards(billboards);
+    }
 
     useEffect(() => {
-        if (did && apiWs) {
-            getNFTIdsOfOwnerDid(did).then(nftIds => {
-                return nftIds ?? [];
-            }).then(nftIds => {
-                if (!nftIds.length) {
-                    return []
+        if (address && chain && apiWs) {
+            fetchAvailableBillboards(address, chain.id);
+        }
+    }, [address, chain, apiWs]);
+
+    useEffect(() => {
+        if (apiWs && hnft.address && hnft.tokenId) {
+            getPortedNftIdOfHnft(hnft.address, hnft.tokenId).then(nftId => {
+                if (nftId) {
+                    setParamiNftId(nftId);
                 }
-
-                return Promise.all(nftIds.map(nftId => getParamiNftExternal(nftId))).then(nfts => {
-                    return nfts.map((nft, index) => {
-                        return {
-                            ...nft,
-                            paramiNftId: nftIds[index]
-                        }
-                    })
-                })
-            }).then(externalNfts => {
-                externalNfts.forEach((nft, index) => {
-                    // mock
-                    if (index === 0) {
-                        setParamiNftId(nft.paramiNftId);
-                        return;
-                    }
-
-                    if (nft && nft.tokenId === hnft.tokenId && nft.address?.toLowerCase() === hnft.address?.toLowerCase()) {
-                        setParamiNftId(nft.paramiNftId);
-                    }
-                })
             })
         }
-    }, [did, apiWs])
+    }, [apiWs, hnft]);
 
     const queryActiveBidImAccounts = async (did: string) => {
-        const activeBidNftIds = await getActiveBidNftIds(did);
-        const billboards = await Promise.all((activeBidNftIds as string[]).map(nftId => {
+        const activeBidNftIds = await getActiveBidNftIdsOfDid(did);
+        const paramiExternalNfts = await Promise.all(activeBidNftIds.map(nftId => {
             return getParamiNftExternal(nftId);
         }));
 
-        const imAccounts = await Promise.all((billboards as any[]).map(billboard => {
-            return getIMAccountOfBillboard(billboard.address, billboard.tokenId);
-        }));
-
-        const adSlots = await Promise.all((activeBidNftIds as string[]).map(nftId => {
-            return getAdSlotOfNftId(nftId);
-        }))
-        const budgetBalances = await Promise.all((adSlots).map(slot => {
-            if (!slot) {
+        const imAccounts = await Promise.all(paramiExternalNfts.map(nft => {
+            if (!nft) {
                 return null;
-            } 
-            return getBalanceOfBudgetPot(slot?.budgetPot, slot?.fractionId)
+            }
+            return getIMAccountOfBillboard(address!, nft.address, nft.tokenId);
         }));
 
-        const activeBidImAccounts = (activeBidNftIds as string[]).map((nftId, index) => {
+        const balances = await Promise.all(activeBidNftIds.map(nftId => getCurrentPriceOfNftId(nftId)))
+
+        const activeBidBillboards = activeBidNftIds.map((nftId, index) => {
             return {
                 paramiNftId: nftId,
-                influence: (imAccounts[index] as any).influence,
-                nftImage: (imAccounts[index] as any).nftImage,
-                price: budgetBalances[index]
+                influence: (imAccounts[index])?.influence ?? 0,
+                nftImage: formatTwitterImageUrl((imAccounts[index])?.twitterProfileImageUri),
+                price: balances[index] ?? '0'
             }
-        })
+        });
 
-        setActiveBidImAccounts(activeBidImAccounts);
+        setActiveBidBillboards(activeBidBillboards);
     }
 
     useEffect(() => {
@@ -117,9 +124,14 @@ function BidWar({ }: BidWarProps) {
 
             queryActiveBidImAccounts(did!);
         }
-    }, [paramiNftId])
+    }, [paramiNftId]);
 
     return <>
+    {/* <div>
+        <Button type='primary' onClick={() => {
+            testGraphQL()
+        }}>Test</Button>
+    </div> */}
         <Title level={3}>Billboard Steal</Title>
         <Spin spinning={!hnft}>
             {hnft && !paramiNftId && <>
@@ -142,7 +154,12 @@ function BidWar({ }: BidWarProps) {
                                         setAccount(account);
                                     }
 
-                                    // todo: if event import nft success
+                                    if (event.data === POST_MESSAGE.NFT_IMPORTED) {
+                                        // refresh
+                                        notification.success({
+                                            message: 'NFT IMPORT SUCCESS!'
+                                        })
+                                    }
                                 }
                             })
                         }}
@@ -153,6 +170,20 @@ function BidWar({ }: BidWarProps) {
             {hnft && !!paramiNftId && <>
                 <Title level={4}>War is on!</Title>
                 <Title level={5}>Bid on others and steal their influence power!</Title>
+                <Row>
+                    {imAccount && !imAccount.beginPreemptTime && <>
+                        <Button type='primary' onClick={async () => {
+                            const res = await startPreempt(address!, chain!.id);
+                            if (res.success) {
+                                notification.success({
+                                    message: 'Start Success'
+                                })
+                                refresh();
+                            }
+                        }}>Start War</Button>
+                    </>}
+                </Row>
+
                 <Row>
                     {occupiedAdId && <>
                         <Col>
@@ -166,21 +197,20 @@ function BidWar({ }: BidWarProps) {
             </>}
 
             <Title level={4}>Active Bids</Title>
-            <Spin spinning={!activeBidImAccounts}>
-                {activeBidImAccounts && activeBidImAccounts.length === 0 && <>
+            <Spin spinning={!activeBidBillboards}>
+                {activeBidBillboards && activeBidBillboards.length === 0 && <>
                     <Title level={5}>You are not occuping any billboards</Title>
                 </>}
-                {activeBidImAccounts && activeBidImAccounts.length > 0 && <>
+                {activeBidBillboards && activeBidBillboards.length > 0 && <>
                     <Row gutter={20}>
-                        {activeBidImAccounts.map((imAccount, index) => {
-                            // todo: use imAccount.xx as key
-                            return <Col xl={6} lg={6} md={24} sm={24} xs={24} key={index}>
+                        {activeBidBillboards.map((billboard, index) => {
+                            return <Col xl={6} lg={6} md={24} sm={24} xs={24} key={billboard.paramiNftId}>
                                 <div className='nft-card'>
                                     <div>
-                                        <Image src={imAccount.nftImage}></Image>
+                                        <Image src={billboard.nftImage} referrerPolicy={'no-referrer'}></Image>
                                     </div>
-                                    <div>Influence hijacked: {imAccount.influence}</div>
-                                    <div>Current price: {amountToFloatString(imAccount.price)} AD3</div>
+                                    <div>Influence hijacked: {billboard.influence}</div>
+                                    <div>Current price: {amountToFloatString(billboard.price)} AD3</div>
                                 </div>
                             </Col>
                         })}
@@ -193,27 +223,33 @@ function BidWar({ }: BidWarProps) {
                     <Title level={4}>
                         List of billboards you can steal
                     </Title>
-                    <Spin spinning={!nfts}>
-                        {nfts?.length === 0 && <>
+                    <Spin spinning={!availableBillboards}>
+                        {availableBillboards?.length === 0 && <>
                             No avaiable billboards at the moment.
                         </>}
 
                         <Row gutter={12}>
-                            {nfts && nfts.length > 0 && <>
-                                {nfts.map(nft => {
-                                    return <Col xl={12} lg={12} md={24} sm={24} xs={24} key={nft.nftId}>
+                            {availableBillboards && availableBillboards.length > 0 && <>
+                                {availableBillboards.map(billboard => {
+                                    return <Col xl={12} lg={12} md={24} sm={24} xs={24} key={billboard.paramiNftId}>
                                         <div className='nft-card'>
                                             <div>
-                                                <Image src={nft.imageUrl}></Image>
+                                                <Image src={billboard.nftImage}></Image>
                                             </div>
-                                            <div>Influence: {nft.influence}</div>
-                                            <div>Price: {amountToFloatString(nft.price)} AD3</div>
+                                            <div>Influence: {billboard.influence}</div>
+                                            {/* higher than current price */}
+                                            <div>Price: {amountToFloatString(billboard.price)} AD3</div>
                                             <div className='btn-container'>
                                                 <Button type='primary' onClick={() => {
-                                                    openPopup(`${PARAMI_WALLET}/quickBid/${nft.nftId}/${nft.price}`);
+                                                    openPopup(`${PARAMI_WALLET}/quickBid/${billboard.paramiNftId}/${billboard.price}`);
                                                     window.addEventListener('message', (event) => {
                                                         if (event.origin === PARAMI_WALLET) {
-                                                            // todo: if event bid success
+                                                            if (event.data === POST_MESSAGE.AD_BID) {
+                                                                // refresh?
+                                                                notification.success({
+                                                                    message: 'Bid Success'
+                                                                })
+                                                            }
                                                         }
                                                     })
                                                 }}>Steal</Button>

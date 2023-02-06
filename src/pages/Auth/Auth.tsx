@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useEnsName, useNetwork, useSigner } from 'wagmi';
 import { notification } from 'antd';
-import { bindAccount, getInfluence } from '../../services/mining.service';
+import { bindAccount, getIMAccountOfWallet } from '../../services/mining.service';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PARAMI_AIRDROP } from '../../models/parami';
 import './Auth.scss';
@@ -17,10 +17,6 @@ const getExpirationTime = () => {
 
 const generateSignedMessage = (address: string, expire: number): string => {
     return `${address},${expire}`;
-    //     return `Parami Influence Mining:
-
-    // My twitter oauth verifier: ${twitter_oauth_verifier}
-    // `;
 };
 
 function Auth() {
@@ -47,8 +43,8 @@ function Auth() {
 
     useEffect(() => {
         if (userSignature) {
-            getInfluence(address!, chain!.id).then(influence => {
-                if (influence?.updatedTime) {
+            getIMAccountOfWallet(address!, chain!.id).then(imAccount => {
+                if (imAccount?.updatedTime) {
                     navigate('/profile');
                 }
             })

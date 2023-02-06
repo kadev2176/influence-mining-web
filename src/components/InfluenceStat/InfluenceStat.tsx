@@ -2,14 +2,14 @@ import { Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
-import { getPoolSummary, Influence, PoolSummary } from '../../services/mining.service';
+import { getPoolSummary, ImAccount, PoolSummary } from '../../services/mining.service';
 import { formatAd3Amount } from '../../utils/format.util';
 import './InfluenceStat.scss';
 
 const { Title } = Typography;
 
 export interface InfluenceStatProps {
-    influence: Influence;
+    influence: ImAccount;
 }
 
 function InfluenceStat({ influence }: InfluenceStatProps) {
@@ -48,7 +48,6 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
                 </Col>
             </Row>
             <Row gutter={12}>
-                {getStatCard('Twitter Followers', influence.twitFollowerCount)}
                 {getStatCard('Referral Count', influence.accountReferalCount)}
                 {getStatCard('Extension Referral Count', influence.pluginReferalCount)}
                 {poolSummary && getStatCard('Total Influence', poolSummary.totalInfluence)}

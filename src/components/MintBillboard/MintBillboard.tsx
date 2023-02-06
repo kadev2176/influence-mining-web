@@ -3,7 +3,6 @@ import { Col, Row, Typography, Spin, notification } from 'antd';
 import './MintBillboard.scss';
 import BillboardCommon from '../BillboardCommon/BillboardCommon';
 import { useHNFT } from '../../hooks/useHNFT';
-import { useInfluence } from '../../hooks/useInfluence';
 import { useMintBillboard } from '../../hooks/useMintBillboard';
 import { useUpgradeBillboard } from '../../hooks/useUpgradeBillboard';
 import { useBillboardPrices } from '../../hooks/useBillboardPrices';
@@ -11,6 +10,7 @@ import { BigNumber } from 'ethers';
 import { useApproveAD3 } from '../../hooks/useApproveAD3';
 import { formatBalance } from '@polkadot/util';
 import { formatAd3Amount } from '../../utils/format.util';
+import { useImAccount } from '../../hooks/useImAccount';
 
 const { Title } = Typography;
 
@@ -47,8 +47,8 @@ function MintBillboard() {
     const [upgradeToLevel, setUpgradeToLevel] = useState<number>();
     const [price, setPrice] = useState<string>();
     const hnft = useHNFT();
-    const { influence } = useInfluence();
-    const { mint, isSuccess: mintSuccess, isLoading: mintLoading, isError: mintError } = useMintBillboard(mintLevel, influence?.twitterProfileImageUri ?? ''); // default image?
+    const { imAccount } = useImAccount();
+    const { mint, isSuccess: mintSuccess, isLoading: mintLoading, isError: mintError } = useMintBillboard(mintLevel, imAccount?.twitterProfileImageUri ?? ''); // default image?
     const { upgradeBillboardLevel, isSuccess: upgradeSuccess, isLoading: upgradeLoading, isError: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
     const { approve, isLoading: approveLoading, isSuccess: approveSuccess, isError: approveError } = useApproveAD3(price);
 

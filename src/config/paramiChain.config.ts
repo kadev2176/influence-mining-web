@@ -1,5 +1,5 @@
 export const config = {
-  "socketServer": "wss://rpc-global.parami.io/ws",
+  "socketServer": "wss://staging.parami.io/ws",
   "types": {
     "Public": "MultiSigner",
     "LookupSource": "MultiAddress",
