@@ -11,31 +11,67 @@ const { Header, Content, Sider } = Layout;
 const menuItems = [
   {
     key: 'profile',
-    name: 'Profile',
+    name: 'My Vault',
     path: '/profile',
     icon: <>
-      <i className="fa-solid fa-user"></i>
+      <i className="fa-solid fa-coins"></i>
     </>,
     label: <>
-      <Link to={'/profile'}>Profile</Link>
+      <Link to={'/profile'}>My Vault</Link>
     </>
   },
   {
     key: 'market',
-    name: 'Market',
+    name: 'NFT',
     path: '/market',
     icon: <><i className="fa-solid fa-store"></i></>,
     label: <>
-      <Link to={'/market'}>Market</Link>
+      <Link to={'/market'}>NFT</Link>
+    </>
+  },
+  {
+    key: 'boost',
+    name: 'Daily Boost',
+    path: '/boost',
+    icon: <><i className="fa-solid fa-trophy"></i></>,
+    label: <>
+      <Link to={'/boost'}>Daily Boost</Link>
+    </>
+  },
+  {
+    key: 'sit',
+    name: 'Your SIT',
+    path: '/sit',
+    icon: <><i className="fa-solid fa-circle-nodes"></i></>,
+    label: <>
+      <Link to={'/sit'}>Your SIT</Link>
+    </>
+  },
+  {
+    key: 'mining',
+    name: 'Mining',
+    path: '/mining',
+    icon: <><i className="fa-solid fa-hand-holding-dollar"></i></>,
+    label: <>
+      <Link to={'/mining'}>Mining</Link>
     </>
   },
   {
     key: 'war',
-    name: 'Billboard Steal',
+    name: 'Battles',
     path: '/war',
     icon: <><i className="fa-solid fa-flag"></i></>,
     label: <>
-      <Link to={'/war'}>Billboard Steal</Link>
+      <Link to={'/war'}>Battles</Link>
+    </>
+  },
+  {
+    key: 'treasure',
+    name: 'Treasure Hunt',
+    path: '/treasure',
+    icon: <><i className="fa-solid fa-gem"></i></>,
+    label: <>
+      <Link to={'/treasure'}>Treasure Hunt</Link>
     </>
   },
 ];

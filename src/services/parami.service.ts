@@ -29,7 +29,6 @@ export const getAdSlotOfNftId = async (nftId: string) => {
     return null;
   }
 
-  // todo: bid with ad3, no fractionId?
   return await slotRes.toHuman() as { adAsset: string, adId: string, budgetPot: string, fractionId: string }; // fraction / ad3
 }
 
