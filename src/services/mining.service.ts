@@ -203,33 +203,7 @@ export const getImAccountsReadyForBid = async (address: string, chainId: number)
   const { data } = await res.json();
 
   // todo: return Page<imAccount>
-  console.log('getImAccountsReadyForBid', data.allImAccounts.nodes);
   return data.allImAccounts.nodes as ImAccount[];
-}
-
-export const testParamiGraphQL = async () => {
-  try {
-    const query = `query {
-      advertisementBids(first: 20) {
-        nodes {
-          id,
-          advertiser,
-          active
-        }
-      }
-    }`;
-    const res = await doGraghQueryParami(query);
-
-    if (!res) {
-      return;
-    }
-
-    const { data } = await res.json();
-    console.log('graph QL', data);
-  } catch (e) {
-    console.error(e)
-    return;
-  }
 }
 
 export const getIMAccountOfBillboard = async (walletAddress: string, contractAddress: string, tokenId: string) => {

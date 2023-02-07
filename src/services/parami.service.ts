@@ -2,6 +2,14 @@ import { BigNumber } from "ethers";
 import { doGraghQueryParami } from "../utils/api.util";
 import { deleteComma } from "../utils/format.util";
 
+export interface AdSlot {
+  adAsset: 'Currency' | { Asset: string };
+  adId: string;
+  budgetPot: string;
+  nftId: string;
+  created: string;
+}
+
 export const getParamiNftExternal = async (nftId: string) => {
   const res = await window.apiWs.query.nft.external(nftId);
   if (res.isEmpty) {
@@ -29,7 +37,7 @@ export const getAdSlotOfNftId = async (nftId: string) => {
     return null;
   }
 
-  return await slotRes.toHuman() as { adAsset: string, adId: string, budgetPot: string, fractionId: string }; // fraction / ad3
+  return await slotRes.toHuman() as unknown as AdSlot;
 }
 
 export const getSitBalanceOfBudgetPot = async (budgetPotId: string, assetId: string) => {
@@ -55,7 +63,7 @@ export const getCurrentPriceOfNftId = async (nftId: string) => {
     return await getAvailableAd3BalanceOnParami(slot.budgetPot) ?? '0';
   }
 
-  const balance = await getSitBalanceOfBudgetPot(slot.budgetPot, slot.fractionId);
+  const balance = await getSitBalanceOfBudgetPot(slot.budgetPot, slot.adAsset.Asset);
   return balance ?? '0';
 }
 
@@ -109,7 +117,7 @@ export const getNFTIdsOfOwnerDid = async (did: string) => {
 
 export const getActiveBidNftIdsOfDid = async (did: string) => {
   const query = `query {
-    advertisementBids(filter: {and: [{advertiser: {equalTo: "${did}"}}, {active: {equalTo: true}}]}) {
+    advertisementBids(filter: {and: [{advertiser: {equalTo: "${did.toLowerCase()}"}}, {active: {equalTo: true}}]}) {
       nodes {
         nftId
       }
@@ -122,7 +130,7 @@ export const getActiveBidNftIdsOfDid = async (did: string) => {
   }
 
   const { data } = await res.json();
-  return ((data?.advertisementBids?.nodes ?? []) as {nftId: string}[]).map(node => node.nftId);
+  return ((data?.advertisementBids?.nodes ?? []) as { nftId: string }[]).map(node => node.nftId);
 }
 
 // export const testGraphQL = async () => {
@@ -142,5 +150,5 @@ export const getActiveBidNftIdsOfDid = async (did: string) => {
 //   }
 
 //   const { data } = await res.json();
-//   return ((data?.advertisementBids?.nodes ?? []) as {nftId: string}[]).map(node => node.nftId);
+//   return ((data?.advertisementBids?.nodes ?? []) as { nftId: string }[]).map(node => node.nftId);
 // }

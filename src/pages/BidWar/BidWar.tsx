@@ -103,13 +103,16 @@ function BidWar({ }: BidWarProps) {
         const balances = await Promise.all(activeBidNftIds.map(nftId => getCurrentPriceOfNftId(nftId)))
 
         const activeBidBillboards = activeBidNftIds.map((nftId, index) => {
+            if (!imAccounts[index]) {
+                return null;
+            }
             return {
                 paramiNftId: nftId,
                 influence: (imAccounts[index])?.influence ?? 0,
                 nftImage: formatTwitterImageUrl((imAccounts[index])?.twitterProfileImageUri),
                 price: balances[index] ?? '0'
             }
-        });
+        }).filter(Boolean) as Billboard[];
 
         setActiveBidBillboards(activeBidBillboards);
     }
