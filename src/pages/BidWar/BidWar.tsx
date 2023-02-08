@@ -9,14 +9,11 @@ import { amountToFloatString, formatTwitterImageUrl } from '../../utils/format.u
 import { useAccount, useNetwork } from 'wagmi';
 import { useImAccount } from '../../hooks/useImAccount';
 import { getIMAccountOfBillboard, getImAccountsReadyForBid, startPreempt } from '../../services/mining.service';
+import { openPopup } from '../../utils/window.util';
 
 const { Title } = Typography;
 
 export interface BidWarProps { }
-
-const openPopup = (url: string) => {
-    window.open(url, 'Parami', 'popup,width=400,height=600');
-}
 
 interface Billboard {
     paramiNftId: string;

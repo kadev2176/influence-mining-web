@@ -22,5 +22,7 @@ export enum AD3TxType {
 
 export enum POST_MESSAGE {
   NFT_IMPORTED = 'ParamiWallet::ImportSuccess',
-  AD_BID = 'ParamiWallet::BidSuccess'
+  AD_BID = 'ParamiWallet::BidSuccess',
+  NFT_MINT = 'ParamiWallet::NftMintSuccess',
+  ADD_LIQUIDITY = 'ParamiWallet::AddLiquidity',
 }

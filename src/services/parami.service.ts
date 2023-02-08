@@ -85,7 +85,7 @@ export const getPortedNftIdOfHnft = async (contractAddress: string, tokenId: str
     return null;
   }
 
-  const nftId = await portedRes.toHuman() as string;
+  const nftId = portedRes.toHuman() as string;
   return deleteComma(nftId);
 }
 
@@ -131,6 +131,55 @@ export const getActiveBidNftIdsOfDid = async (did: string) => {
 
   const { data } = await res.json();
   return ((data?.advertisementBids?.nodes ?? []) as { nftId: string }[]).map(node => node.nftId);
+}
+
+export const getNftMetadata = async (nftId: string) => {
+  const metadataRes = await window.apiWs.query.nft.metadata(nftId);
+  if (metadataRes.isEmpty) {
+    return null;
+  }
+  const metadata = metadataRes.toHuman() as {
+    minted: boolean,
+    owner: string,
+    pot: string,
+    tokenAssetId: string,
+    classId: string
+  };
+  return {
+    minted: metadata.minted,
+    owner: metadata.owner,
+    pot: metadata.pot,
+    id: deleteComma(metadata.tokenAssetId)
+  }
+}
+
+export const getSwapMetadataOfNftId = async (nftId: string) => {
+  const metadataRes = await window.apiWs.query.swap.metadata(nftId);
+  if (metadataRes.isEmpty) {
+    return null;
+  }
+
+  const metadata = metadataRes.toHuman() as {
+    created: string,
+    liquidity: string,
+    enableStaking: boolean
+  };
+  return {
+    created: deleteComma(metadata.created),
+    liquidity: deleteComma(metadata.liquidity),
+    enableStaking: metadata.enableStaking
+  }
+}
+
+export const getAssetMetadataOfNftId = async (nftId: string) => {
+  const metadataRes = await window.apiWs.query.assets.metadata(nftId);
+  if (metadataRes.isEmpty) {
+    return null;
+  }
+
+  const metadata = metadataRes.toHuman();
+  console.log('asset metadata', metadata);
+  return metadata;
 }
 
 // export const testGraphQL = async () => {
