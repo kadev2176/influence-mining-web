@@ -1,5 +1,5 @@
 import { PARAMI_AIRDROP } from "../models/parami";
-import { doGraghQueryIM, doGraghQueryParami, fetchWithSig } from "../utils/api.util";
+import { doGraghQueryIM, fetchWithSig } from "../utils/api.util";
 
 export type Balance = {
   total: string;
@@ -268,4 +268,16 @@ export const getIMAccountOfWallet = async (address: string, chainId: number) => 
 
   const { data } = await res.json();
   return data.allImAccounts.nodes[0] as ImAccount;
+}
+
+export const applyForDao = async (address: string, tokenId: string) => {
+
+}
+
+export const getAvailableDaos = async (address: string, chainId: number) => {
+
+  const imAccounts = await getIMAccountOfWallet(address, chainId);
+
+  console.log('im accounts', imAccounts);
+  return [imAccounts];
 }

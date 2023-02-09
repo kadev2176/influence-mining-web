@@ -22,6 +22,7 @@ import MintBillboard from './components/MintBillboard/MintBillboard';
 import BidWar from './pages/BidWar/BidWar';
 import { ApiPromise } from '@polkadot/api';
 import SocialInfluenceToken from './pages/SocialInfluenceToken/SocialInfluenceToken';
+import InfluenceMining from './pages/InfluenceMining/InfluenceMining';
 
 declare global {
   interface Window {
@@ -71,6 +72,8 @@ root.render(
               <Route path="/influenceTx" element={<InfluenceTransactions />} />
               <Route path="/war" element={<BidWar />} />
               <Route path="/sit" element={<SocialInfluenceToken />} />
+              <Route path="/mining/influence" element={<InfluenceMining />} />
+
               <Route path="/test" element={<Test />} />
             </Route>
           </Routes>

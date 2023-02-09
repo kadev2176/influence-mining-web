@@ -93,6 +93,9 @@ function SocialInfluenceToken({ }: SocialInfluenceTokenProps) {
                     <div>
                         <Button type='primary'>Create Influence Mining Pool</Button>
                     </div>
+                    <div>
+                        <Button type='primary'>Setup staking reward</Button>
+                    </div>
                 </>}
             </>}
         </>}

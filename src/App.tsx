@@ -52,9 +52,17 @@ const menuItems = [
     name: 'Mining',
     path: '/mining',
     icon: <><i className="fa-solid fa-hand-holding-dollar"></i></>,
-    label: <>
-      <Link to={'/mining'}>Mining</Link>
-    </>
+    label: 'Mining',
+    children: [
+      {
+        key: 'ad3Mining',
+        label: <><Link to={'/mining/ad3'}>AD3</Link></>
+      },
+      {
+        key: 'influenceMining',
+        label: <><Link to={'/mining/influence'}>SIT</Link></>
+      },
+    ]
   },
   {
     key: 'war',
