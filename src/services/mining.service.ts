@@ -281,3 +281,36 @@ export const getAvailableDaos = async (address: string, chainId: number) => {
   console.log('im accounts', imAccounts);
   return [imAccounts];
 }
+
+export const createInfluenceMiningPool = async () => {
+  return;
+}
+
+export const TestGetSomeImAccounts = async () => {
+  const query = `{
+    allImAccounts(first:10) {
+      nodes {
+        wallet,
+        influence,
+        ad3Balance,
+        accountReferalCount,
+        pluginReferalCount,
+        updatedTime,
+        beginMiningTime,
+        beginPreemptTime,
+        twitterProfileImageUri,
+        hnftContractAddr,
+        hnftTokenId
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(query, '0xFb26cC1f046ec231B7Df3042049afeacdE7B0BCC');
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  return data.allImAccounts.nodes as ImAccount[];
+}

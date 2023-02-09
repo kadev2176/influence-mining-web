@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './App.scss';
 import { Layout, Menu } from 'antd';
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { parseUrlParams } from './utils/window.util';
 import { getIMAccountOfWallet } from './services/mining.service';
