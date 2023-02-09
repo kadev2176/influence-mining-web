@@ -23,6 +23,10 @@ import BidWar from './pages/BidWar/BidWar';
 import { ApiPromise } from '@polkadot/api';
 import SocialInfluenceToken from './pages/SocialInfluenceToken/SocialInfluenceToken';
 import InfluenceMining from './pages/InfluenceMining/InfluenceMining';
+import Boost from './pages/Boost/Boost';
+import Ad3Mining from './pages/Ad3Mining/Ad3Mining';
+import DaoBattle from './pages/DaoBattle/DaoBattle';
+import TreasureHunt from './pages/TreasureHunt/TreasureHunt';
 
 declare global {
   interface Window {
@@ -70,9 +74,13 @@ root.render(
               <Route path="/profile" element={<Profile />} />
               <Route path="/ad3Tx" element={<Ad3Transactions />} />
               <Route path="/influenceTx" element={<InfluenceTransactions />} />
-              <Route path="/war" element={<BidWar />} />
+              <Route path="/battles/billboard" element={<BidWar />} />
+              <Route path="/battles/dao" element={<DaoBattle />} />
               <Route path="/sit" element={<SocialInfluenceToken />} />
+              <Route path="/boost" element={<Boost />} />
               <Route path="/mining/influence" element={<InfluenceMining />} />
+              <Route path="/mining/ad3" element={<Ad3Mining />} />
+              <Route path="/treasure" element={<TreasureHunt />} />
 
               <Route path="/test" element={<Test />} />
             </Route>

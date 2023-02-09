@@ -67,11 +67,19 @@ const menuItems = [
   {
     key: 'war',
     name: 'Battles',
-    path: '/war',
+    path: '/battles',
     icon: <><i className="fa-solid fa-flag"></i></>,
-    label: <>
-      <Link to={'/war'}>Battles</Link>
-    </>
+    label: 'Battles',
+    children: [
+      {
+        key: 'billboard-battles',
+        label: <><Link to={'/battles/billboard'}>Billboards</Link></>
+      },
+      {
+        key: 'dao-battles',
+        label: <><Link to={'/battles/dao'}>DAO</Link></>
+      },
+    ]
   },
   {
     key: 'treasure',
