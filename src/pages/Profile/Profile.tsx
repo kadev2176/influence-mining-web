@@ -30,7 +30,6 @@ function Profile({ }: ProfileProps) {
             notification.success({
                 message: 'Mining Started!'
             })
-
             refresh();
         })
     }

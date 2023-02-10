@@ -37,7 +37,54 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
     return <>
         <Title level={3}>Your Social Influence</Title>
         <div className='influence-stat-card'>
-            <Row gutter={12} style={{ marginBottom: '10px' }}>
+            <Row style={{ width: '100%' }}>
+                <Col xl={12} lg={12} md={24} sm={24} xs={24}>
+                    <div className='total-influence'>
+                        <div className='title'>Mining Influence</div>
+                        {/* <div className='icon'>
+                            <img src='/logo-round-core.svg'></img>
+                            Mining Influence
+                        </div> */}
+                        <div className='value' onClick={() => {
+                            navigate('/influenceTx')
+                        }}>
+                            <div className='balance'>
+                                {influence.influence}
+                            </div>
+                        </div>
+                    </div>
+                </Col>
+                <Col xl={12} lg={12} md={24} sm={24} xs={24} className='sub-influence'>
+                    <Row justify="space-between" className='sub-influence-row'>
+                        <Col className='label'>
+                            <i className="fa-solid fa-user"></i>
+                            <span className='text'>Social Influence</span>
+                        </Col>
+                        <Col className='value'>
+                            <div className='balance'>{influence.influence}</div>
+                        </Col>
+                        {/* <Col className='action'>
+                            <div>
+                                <Button type='primary' onClick={() => {
+                                    setWithdrawModal(true);
+                                }}>Withdraw</Button>
+                            </div>
+                        </Col> */}
+                    </Row>
+                    <Row justify="space-between" className='sub-influence-row'>
+                        <Col className='label'>
+                            <i className="fa-solid fa-star"></i>
+                            <span className='text'>Bonus Influence</span>
+                        </Col>
+                        <Col className='value'>
+                            <div className='balance'>{0}</div>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
+        </div>
+        <div className='influence-stat-card'>
+            {/* <Row gutter={12} style={{ marginBottom: '10px' }}>
                 <Col span={12}>
                     <div className='influence-score' onClick={() => {
                         navigate('/influenceTx')
@@ -46,7 +93,7 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
                         <div className='value'>{influence.influence}</div>
                     </div>
                 </Col>
-            </Row>
+            </Row> */}
             <Row gutter={12}>
                 {getStatCard('Referral Count', influence.accountReferalCount)}
                 {getStatCard('Extension Referral Count', influence.pluginReferalCount)}
