@@ -11,6 +11,7 @@ import { useApproveAD3 } from '../../hooks/useApproveAD3';
 import { formatBalance } from '@polkadot/util';
 import { formatAd3Amount } from '../../utils/format.util';
 import { useImAccount } from '../../hooks/useImAccount';
+import BillboardNftImage from '../BillboardNftImage/BillboardNftImage';
 
 const { Title } = Typography;
 
@@ -74,7 +75,7 @@ function MintBillboard() {
 
     useEffect(() => {
         if (upgradeToLevel !== undefined) {
-            const priceDiff = BigNumber.from(prices[upgradeToLevel]).sub(prices[hnft.level!]).toString();
+            const priceDiff = BigNumber.from(prices[upgradeToLevel]).sub(prices[Number(hnft.level!)]).toString();
             setPrice(priceDiff);
         }
     }, [upgradeToLevel])
@@ -114,7 +115,7 @@ function MintBillboard() {
                 <div className='nft-card'>
                     <div className='content-container'>
                         <div className='billboard'>
-                            <BillboardCommon />
+                            <BillboardNftImage imageUrl={imAccount?.twitterProfileImageUri ?? ''} level={billboard.level}></BillboardNftImage>
                         </div>
 
                         <div className='info-container'>
@@ -144,10 +145,10 @@ function MintBillboard() {
                             }}>Mint</div>
                         </>}
                         {!!hnft?.balance && hnft?.balance > 0 && <>
-                            {hnft.level! >= billboard.level && <>
+                            {Number(hnft.level!) >= billboard.level && <>
                                 <div className='btn disabled'>Owned</div>
                             </>}
-                            {hnft.level! < billboard.level && <>
+                            {Number(hnft.level!) < billboard.level && <>
                                 <div className='btn active' onClick={() => {
                                     setUpgradeToLevel(billboard.level);
                                 }}>Upgrade</div>

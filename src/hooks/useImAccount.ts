@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
 import { getIMAccountOfWallet, ImAccount } from "../services/mining.service";
+import { formatTwitterImageUrl } from "../utils/format.util";
 
 export const useImAccount = () => {
   const { address } = useAccount();
@@ -17,7 +18,10 @@ export const useImAccount = () => {
       setLoading(true);
       getIMAccountOfWallet(address, chain.id).then(imAccount => {
         if (imAccount) {
-          setImAccount(imAccount);
+          setImAccount({
+            ...imAccount,
+            twitterProfileImageUri: formatTwitterImageUrl(imAccount.twitterProfileImageUri)
+          });
         }
         setLoading(false);
       }).catch((e) => {

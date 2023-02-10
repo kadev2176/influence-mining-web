@@ -27,3 +27,19 @@ export enum POST_MESSAGE {
   ADD_LIQUIDITY = 'ParamiWallet::AddLiquidity',
   IM_POOL_CREATED = 'ParamiWallet::IMPoolCreated'
 }
+
+export const BillboardLevel2Name: {[level: string]: string} = {
+  '0': 'Novel',
+  '1': 'Rare',
+  '2': 'Premium',
+  '3': 'Epic',
+  '4': 'Legendary'
+}
+
+export const BillboardLevel2MiningPower: {[level: string]: number} = {
+  '0': 20,
+  '1': 50,
+  '2': 100,
+  '3': 200,
+  '4': 400
+}

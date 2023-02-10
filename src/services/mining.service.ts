@@ -79,25 +79,21 @@ export const bindAccount = async (address: string, chainId: number, oauthToken: 
 }
 
 export const startMining = async (address: string, chainId: number, hnftContract: string, hnftTokenId: string) => {
-  try {
-    const data = JSON.stringify({
-      wallet: address,
-      chain_id: chainId,
-      hNFTContractAddr: hnftContract,
-      hNFTTokenId: hnftTokenId
-    });
+  const data = JSON.stringify({
+    wallet: address,
+    chain_id: chainId,
+    hNFTContractAddr: hnftContract,
+    hNFTTokenId: hnftTokenId
+  });
 
-    const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/beginmining`, address, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: data
-    });
-    return await resp.json();
-  } catch (_) {
-    return true;
-  }
+  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/beginmining`, address, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  });
+  return await resp.json();
 }
 
 export const startPreempt = async (address: string, chainId: number) => {
