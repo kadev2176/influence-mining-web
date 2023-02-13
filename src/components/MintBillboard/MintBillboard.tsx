@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Typography, Spin, notification } from 'antd';
+import { Col, Row, Typography, Spin } from 'antd';
 import './MintBillboard.scss';
-import BillboardCommon from '../BillboardCommon/BillboardCommon';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useMintBillboard } from '../../hooks/useMintBillboard';
 import { useUpgradeBillboard } from '../../hooks/useUpgradeBillboard';
 import { useBillboardPrices } from '../../hooks/useBillboardPrices';
 import { BigNumber } from 'ethers';
 import { useApproveAD3 } from '../../hooks/useApproveAD3';
-import { formatBalance } from '@polkadot/util';
 import { formatAd3Amount } from '../../utils/format.util';
 import { useImAccount } from '../../hooks/useImAccount';
 import BillboardNftImage from '../BillboardNftImage/BillboardNftImage';
@@ -141,6 +139,7 @@ function MintBillboard() {
                     <div className='btn-container'>
                         {hnft?.balance === 0 && <>
                             <div className='btn active' onClick={() => {
+                                console.log('mint:', billboard.level);
                                 setMintLevel(billboard.level);
                             }}>Mint</div>
                         </>}

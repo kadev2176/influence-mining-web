@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi';
-import { notification, Typography } from 'antd';
+import { Button, notification, Typography } from 'antd';
 import { startMining, updateInfluence } from '../../services/mining.service';
 import './Profile.scss';
 import AD3Balance from '../../components/AD3Balance/AD3Balance';
@@ -8,6 +8,7 @@ import InfluenceStat from '../../components/InfluenceStat/InfluenceStat';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useImAccount } from '../../hooks/useImAccount';
 import BillboardNftImage from '../../components/BillboardNftImage/BillboardNftImage';
+import { useNavigate } from 'react-router-dom';
 
 const { Title } = Typography;
 
@@ -18,6 +19,7 @@ function Profile({ }: ProfileProps) {
     const { chain } = useNetwork();
     const { imAccount, refresh, loading } = useImAccount()
     const hnft = useHNFT();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (imAccount) {
@@ -42,6 +44,12 @@ function Profile({ }: ProfileProps) {
     return <>
         <div className='profile-container'>
             <Title level={3}>Billboard</Title>
+            {!hnft?.balance && <>
+                <Button type="primary" onClick={() => {
+                    navigate('/market');
+                }}>Mint Your Billboard</Button>
+            </>}
+
             {!!hnft?.name && <>
                 <div className='billboards'>
                     <div className='billboard-card'>
@@ -69,12 +77,6 @@ function Profile({ }: ProfileProps) {
                                 </div>
                             </div>
                         </>}
-
-                        <div className='btn-container'>
-                            <div className='btn active' onClick={handleStartMining}>
-                                Start Mining
-                            </div>
-                        </div>
                     </div>
                 </div>
             </>}

@@ -8,6 +8,7 @@ export type Balance = {
 }
 
 // imAccount
+// todo: linkedTo
 export type ImAccount = {
   wallet: string;
   influence: number;
@@ -20,6 +21,8 @@ export type ImAccount = {
   hnftContractAddr: string;
   hnftTokenId: string;
   twitterProfileImageUri: string;
+  linkedTo: string;
+  hasDao: boolean;
 }
 
 export type Ad3Tx = {
@@ -166,7 +169,6 @@ export const getWithdrawSignatureOfTxId = async (txId: string, chainId: number, 
 }
 
 export const getImAccountsReadyForBid = async (address: string, chainId: number) => {
-  // filter beginPreemptTime & chainId
   // todo: page and pageInfo
   const query = `{
     allImAccounts( filter: { and: [{chainId: {equalTo: ${chainId}}}, { not: {beginPreemptTime: {equalTo: 0}}}]}, first:100 ) {
@@ -238,6 +240,7 @@ export const getIMAccountOfBillboard = async (walletAddress: string, contractAdd
 }
 
 export const getIMAccountOfWallet = async (address: string, chainId: number) => {
+  // todo: get account link info
   const query = `{
     allImAccounts( filter: { and: [{wallet: {equalTo: "${address.toLowerCase()}"}}, {chainId: {equalTo: ${chainId}}}]}) {
       nodes {
@@ -271,11 +274,13 @@ export const applyForDao = async (address: string, tokenId: string) => {
 }
 
 export const getAvailableDaos = async (address: string, chainId: number) => {
-
-  const imAccounts = await getIMAccountOfWallet(address, chainId);
-
-  console.log('im accounts', imAccounts);
-  return [imAccounts];
+  const imAccounts = await TestGetSomeImAccounts();
+  return (imAccounts ?? []).map(imAccount => {
+    return {
+      ...imAccount,
+      hasDao: true
+    };
+  });
 }
 
 export const createInfluenceMiningPool = async () => {

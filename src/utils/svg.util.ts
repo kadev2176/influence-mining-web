@@ -20,9 +20,10 @@ const background_black = `
 <circle cx="600" cy="600" r="900" fill="#000" />
 `;
 
-const circle = `<g stroke="#e37da2" fill="#e37da2">
-  <circle cx="600" cy="600" r="454" stroke-width="15" fill="none">
-  </circle>
+const drawCircle = (level: number) => {
+  return `<g stroke="${baseColors[level]}" fill="${baseColors[level]}">
+  ${level === 3 ? '<circle cx="600" cy="600" r="480" stroke-width="10" fill="none" stroke-dasharray="230 20"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 600 600" to="360 600 600" begin="0" dur="30s" repeatCount="indefinite" /></circle>' : ''}
+  <circle cx="600" cy="600" r="454" stroke-width="15" fill="none" />
   '<circle cx="600" cy="600" r="430" stroke-width="4" fill="none"/>'
   
   '<circle cx="600" cy="600" r="410" stroke-width="4" fill="none"/>'
@@ -31,6 +32,7 @@ const circle = `<g stroke="#e37da2" fill="#e37da2">
   "</circle>"
   '<circle cx="600" cy="600" r="355" stroke-width="4" fill="none"/>'
 </g>`;
+}
 
 const frame_fire = `
   '<g stroke="#e37da2" stroke-width="4" filter="url(#light0)">'
@@ -170,6 +172,8 @@ const frame_common = `
 
 const frames = [frame_common, frame_wind, frame_earth, frame_water, frame_fire];
 
+const baseColors = ['#989898', 'url(#gradient_wind)', 'url(#gradient)', '#4fb3bf', '#e37da2'];
+
 export const generateSvg = (imageUrl: string, level: number = 0) => {
 
   level = Math.min(Math.max(0, level), 4);
@@ -203,9 +207,9 @@ export const generateSvg = (imageUrl: string, level: number = 0) => {
       '</filter>'
     </defs>
     
-    ${background_black}
+    ${level=== 2 ? background_light : background_black}
     ${frames[level]}
-    ${circle}
+    ${drawCircle(level)}
     
     <image
       x="300"

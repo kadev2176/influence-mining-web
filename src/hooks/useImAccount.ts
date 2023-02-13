@@ -20,7 +20,9 @@ export const useImAccount = () => {
         if (imAccount) {
           setImAccount({
             ...imAccount,
-            twitterProfileImageUri: formatTwitterImageUrl(imAccount.twitterProfileImageUri)
+            twitterProfileImageUri: formatTwitterImageUrl(imAccount.twitterProfileImageUri),
+            // linkedTo: '0x123'
+            linkedTo: ''
           });
         }
         setLoading(false);
