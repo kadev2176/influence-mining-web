@@ -9,7 +9,7 @@ export const useMintBillboard = (level: number | undefined, imageUrl: string) =>
     functionName: 'mint',
     args: [imageUrl, level]
   });
-  const { data, isLoading: writeLoading, write: mint, isError } = useContractWrite(config);
+  const { data, isLoading: writeLoading, write: mint, isError, error } = useContractWrite(config);
   const { isLoading: waitTxLoading, isSuccess: mintSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
@@ -18,6 +18,7 @@ export const useMintBillboard = (level: number | undefined, imageUrl: string) =>
     mint,
     isLoading: writeLoading || waitTxLoading,
     isSuccess: mintSuccess,
-    isError
+    isError,
+    error
   }
 }

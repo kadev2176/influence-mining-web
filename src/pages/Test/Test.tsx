@@ -4,6 +4,7 @@ import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import BillboardNftImage from '../../components/BillboardNftImage/BillboardNftImage';
 import MintBillboard from '../../components/MintBillboard/MintBillboard';
 import { PARAMI_AIRDROP } from '../../models/parami';
+import { getQueryFields } from '../../services/mining.service';
 
 export interface TestProps { }
 
@@ -34,6 +35,10 @@ function Test({ }: TestProps) {
     //         notification.success({ message: userSignature })
     //     }
     // }, [userSignature])
+
+    useEffect(() => {
+        getQueryFields();
+    }, [])
 
     return <>
         <div style={{ width: '400px', height: '400px' }}>

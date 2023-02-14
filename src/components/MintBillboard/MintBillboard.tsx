@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Typography, Spin } from 'antd';
+import { Col, Row, Typography, Spin, notification } from 'antd';
 import './MintBillboard.scss';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useMintBillboard } from '../../hooks/useMintBillboard';
@@ -47,9 +47,9 @@ function MintBillboard() {
     const [price, setPrice] = useState<string>();
     const hnft = useHNFT();
     const { imAccount } = useImAccount();
-    const { mint, isSuccess: mintSuccess, isLoading: mintLoading, isError: mintError } = useMintBillboard(mintLevel, imAccount?.twitterProfileImageUri ?? ''); // default image?
-    const { upgradeBillboardLevel, isSuccess: upgradeSuccess, isLoading: upgradeLoading, isError: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
-    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, isError: approveError } = useApproveAD3(price);
+    const { mint, isSuccess: mintSuccess, isLoading: mintLoading, error: mintError } = useMintBillboard(mintLevel, imAccount?.twitterProfileImageUri ?? ''); // default image?
+    const { upgradeBillboardLevel, isSuccess: upgradeSuccess, isLoading: upgradeLoading, error: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
+    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError } = useApproveAD3(price);
 
     const clearState = () => {
         setMintLevel(undefined);
@@ -60,8 +60,11 @@ function MintBillboard() {
     useEffect(() => {
         if (approveError || mintError || upgradeError) {
             clearState();
+            notification.warning({
+                message: approveError?.message || mintError?.message || upgradeError?.message
+            });
         }
-    }, [approveError, mintError, upgradeError])
+    }, [approveError, mintError, upgradeError]);
 
     const prices = useBillboardPrices();
 

@@ -11,6 +11,7 @@ export type Balance = {
 // todo: linkedTo
 export type ImAccount = {
   wallet: string;
+  chainId: number;
   influence: number;
   ad3Balance: number;
   accountReferalCount: number;
@@ -269,27 +270,137 @@ export const getIMAccountOfWallet = async (address: string, chainId: number) => 
   return data.allImAccounts.nodes[0] as ImAccount;
 }
 
-export const applyForDao = async (address: string, tokenId: string) => {
+export const getDaoApplicationOfWallet = async (address: string, chainId: number) => {
+  const query = `{
+    allJoinDaoApplications(filter: {and: [{memberWallet: {equalTo: "${address.toLowerCase()}"}}, {memberChainId: {equalTo: ${chainId}}}, {not: {status: {equalTo: "cancelled"}}}]}) {
+      nodes {
+        id,
+        status,
+        kolWallet,
+        kolChainId
+      }
+    }
+  }`;
 
+  const res = await doGraghQueryIM(query, address);
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  return data.allJoinDaoApplications.nodes[0];
+}
+
+export const getPendingApplicationsForMe = async (address: string, chainId: number) => {
+  const query = `{
+    allJoinDaoApplications(filter: {and: [{kolWallet: {equalTo: "${address.toLowerCase()}"}}, {kolChainId: {equalTo: ${chainId}}}, {status: {equalTo: "pending"}}]}) {
+      nodes {
+        id,
+        status,
+        kolWallet,
+        kolChainId,
+        memberWallet
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(query, address);
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  return data.allJoinDaoApplications.nodes;
 }
 
 export const getAvailableDaos = async (address: string, chainId: number) => {
-  const imAccounts = await TestGetSomeImAccounts();
-  return (imAccounts ?? []).map(imAccount => {
-    return {
-      ...imAccount,
-      hasDao: true
-    };
-  });
+  // todo: filter dao applicable
+  const query = `{
+    allImAccounts(first: 20, filter: {chainId: {equalTo: 5}}) {
+      nodes {
+        wallet,
+        chainId,
+        influence,
+        ad3Balance,
+        accountReferalCount,
+        pluginReferalCount,
+        updatedTime,
+        beginMiningTime,
+        beginPreemptTime,
+        twitterProfileImageUri,
+        hnftContractAddr,
+        hnftTokenId,
+        daoApplicable
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(query, address);
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  return data.allImAccounts.nodes as ImAccount[];
 }
 
 export const createInfluenceMiningPool = async () => {
   return;
 }
 
+export const applyForDao = async (address: string, chainId: number, kolWallet: string, kolChainId: number) => {
+  const data = JSON.stringify({
+    chainId,
+    kolWallet,
+    kolChainId,
+  });
+
+  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/dao/join-applications`, address, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  });
+  return resp;
+}
+
+export const exitDao = async (address: string, chainId: number, daoApplicationId: number) => {
+  const data = JSON.stringify({
+    chainId,
+  });
+
+  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/dao/join-applications/${daoApplicationId}/exit`, address, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  });
+  return resp;
+}
+
+export const approveDaoApplication = async (address: string, chainId: number, daoApplicationId: number) => {
+  const data = JSON.stringify({
+    chainId,
+  });
+
+  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/dao/join-applications/${daoApplicationId}/approve`, address, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  });
+  return resp;
+}
+
 export const TestGetSomeImAccounts = async () => {
   const query = `{
-    allImAccounts(first:10) {
+    allImAccounts(first:20) {
       nodes {
         wallet,
         influence,
@@ -314,4 +425,37 @@ export const TestGetSomeImAccounts = async () => {
 
   const { data } = await res.json();
   return data.allImAccounts.nodes as ImAccount[];
+}
+
+export const getQueryFields = async () => {
+  const query = `{
+    __schema {
+      queryType {
+        fields {
+          name
+        }
+      }
+    }
+  }`
+
+  // const query = `
+  // {
+  //   __schema {
+  //     mutationType {
+  //       fields {
+  //         name
+  //       }
+  //     }
+  //   }
+  // }
+  // `
+
+  const res = await doGraghQueryIM(query, '0xFb26cC1f046ec231B7Df3042049afeacdE7B0BCC');
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  console.log('query fields', data);
 }

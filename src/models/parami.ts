@@ -2,7 +2,7 @@
 export const PARAMI_AIRDROP = 'https://staging.parami.io/airdrop';
 
 // export const PARAMI_WALLET = 'https://app.parami.io';
-export const PARAMI_WALLET = 'http://local.parami.io:1024';
+export const PARAMI_WALLET = 'https://staging.parami.io';
 
 // export const PARAMI_SUBQUERY = 'https://graph.parami.io';
 export const PARAMI_SUBQUERY = 'https://staging.parami.io/graph/';

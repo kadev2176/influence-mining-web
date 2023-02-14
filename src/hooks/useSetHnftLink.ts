@@ -1,23 +1,26 @@
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
+import { EIP5489ForInfluenceMiningContractAddress } from "../models/parami";
+import EIP5489ForInfluenceMining from '../contracts/EIP5489ForInfluenceMining.json';
 
-export const useHnftSetLinkTo = (address: string, tokenId: string) => {
+export const useHnftLinkTo = (tokenId = '0', targetTokenId = '0') => {
 
   const { config } = usePrepareContractWrite({
-    address: '0x111',
-    abi: [] as any,
-    functionName: 'setLinkTo',
-    args: [address, tokenId]
+    address: EIP5489ForInfluenceMiningContractAddress,
+    abi: EIP5489ForInfluenceMining.abi,
+    functionName: 'linkTo',
+    args: [tokenId, targetTokenId]
   });
 
-  const { data, isLoading: writeLoading, write: setLinkTo, isError } = useContractWrite(config);
+  const { data, isLoading: writeLoading, write: linkTo, isError, error } = useContractWrite(config);
   const { isLoading: waitTxLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
 
   return {
-    setLinkTo,
+    linkTo,
     isLoading: writeLoading || waitTxLoading,
     isSuccess,
-    isError: isError
+    isError: isError,
+    error
   }
 }
