@@ -18,10 +18,7 @@ function SocialInfluenceToken({ }: SocialInfluenceTokenProps) {
     const [paramiNftId, setParamiNftId] = useState<string>();
     const [paramiNft, setParamiNft] = useState<any>(); // todo: type this
 
-    const [applications, setApplications] = useState<any[]>();
-
     const queryParamiNft = async (nftId: string) => {
-        console.log('query parami nft...');
         const nftMetadata = await getNftMetadata(nftId);
         const swapMetadata = await getSwapMetadataOfNftId(nftId);
         const assetMetadata = await getAssetMetadataOfNftId(nftId);
@@ -50,13 +47,8 @@ function SocialInfluenceToken({ }: SocialInfluenceTokenProps) {
         }
     }, [paramiNftId]);
 
-    useEffect(() => {
-        TestGetSomeImAccounts().then(imAccounts => {
-            setApplications(imAccounts);
-        })
-    }, [])
-
     return <>
+        <Title level={3}>Create DAO and claim your SIT!</Title>
         {!paramiNft && <>
             <Button type='primary' onClick={() => {
                 openPopup(`${PARAMI_WALLET}/enlist/${hnft.address}/${hnft.tokenId}`);
@@ -130,29 +122,6 @@ function SocialInfluenceToken({ }: SocialInfluenceTokenProps) {
                         <Button type='primary'>Setup staking reward</Button>
                     </div>
                 </>}
-
-                <div>
-                    <Title level={3}>DAO Applications</Title>
-                    <div>
-                        <List
-                            className="demo-loadmore-list"
-                            itemLayout="horizontal"
-                            dataSource={applications}
-                            renderItem={(item) => (
-                                <List.Item
-                                    actions={[<Button type='primary'>approve</Button>]}
-                                >
-                                    <List.Item.Meta
-                                        avatar={<Avatar src={formatTwitterImageUrl(item.twitterProfileImageUri)} />}
-                                        title={<a href="https://ant.design">{'Dao name'}</a>}
-                                        description={item.wallet}
-                                    />
-                                    <div>{item.influence}</div>
-                                </List.Item>
-                            )}
-                        />
-                    </div>
-                </div>
             </>}
         </>}
     </>;

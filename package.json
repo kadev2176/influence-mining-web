@@ -23,6 +23,7 @@
     "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1",
     "sass": "^1.57.1",
+    "three": "^0.149.0",
     "typescript": "^4.9.4",
     "wagmi": "^0.10.1",
     "web-vitals": "^2.1.4"
@@ -53,5 +54,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://influence.parami.io/"
+  "homepage": "https://influence.parami.io/",
+  "devDependencies": {
+    "@types/three": "^0.149.0"
+  }
 }
