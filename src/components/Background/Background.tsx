@@ -8,7 +8,7 @@
 
 import { useEffect } from 'react';
 import * as THREE from 'three';
-import { AdditiveBlending } from 'three';
+import { AdditiveBlending, MultiplyBlending, NoBlending, NormalBlending, SubtractiveBlending } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import './Background.scss';
 
@@ -24,30 +24,46 @@ const Background: React.FC<{
 
   const textureLoader = new THREE.TextureLoader();
   const shape = textureLoader.load('/particleShape/1.png');
+  const muri = textureLoader.load('/assets/images/avatar.png');
+  const bayc = textureLoader.load('/assets/images/bayc.png');
 
   // Scene
   const scene = new THREE.Scene();
 
   // Galaxy Generator
+  // const parameters = {
+  //   count:
+  //     !!leftDays && leftDays <= 7
+  //       ? ((count[1] - count[0]) / 7) * (7 - leftDays + 1)
+  //       : complex
+  //       ? 70000
+  //       : 10000,
+  //   size: 0.01,
+  //   radius: 5,
+  //   branches: !!leftDays && leftDays <= 7 ? 7 - leftDays + 1 : 7,
+  //   spin: 1,
+  //   randomness:
+  //     !!leftDays && leftDays <= 7
+  //       ? ((randomness[1] - randomness[0]) / 7) * (7 - leftDays + 1)
+  //       : complex
+  //       ? 0.3
+  //       : 0.1,
+  //   randomnessPower: 5,
+  //   stars: !!leftDays && leftDays <= 7 ? stars[1] - (stars[0] / 7) * (7 - leftDays + 1) : 9000,
+  //   starColor: '#1b3984',
+  //   insideColor: '#ff5b00',
+  //   outsideColor: '#1b3984',
+  // };
+
   const parameters = {
-    count:
-      !!leftDays && leftDays <= 7
-        ? ((count[1] - count[0]) / 7) * (7 - leftDays + 1)
-        : complex
-        ? 70000
-        : 10000,
-    size: 0.01,
+    count: 42900,
+    size: 0.009,
     radius: 5,
-    branches: !!leftDays && leftDays <= 7 ? 7 - leftDays + 1 : 7,
-    spin: 1,
-    randomness:
-      !!leftDays && leftDays <= 7
-        ? ((randomness[1] - randomness[0]) / 7) * (7 - leftDays + 1)
-        : complex
-        ? 0.3
-        : 0.1,
-    randomnessPower: 5,
-    stars: !!leftDays && leftDays <= 7 ? stars[1] - (stars[0] / 7) * (7 - leftDays + 1) : 9000,
+    branches: 7,
+    spin: -0.651,
+    randomness: 1.17,
+    randomnessPower: 4,
+    stars: 9000,
     starColor: '#1b3984',
     insideColor: '#ff5b00',
     outsideColor: '#1b3984',
@@ -115,31 +131,36 @@ const Background: React.FC<{
   let bgStarsGeometry: any;
   let bgStarsMaterial: any;
   let bgStars: any;
+  const avatars: any = [];
 
-  const generateBgStars = () => {
+  const generateBgStars = (textrue: THREE.Texture) => {
     bgStarsGeometry = new THREE.BufferGeometry();
-    const bgStarsPositions = new Float32Array(parameters.stars * 3);
+    // const bgStarsPositions = new Float32Array(parameters.stars * 3);
+    const bgStarsPositions = new Float32Array(30);
 
-    for (let j = 0; j < parameters.stars; j++) {
-      bgStarsPositions[j * 3 + 0] = (Math.random() - 0.5) * 20;
-      bgStarsPositions[j * 3 + 1] = (Math.random() - 0.5) * 20;
-      bgStarsPositions[j * 3 + 2] = (Math.random() - 0.5) * 20;
+    for (let j = 0; j < 10; j++) {
+      bgStarsPositions[j * 3 + 0] = (Math.random() - 0.5) * 10;
+      // bgStarsPositions[j * 3 + 1] = (Math.random() - 0.5) * 10;
+      bgStarsPositions[j * 3 + 2] = (Math.random() - 0.5) * 10;
     }
 
     bgStarsGeometry.setAttribute('position', new THREE.BufferAttribute(bgStarsPositions, 3));
 
     bgStarsMaterial = new THREE.PointsMaterial({
-      size: parameters.size,
+      size: 0.15,
       depthWrite: false,
       sizeAttenuation: true,
       blending: AdditiveBlending,
-      color: parameters.starColor,
-      transparent: true,
-      alphaMap: shape,
+      transparent: false,
+      map: textrue
     });
+    // bgStarsMaterial = new THREE.MeshBasicMaterial({
+    //   alphaMap: shapeAvatar,
+    // })
 
     bgStars = new THREE.Points(bgStarsGeometry, bgStarsMaterial);
     scene.add(bgStars);
+    avatars.push(bgStars);
   };
 
   // Sizes
@@ -164,10 +185,16 @@ const Background: React.FC<{
       const elapsedTime = clock.getElapsedTime();
       //Update the camera
       points.rotation.y = elapsedTime * 0.1;
-      bgStars.rotation.y = -elapsedTime * 0.05;
+      avatars.forEach((avatar: any) => {
+        avatar.rotation.y = -elapsedTime * 0.05;
+      })
+      // bgStars.rotation.y = -elapsedTime * 0.05;
       if (speedup) {
         points.rotation.y += points.rotation.y * 1.1;
-        bgStars.rotation.y += bgStars.rotation.y * 1.1;
+        avatars.forEach((avatar: any) => {
+          avatar.rotation.y += bgStars.rotation.y * 1.1;
+        })
+        // bgStars.rotation.y += bgStars.rotation.y * 1.1;
       }
       if (pullup && camera.position.x > 1) {
         camera.position.x -= 0.01;
@@ -194,7 +221,8 @@ const Background: React.FC<{
     bgContainer.appendChild(canvas);
 
     generateGalaxy();
-    generateBgStars();
+    generateBgStars(muri);
+    generateBgStars(bayc);
     // Controls
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;

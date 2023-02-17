@@ -1,30 +1,118 @@
-.page-header {
-  background: #23103A !important;
-}
-
-.header-content {
-  color: white;
+.landingContainer {
+  color: #fff;
+  position: relative;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  width: 100%;
 
-  .header-logo {
-    margin-right: 100px;
-  }
-
-  .header-menu {
+  .sloganContainer {
+    position: relative;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 3.1rem;
+    line-height: 1;
+    font-weight: 900;
+    font-family: 'Josefin Sans';
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+    .sloganTop {
+      margin: 0 0 22px;
+    }
+
+    .sloganBottom {
+      margin: 0 0 16px;
+
+      .superscript {
+        position: relative;
+        top: -18px;
+        font-size: 1.8rem;
+      }
+    }
+
+    .copy {
+      font-size: 1rem;
+      font-weight: 300;
+
+      span:not(:last-child) {
+        margin-right: 0.73rem;
+      }
+    }
   }
 
-  .menu-item {
-    margin: 0px 20px;
+  .learnMore {
+    color: #fff;
+    line-height: 2rem;
+    margin-top: 2rem;
+    font-size: 1rem;
+    height: auto;
   }
 }
 
-.page-content {
-  background: #282D4F !important;
-  color: white;
+.snsContainer {
+  position: absolute;
+  left: 2rem;
+  bottom: 3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  z-index: 99;
 
-  .section {
-    height: 100px;
+  .snsButtonItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 0.4rem;
+    transition: all 0.2s;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #21232d;
+    }
+
+    .snsButtonItemSvg {
+      font-size: 22px;
+      color: #fff;
+    }
+
+    img {
+      height: 22px;
+      width: 22px;
+    }
   }
 }
 
+@media (max-width: 767px) {
+  .snsContainer {
+    .snsButtonItem {
+      height: 30px !important;
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+      margin-left: 8px !important;
+      margin-right: 8px !important;
+
+      .snsButtonItemSvg {
+        font-size: 18px !important;
+      }
+
+      img {
+        height: 18px !important;
+        width: 18px !important;
+      }
+    }
+  }
+}
