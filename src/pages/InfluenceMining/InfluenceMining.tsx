@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Typography, Image, Spin, notification } from 'antd';
-import { applyForDao, approveDaoApplication, exitDao, getAvailableDaos, getDaoApplicationOfWallet, getPendingApplicationsForMe, ImAccount } from '../../services/mining.service';
+import { applyForDao, approveDaoApplication, exitDao, getAvailableDaos, getDaoApplicationOfWallet, getNumOfMembersOfDao, getPendingApplicationsForMe, ImAccount } from '../../services/mining.service';
 import { useAccount, useNetwork } from 'wagmi';
 import { useImAccount } from '../../hooks/useImAccount';
 import BillboardNftImage from '../../components/BillboardNftImage/BillboardNftImage';
@@ -14,7 +14,8 @@ export interface InfluenceMiningProps { }
 function InfluenceMining({ }: InfluenceMiningProps) {
     const { address } = useAccount();
     const { chain } = useNetwork();
-    const [daos, setDaos] = useState<ImAccount[]>();
+    const [daos, setDaos] = useState<any[]>(); // todo: type this
+
     const [selectedDao, setSelectedDao] = useState<ImAccount>(); // todo: type this
     const hnft = useHNFT();
     const { linkTo, isLoading, isSuccess, isError, error } = useHnftLinkTo(hnft?.tokenId, selectedDao?.hnftTokenId);
@@ -35,8 +36,24 @@ function InfluenceMining({ }: InfluenceMiningProps) {
 
     useEffect(() => {
         getAvailableDaos(address!, chain!.id).then(daos => {
-            console.log('available daos', daos);
-            setDaos(daos);
+            if (!daos) {
+                setDaos(daos);
+                return;
+            }
+
+            return Promise.all(daos?.map(dao => {
+                return getNumOfMembersOfDao(address!, dao.wallet, dao.chainId);
+            })).then(nums => {
+                return daos.map((dao, index) => {
+                    return {
+                        ...dao,
+                        daoSize: nums[index]
+                    }
+                })
+            });
+        }).then(res => {
+            console.log('available daos', res);
+            setDaos(res);
         });
 
         getDaoApplicationOfWallet(address!, chain!.id).then(res => {
@@ -120,9 +137,9 @@ function InfluenceMining({ }: InfluenceMiningProps) {
                                             </div>
                                         </Col>
                                         <Col>
-                                            <div>Kai's Dao</div>
+                                            <div>KOL: {dao.wallet}</div>
                                             <div>Influence: {dao.influence}</div>
-                                            <div>2000+ members</div>
+                                            <div>{dao.daoSize} members</div>
                                             <div>300k $KaiSIT offered</div>
                                             <div>
                                                 <Button type='primary' onClick={() => {

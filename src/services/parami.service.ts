@@ -63,8 +63,8 @@ export const getCurrentPriceOfNftId = async (nftId: string) => {
     return await getAvailableAd3BalanceOnParami(slot.budgetPot) ?? '0';
   }
 
-  const balance = await getSitBalanceOfBudgetPot(slot.budgetPot, slot.adAsset.Asset);
-  return balance ?? '0';
+  const balance = await getSitBalanceOfBudgetPot(slot.budgetPot, deleteComma(slot.adAsset.Asset)) as string;
+  return deleteComma(balance) ?? '0';
 }
 
 export const getAvailableAd3BalanceOnParami = async (account: string) => {

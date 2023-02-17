@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useApiWs } from '../../hooks/useApiWs';
 import { useHNFT } from '../../hooks/useHNFT';
 import { PARAMI_WALLET, POST_MESSAGE } from '../../models/parami';
-import { createInfluenceMiningPool, TestGetSomeImAccounts } from '../../services/mining.service';
+import { createInfluenceMiningPool } from '../../services/mining.service';
 import { getAssetMetadataOfNftId, getNftMetadata, getPortedNftIdOfHnft, getSwapMetadataOfNftId } from '../../services/parami.service';
-import { formatTwitterImageUrl } from '../../utils/format.util';
 import { openPopup, subscribePostMessage } from '../../utils/window.util';
 
 const { Title } = Typography;

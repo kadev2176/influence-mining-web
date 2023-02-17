@@ -270,6 +270,29 @@ export const getIMAccountOfWallet = async (address: string, chainId: number) => 
   return data.allImAccounts.nodes[0] as ImAccount;
 }
 
+export const getNumOfMembersOfDao = async (address: string, kolWallet: string, kolChainId: number) => {
+  const query = `{
+    allJoinDaoApplications(filter: {and: [{kolWallet: {equalTo: "${kolWallet.toLowerCase()}"}}, {kolChainId: {equalTo: ${kolChainId}}}, {status: {equalTo: "approved"}}]}) {
+      nodes {
+        id,
+        status,
+        kolWallet,
+        kolChainId,
+        memberWallet
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(query, address);
+
+  if (!res) {
+    return 0;
+  }
+
+  const { data } = await res.json();
+  return data.allJoinDaoApplications.nodes.length;
+}
+
 export const getDaoApplicationOfWallet = async (address: string, chainId: number) => {
   const query = `{
     allJoinDaoApplications(filter: {and: [{memberWallet: {equalTo: "${address.toLowerCase()}"}}, {memberChainId: {equalTo: ${chainId}}}, {not: {status: {equalTo: "cancelled"}}}]}) {
