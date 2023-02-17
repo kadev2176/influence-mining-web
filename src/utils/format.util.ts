@@ -71,3 +71,7 @@ export const formatTwitterImageUrl = (url?: string) => {
 	}
 	return url.replace('_normal', '');
 }
+
+export const formatInfluenceScore = (value: string | bigint) => {
+	return Number(amountToFloatString(value)).toFixed(3);
+}

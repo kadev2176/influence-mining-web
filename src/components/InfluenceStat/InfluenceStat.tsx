@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { getPoolSummary, ImAccount, PoolSummary } from '../../services/mining.service';
-import { formatAd3Amount } from '../../utils/format.util';
+import { amountToFloatString, formatAd3Amount, formatInfluenceScore } from '../../utils/format.util';
 import './InfluenceStat.scss';
 
 const { Title } = Typography;
@@ -49,7 +49,7 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
                             navigate('/influenceTx')
                         }}>
                             <div className='balance'>
-                                {influence.influence}
+                                {formatInfluenceScore(influence.influence)}
                             </div>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
                             <span className='text'>Social Influence</span>
                         </Col>
                         <Col className='value'>
-                            <div className='balance'>{influence.influence}</div>
+                            <div className='balance'>{formatInfluenceScore(influence.influence)}</div>
                         </Col>
                         {/* <Col className='action'>
                             <div>
@@ -97,7 +97,7 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
             <Row gutter={12}>
                 {getStatCard('Referral Count', influence.accountReferalCount)}
                 {getStatCard('Extension Referral Count', influence.pluginReferalCount)}
-                {poolSummary && getStatCard('Total Influence', poolSummary.totalInfluence)}
+                {poolSummary && getStatCard('Total Influence', formatInfluenceScore(poolSummary.totalInfluence))}
                 {poolSummary && getStatCard('Total Daily AD3 Rewards', formatAd3Amount(poolSummary.currentDailyOutput))}
             </Row>
         </div>

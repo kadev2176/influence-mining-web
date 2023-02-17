@@ -17,7 +17,7 @@ export interface BidWarProps { }
 
 interface Billboard {
     paramiNftId: string;
-    influence: number;
+    influence: string;
     nftImage: string;
     price: string;
 }

@@ -12,7 +12,7 @@ export type Balance = {
 export type ImAccount = {
   wallet: string;
   chainId: number;
-  influence: number;
+  influence: string;
   ad3Balance: number;
   accountReferalCount: number;
   pluginReferalCount: number;
@@ -129,7 +129,7 @@ export const getAd3Transactions = async (address: string, chainId: number) => {
 }
 
 export const updateInfluence = async (address: string, chainId: number) => {
-  const data = JSON.stringify({ wallet: address, chain_id: chainId });
+  const data = JSON.stringify({ chainId: chainId });
   const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/influence`, address, {
     method: 'post',
     headers: {
