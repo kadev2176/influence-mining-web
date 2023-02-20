@@ -12,6 +12,20 @@ import { AdditiveBlending, MultiplyBlending, NoBlending, NormalBlending, Subtrac
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import './Background.scss';
 
+const generatePosition = () => {
+  while (1) {
+    const x = (Math.random() - 0.5) * 4;
+    const y = (Math.random() - 0.5) * 2;
+    const z = (Math.random() - 0.5) * 4;
+    const r2 = x * x + y * y + z * z
+    if (r2 > 0.8 && r2 < 4) {
+      return {
+        x, y, z
+      }
+    }
+  }
+}
+
 const Background: React.FC<{
   speedup?: boolean;
   pullup?: boolean;
@@ -23,9 +37,16 @@ const Background: React.FC<{
   const stars = [1000, 9000];
 
   const textureLoader = new THREE.TextureLoader();
-  const shape = textureLoader.load('/particleShape/1.png');
-  const muri = textureLoader.load('/assets/images/avatar.png');
-  const bayc = textureLoader.load('/assets/images/bayc.png');
+  const shape = textureLoader.load('/particleShape/particle.png');
+  const avatarTextures = [
+    textureLoader.load('/assets/images/muri.png'),
+    textureLoader.load('/assets/images/bayc.png'),
+    textureLoader.load('/assets/images/azuki.png'),
+    textureLoader.load('/assets/images/coolcat.png'),
+    textureLoader.load('/assets/images/doodle.png'),
+    textureLoader.load('/assets/images/moonbirds.png'),
+    textureLoader.load('/assets/images/pp.png'),
+  ];
 
   // Scene
   const scene = new THREE.Scene();
@@ -58,7 +79,7 @@ const Background: React.FC<{
   const parameters = {
     count: 42900,
     size: 0.009,
-    radius: 5,
+    radius: 7,
     branches: 7,
     spin: -0.651,
     randomness: 1.17,
@@ -95,9 +116,22 @@ const Background: React.FC<{
       const randomZ =
         Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
 
-      positions[i * 3] = Math.sin(branchAngle + spinAngle) * x + randomX;
-      positions[i * 3 + 1] = randomY;
-      positions[i * 3 + 2] = Math.cos(branchAngle + spinAngle) * x + randomZ;
+      const pos_x = Math.sin(branchAngle + spinAngle) * x + randomX;
+      const pos_y = randomY;
+      const pos_z = Math.cos(branchAngle + spinAngle) * x + randomZ;
+
+      const r2 = pos_x * pos_x + pos_y * pos_y + pos_z * pos_z;
+      // if (true) {
+      //   continue;
+      // }
+      if (pos_y > 0.5 && r2 > 0.5 && r2 < 3) {
+        console.log('should continue')
+        continue;
+      }
+
+      positions[i * 3] = pos_x;
+      positions[i * 3 + 1] = pos_y;
+      positions[i * 3 + 2] = pos_z;
 
       // Color
 
@@ -134,33 +168,86 @@ const Background: React.FC<{
   const avatars: any = [];
 
   const generateBgStars = (textrue: THREE.Texture) => {
-    bgStarsGeometry = new THREE.BufferGeometry();
-    // const bgStarsPositions = new Float32Array(parameters.stars * 3);
-    const bgStarsPositions = new Float32Array(30);
+    const bgStarsGeometry = new THREE.BufferGeometry();
+    const bgAvatarsGeometry = new THREE.BufferGeometry();
+    const colorInside = new THREE.Color(parameters.insideColor);
 
-    for (let j = 0; j < 10; j++) {
-      bgStarsPositions[j * 3 + 0] = (Math.random() - 0.5) * 10;
-      // bgStarsPositions[j * 3 + 1] = (Math.random() - 0.5) * 10;
-      bgStarsPositions[j * 3 + 2] = (Math.random() - 0.5) * 10;
+    // random positions
+    const count = 12;
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    // for (let i = 0; i < count; i++) {
+    //   // Position
+    //   const x = Math.random() * parameters.radius;
+    //   const branchAngle = ((i % parameters.branches) / parameters.branches) * 2 * Math.PI;
+    //   const spinAngle = x * parameters.spin;
+
+    //   const randomX =
+    //     Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+    //   const randomY =
+    //     Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+    //   const randomZ =
+    //     Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : -1);
+
+    //   positions[i * 3] = Math.sin(branchAngle + spinAngle) * x + randomX;
+    //   positions[i * 3 + 1] = randomY;
+    //   positions[i * 3 + 2] = Math.cos(branchAngle + spinAngle) * x + randomZ;
+    // }
+
+    // const bgStarsPositions = new Float32Array(parameters.stars * 3);
+    // const bgStarsPositions = new Float32Array(30);
+
+    for (let j = 0; j < count; j++) {
+      const pos = generatePosition() as any;
+      positions[j * 3 + 0] = pos.x;
+      positions[j * 3 + 1] = pos.y;
+      positions[j * 3 + 2] = pos.z;
+
+      const mixedColor = colorInside.clone();
+      // mixedColor.lerp(colorOutside, x / parameters.radius);
+
+      colors[j * 3 + 0] = mixedColor.r;
+      colors[j * 3 + 1] = mixedColor.g;
+      colors[j * 3 + 2] = mixedColor.b;
+      // positions[j * 3 + 0] = (0.9 + Math.random() * 0.2) * (Math.random() > 0.5 ? 1 : -1);
+      // positions[j * 3 + 1] = (0.9 + Math.random() * 0.2) * (Math.random() > 0.5 ? 1 : -1);
+      // positions[j * 3 + 2] = (0.9 + Math.random() * 0.2) * (Math.random() > 0.5 ? 1 : -1); // -0.5 0.5
     }
 
-    bgStarsGeometry.setAttribute('position', new THREE.BufferAttribute(bgStarsPositions, 3));
+    bgAvatarsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    bgStarsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    bgStarsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    bgStarsMaterial = new THREE.PointsMaterial({
-      size: 0.15,
-      depthWrite: false,
+    const bgAvatarMaterial = new THREE.PointsMaterial({
+      size: 0.04,
+      depthWrite: true,
       sizeAttenuation: true,
       blending: AdditiveBlending,
-      transparent: false,
-      map: textrue
+      transparent: true,
+      opacity: 0.85,
+      map: textrue,
     });
-    // bgStarsMaterial = new THREE.MeshBasicMaterial({
-    //   alphaMap: shapeAvatar,
-    // })
+    const bgStarsMaterial = new THREE.PointsMaterial({
+      color: '#fff',
+      size: 0.07,
+      depthWrite: true,
+      sizeAttenuation: true,
+      blending: AdditiveBlending,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.3,
+      // map: shape,
+      alphaMap: shape,
+    });
 
-    bgStars = new THREE.Points(bgStarsGeometry, bgStarsMaterial);
-    scene.add(bgStars);
-    avatars.push(bgStars);
+    const bgAvatars = new THREE.Points(bgAvatarsGeometry, bgAvatarMaterial);
+    const bgStarts = new THREE.Points(bgStarsGeometry, bgStarsMaterial);
+
+    scene.add(bgStarts);
+    scene.add(bgAvatars);
+    avatars.push(bgAvatars);
+    
+    avatars.push(bgStarts);
   };
 
   // Sizes
@@ -171,9 +258,9 @@ const Background: React.FC<{
 
   // Camera
   const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 50);
-  camera.position.x = 3;
-  camera.position.y = 3;
-  camera.position.z = 3;
+  camera.position.x = 1;
+  camera.position.y = 1;
+  camera.position.z = 1;
 
   scene.add(camera);
   // Animate
@@ -184,15 +271,15 @@ const Background: React.FC<{
     if (!!g_renderer) {
       const elapsedTime = clock.getElapsedTime();
       //Update the camera
-      points.rotation.y = elapsedTime * 0.1;
+      points.rotation.y = elapsedTime * 0.2;
       avatars.forEach((avatar: any) => {
-        avatar.rotation.y = -elapsedTime * 0.05;
+        avatar.rotation.y = elapsedTime * 0.2;
       })
       // bgStars.rotation.y = -elapsedTime * 0.05;
       if (speedup) {
         points.rotation.y += points.rotation.y * 1.1;
         avatars.forEach((avatar: any) => {
-          avatar.rotation.y += bgStars.rotation.y * 1.1;
+          avatar.rotation.y += avatar.rotation.y * 1.1;
         })
         // bgStars.rotation.y += bgStars.rotation.y * 1.1;
       }
@@ -221,8 +308,12 @@ const Background: React.FC<{
     bgContainer.appendChild(canvas);
 
     generateGalaxy();
-    generateBgStars(muri);
-    generateBgStars(bayc);
+    avatarTextures.forEach(texture => {
+      generateBgStars(texture);
+    })
+
+    // generateBgStars(muri);
+    // generateBgStars(bayc);
     // Controls
     const controls = new OrbitControls(camera, canvas);
     controls.enableDamping = true;

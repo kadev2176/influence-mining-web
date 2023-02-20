@@ -15,11 +15,11 @@ function HomePageHeader({ }: HomePageHeaderProps) {
     return <>
         <div className='header-container'>
             <div className='logo'>
-                <img className='logo-img' src='/assets/images/logo-core-colored.svg'></img>
-                <span>Parami</span>
+                {/* <img className='logo-img' src='/assets/images/logo-core-colored.svg'></img>
+                <span>Parami</span> */}
             </div>
             <div className='connect-wallet'>
-                {!isConnected && <>
+                {(!isConnected || true) && <>
                     <Button className='connect-wallet-btn' type='primary' onClick={() => {
                         
                     }}>

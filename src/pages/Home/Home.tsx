@@ -55,7 +55,7 @@ const Landing = () => {
     return <>
         <div className="landingContainer">
             <div className="sloganContainer">
-                <p className="sloganTop">
+                {/* <p className="sloganTop">
                     {sloganTopArr.map((char, index) => (
                         <span
                             key={index}
@@ -91,7 +91,7 @@ const Landing = () => {
                             {char}
                         </span>
                     ))}
-                </p>
+                </p> */}
                 {/* <Button
                     type="link"
                     size="large"
@@ -103,7 +103,7 @@ const Landing = () => {
                 >
                     Learn More About MetaAstro Phase I<br />- GENESIS OF THE GODS -
                 </Button> */}
-                <Button type="link" size='large' className='learnMore' >Learn more</Button>
+                {/* <Button type="link" size='large' className='learnMore' >Learn more</Button> */}
             </div>
             {/* <div
                 className={style.mouse}
@@ -114,7 +114,7 @@ const Landing = () => {
                 <RiArrowDownSLine className={style.icon} />
             </div>
             <SNS /> */}
-            <SNS></SNS>
+            {/* <SNS></SNS> */}
         </div>
     </>
 }
