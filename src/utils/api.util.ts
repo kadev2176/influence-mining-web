@@ -1,5 +1,16 @@
 import { IM_SUBQUERY, PARAMI_SUBQUERY } from "../models/parami";
 
+const ONE_HOUR = 60 * 60 * 1000;
+const ONE_WEEK = 7 * 24 * ONE_HOUR;
+
+export const getSigExpirationTime = () => {
+    return Date.now() + ONE_WEEK;
+}
+
+export const generateSignedMessage = (address: string, expire: number): string => {
+  return `${address},${expire}`;
+};
+
 export const fetchWithSig = async (input: RequestInfo | URL, address: string, init?: RequestInit) => {
   const options = init ?? {};
   return fetch(input, {

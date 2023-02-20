@@ -1,30 +1,50 @@
-import { useWeb3Modal } from '@web3modal/react';
 import { Button } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { useImAccount } from '../../hooks/useImAccount';
 import './HomePageHeader.scss';
+import { LoadingOutlined } from '@ant-design/icons';
 
 export interface HomePageHeaderProps { }
 
 function HomePageHeader({ }: HomePageHeaderProps) {
-
-    const { open } = useWeb3Modal();
+    // const { open } = useWeb3Modal();
     const { address, isConnected } = useAccount();
-
+    const [authModal, setAuthModal] = useState<boolean>();
+    const navigate = useNavigate();
+    const { imAccount, loading } = useImAccount();
 
     return <>
         <div className='header-container'>
             <div className='logo'>
-                {/* <img className='logo-img' src='/assets/images/logo-core-colored.svg'></img>
-                <span>Parami</span> */}
             </div>
             <div className='connect-wallet'>
-                {(!isConnected || true) && <>
-                    <Button className='connect-wallet-btn' type='primary' onClick={() => {
-                        
-                    }}>
-                        <span>Connect Wallet</span>
-                    </Button>
+                {loading && <>
+                    <div className='connect-btn action-btn'>
+                        <LoadingOutlined spin />
+                    </div>
+                </>}
+
+                {!loading && <>
+                    {!!imAccount?.updatedTime && <>
+                        <div className='user-profile' onClick={() => {
+                            navigate('/vault');
+                        }}>
+                            <img src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer" className='pfp'></img>
+                            <span className='wallet-address'>
+                                {imAccount.wallet.slice(0, 8)}
+                            </span>
+                        </div>
+                    </>}
+
+                    {!imAccount?.updatedTime && !loading && <>
+                        <div className='connect-btn action-btn active' onClick={() => {
+                            navigate('/auth');
+                        }}>
+                            Join Now
+                        </div>
+                    </>}
                 </>}
             </div>
         </div>

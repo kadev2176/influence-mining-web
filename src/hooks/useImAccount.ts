@@ -21,8 +21,6 @@ export const useImAccount = () => {
           setImAccount({
             ...imAccount,
             twitterProfileImageUri: formatTwitterImageUrl(imAccount.twitterProfileImageUri),
-            // linkedTo: '0x123'
-            linkedTo: ''
           });
         }
         setLoading(false);

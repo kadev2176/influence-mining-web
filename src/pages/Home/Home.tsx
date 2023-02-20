@@ -3,6 +3,7 @@ import { Button, Layout } from 'antd';
 import './Home.scss';
 import Background from '../../components/Background/Background';
 import HomePageHeader from '../../components/HomePageHeader/HomePageHeader';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -120,14 +121,19 @@ const Landing = () => {
 }
 
 function Home({ }: HomeProps) {
+    const location = useLocation();
     return <>
-        <Layout>
-            <HomePageHeader />
-            <Content>
-                <Background complex={true}></Background>
-                <Landing></Landing>
-            </Content>
-        </Layout>
+        {location.pathname === '/auth' && <>
+            <Outlet></Outlet>
+        </>}
+        {location.pathname !== '/auth' && <>
+            <Layout>
+                <HomePageHeader />
+                <Content>
+                    <Outlet></Outlet>
+                </Content>
+            </Layout>
+        </>}
     </>;
 };
 

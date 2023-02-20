@@ -1,0 +1,45 @@
+.vault-container {
+  padding-top: 120px;
+  background-color: #000;
+  color: #fff;
+  width: 100vw;
+  min-height: 100vh;
+
+  .user-section {
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .no-tweet-info {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: 500;
+
+      .row {
+        margin-bottom: 30px;
+      }
+    }
+
+    .button-container {
+      .btn {
+        border: 1px solid;
+        border-radius: 8px;
+        padding: 10px 20px;
+        min-width: 200px;
+        display: flex;
+        justify-content: center;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+        &:hover {
+          cursor: pointer;
+          color: #000;
+          background-color: #fff;
+        }
+      }
+    }
+  }
+}

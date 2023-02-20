@@ -7,17 +7,7 @@ import { bindAccount, getIMAccountOfWallet } from '../../services/mining.service
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PARAMI_AIRDROP } from '../../models/parami';
 import './Auth.scss';
-
-const ONE_HOUR = 60 * 60 * 1000;
-const ONE_WEEK = 7 * 24 * ONE_HOUR;
-
-const getExpirationTime = () => {
-    return Date.now() + ONE_WEEK;
-}
-
-const generateSignedMessage = (address: string, expire: number): string => {
-    return `${address},${expire}`;
-};
+import { generateSignedMessage, getSigExpirationTime } from '../../utils/api.util';
 
 function Auth() {
     const { open } = useWeb3Modal();
@@ -45,7 +35,7 @@ function Auth() {
         if (userSignature) {
             getIMAccountOfWallet(address!, chain!.id).then(imAccount => {
                 if (imAccount?.updatedTime) {
-                    navigate('/profile');
+                    navigate('/vault');
                 }
             })
         }
@@ -67,7 +57,7 @@ function Auth() {
     }
 
     const signMessage = async () => {
-        const expire = getExpirationTime();
+        const expire = getSigExpirationTime();
         const sig = await signer?.signMessage(generateSignedMessage(address!, expire));
         // set localStorage
         window.localStorage.setItem('sessionExpirationTime', `${expire}`);
@@ -87,7 +77,7 @@ function Auth() {
                     notification.success({
                         message: 'Bind Success!'
                     })
-                    navigate('/profile');
+                    navigate('/vault');
                     return;
                 }
 
@@ -101,37 +91,37 @@ function Auth() {
     return <>
         <div className='auth-container'>
             <div className='logo-container'>
-                <img className='logo' src='/assets/images/logo-core-white.svg'></img>
+                <img className='logo' src='/assets/images/logo-core-colored.svg'></img>
             </div>
 
             <div className='btn-container'>
                 {!isConnected && <>
-                    <div className='connect-btn active' onClick={async () => {
+                    <div className='connect-btn action-btn active' onClick={async () => {
                         open();
                     }}>
                         Connect Wallet
                     </div>
 
-                    <div className='connect-btn disabled'>Connect Twitter</div>
+                    <div className='connect-btn action-btn disabled'>Connect Twitter</div>
                 </>}
 
                 {isConnected && <>
-                    <div className='connect-btn disabled'>
+                    <div className='connect-btn action-btn disabled'>
                         Wallet Connected{ensName ? ` as ${ensName}` : ''}
                     </div>
 
                     {!userSignature && <>
-                        <div className='connect-btn active' onClick={() => {
+                        <div className='connect-btn action-btn active' onClick={() => {
                             signMessage();
                         }}>
                             Sign Message
                         </div>
 
-                        <div className='connect-btn disabled'>Connect Twitter</div>
+                        <div className='connect-btn action-btn disabled'>Connect Twitter</div>
                     </>}
 
                     {userSignature && <>
-                        <div className='connect-btn active' onClick={handleConnectTwitter}>
+                        <div className='connect-btn action-btn active' onClick={handleConnectTwitter}>
                             Connect Twitter
                         </div>
                     </>}

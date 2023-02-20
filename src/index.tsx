@@ -27,6 +27,8 @@ import Boost from './pages/Boost/Boost';
 import Ad3Mining from './pages/Ad3Mining/Ad3Mining';
 import DaoBattle from './pages/DaoBattle/DaoBattle';
 import TreasureHunt from './pages/TreasureHunt/TreasureHunt';
+import Vault from './pages/Vault/Vault';
+import Landing from './pages/Landing/Landing';
 
 declare global {
   interface Window {
@@ -34,7 +36,7 @@ declare global {
   }
 }
 
-const chains = [arbitrum, mainnet, polygon, goerli];
+const chains = [goerli];
 
 // Wagmi client
 const { provider } = configureChains(chains, [
@@ -66,23 +68,27 @@ root.render(
       >
         <HashRouter>
           <Routes>
-            <Route path='/home' element={<Home />}></Route>
-
-            <Route path="/" element={<App />}>
+            <Route path='/' element={<Home />}>
+              <Route path="/" element={<Landing />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/market" element={<MintBillboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/ad3Tx" element={<Ad3Transactions />} />
-              <Route path="/influenceTx" element={<InfluenceTransactions />} />
-              <Route path="/battles/billboard" element={<BidWar />} />
-              <Route path="/battles/dao" element={<DaoBattle />} />
-              <Route path="/sit" element={<SocialInfluenceToken />} />
-              <Route path="/boost" element={<Boost />} />
-              <Route path="/mining/influence" element={<InfluenceMining />} />
-              <Route path="/mining/ad3" element={<Ad3Mining />} />
-              <Route path="/treasure" element={<TreasureHunt />} />
+              <Route path="/vault" element={<Vault />} />
+            </Route>
 
-              <Route path="/test" element={<Test />} />
+            <Route path="/app" element={<App />}>
+              {/* <Route path="/auth" element={<Auth />} /> */}
+              <Route path="/app/market" element={<MintBillboard />} />
+              <Route path="/app/profile" element={<Profile />} />
+              <Route path="/app/ad3Tx" element={<Ad3Transactions />} />
+              <Route path="/app/influenceTx" element={<InfluenceTransactions />} />
+              <Route path="/app/battles/billboard" element={<BidWar />} />
+              <Route path="/app/battles/dao" element={<DaoBattle />} />
+              <Route path="/app/sit" element={<SocialInfluenceToken />} />
+              <Route path="/app/boost" element={<Boost />} />
+              <Route path="/app/mining/influence" element={<InfluenceMining />} />
+              <Route path="/app/mining/ad3" element={<Ad3Mining />} />
+              <Route path="/app/treasure" element={<TreasureHunt />} />
+
+              <Route path="/app/test" element={<Test />} />
             </Route>
           </Routes>
         </HashRouter>
@@ -92,6 +98,7 @@ root.render(
     <Web3Modal
       projectId="2e586b0807500a0da3a4f7b66418295e"
       ethereumClient={ethereumClient}
+      themeMode="dark"
     />
   </>
 );

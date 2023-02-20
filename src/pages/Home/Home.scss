@@ -116,3 +116,18 @@
     }
   }
 }
+
+.action-btn {
+  color: #fff;
+  border: 1px solid;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+  &.active:hover {
+    cursor: pointer;
+    color: #000;
+    background-color: #fff;
+  }
+}
