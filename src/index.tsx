@@ -9,7 +9,7 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon, goerli } from "wagmi/chains";
+import { goerli } from "wagmi/chains";
 import { Routes, Route, HashRouter } from "react-router-dom";
 import Profile from './pages/Profile/Profile';
 import Ad3Transactions from './pages/Ad3Transactions/Ad3Transactions';

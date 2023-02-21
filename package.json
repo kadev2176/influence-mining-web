@@ -17,6 +17,7 @@
     "@web3modal/react": "^2.0.0-rc.1",
     "antd": "^5.1.1",
     "ethers": "^5.7.2",
+    "fetch-jsonp": "^1.2.3",
     "gh-pages": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

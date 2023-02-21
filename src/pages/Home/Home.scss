@@ -1,3 +1,5 @@
+@import '../../common.scss';
+
 .landingContainer {
   color: #fff;
   position: relative;
@@ -129,5 +131,9 @@
     cursor: pointer;
     color: #000;
     background-color: #fff;
+  }
+
+  &.disabled {
+    color: $text-light-color;
   }
 }

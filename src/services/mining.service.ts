@@ -270,6 +270,38 @@ export const getIMAccountOfWallet = async (address: string, chainId: number) => 
   return data.allImAccounts.nodes[0] as ImAccount;
 }
 
+export const getLeaderBoardImAccounts = async (address: string, chainId: number) => {
+  // sort by influence
+  const query = `{
+    allImAccounts(first: 20, filter: {chainId: {equalTo: ${chainId}}}) {
+      nodes {
+        wallet,
+        chainId,
+        influence,
+        ad3Balance,
+        accountReferalCount,
+        pluginReferalCount,
+        updatedTime,
+        beginMiningTime,
+        beginPreemptTime,
+        twitterProfileImageUri,
+        hnftContractAddr,
+        hnftTokenId,
+        daoApplicable
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(query, address);
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  return data.allImAccounts.nodes as ImAccount[];
+}
+
 export const getNumOfMembersOfDao = async (address: string, kolWallet: string, kolChainId: number) => {
   const query = `{
     allJoinDaoApplications(filter: {and: [{kolWallet: {equalTo: "${kolWallet.toLowerCase()}"}}, {kolChainId: {equalTo: ${kolChainId}}}, {status: {equalTo: "approved"}}]}) {
