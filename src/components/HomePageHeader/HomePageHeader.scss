@@ -43,27 +43,16 @@
       min-width: 100px;
       padding: 8px 16px;
     }
-
-    // button {
-    //   height: 50px;
-    //   min-width: 100px;
-    //   padding: 5px;
-
-    //   span:first-child {
-    //     display: flex;
-    //     align-items: center;
-    //   }
-    // }
-
+    
     .user-profile {
       color: #fff;
       display: flex;
       align-items: center;
 
       .pfp {
-        width: 40px;
-        height: 40px;
-        border-radius: 20px;
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
       }
 
       .wallet-address {
@@ -85,30 +74,5 @@
       margin-left: 20px;
       margin-right: 20px;
     }
-  }
-}
-
-@media (max-width: 767px) {
-  .header-container {
-    padding: 4% 2%;
-  }
-
-  .logo {
-    .logo-img {
-      width: 48px !important;
-      height: 48px !important;
-    }
-
-    span {
-      font-size: 1.3rem !important;
-      margin-left: -20px !important;
-    }
-  }
-
-  .connect-wallet {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
   }
 }

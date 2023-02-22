@@ -10,7 +10,7 @@ import {
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { goerli } from "wagmi/chains";
-import { Routes, Route, HashRouter } from "react-router-dom";
+import { Routes, Route, HashRouter, Navigate } from "react-router-dom";
 import Profile from './pages/Profile/Profile';
 import Ad3Transactions from './pages/Ad3Transactions/Ad3Transactions';
 import InfluenceTransactions from './pages/InfluenceTransactions/InfluenceTransactions';
@@ -72,10 +72,11 @@ root.render(
               <Route path="/" element={<Landing />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/vault" element={<Vault />} />
+              <Route path='*' element={<Navigate to='/' />} />
             </Route>
 
-            <Route path="/app" element={<App />}>
-              {/* <Route path="/auth" element={<Auth />} /> */}
+            {/* <Route path="/app" element={<App />}>
+              <Route path="/auth" element={<Auth />} />
               <Route path="/app/market" element={<MintBillboard />} />
               <Route path="/app/profile" element={<Profile />} />
               <Route path="/app/ad3Tx" element={<Ad3Transactions />} />
@@ -89,7 +90,7 @@ root.render(
               <Route path="/app/treasure" element={<TreasureHunt />} />
 
               <Route path="/app/test" element={<Test />} />
-            </Route>
+            </Route> */}
           </Routes>
         </HashRouter>
       </ConfigProvider>

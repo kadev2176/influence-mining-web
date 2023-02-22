@@ -24,6 +24,8 @@ export type ImAccount = {
   twitterProfileImageUri: string;
   linkedTo: string;
   hasDao: boolean;
+  tweetStats: string;
+  tweetId?: string;
 }
 
 export type Ad3Tx = {
@@ -50,6 +52,40 @@ export interface WithdrawAd3Signature {
   amount: string;
   nounce: string;
   sig: string;
+}
+
+export const queryAllImAccounts = async (query: string, address: string) => {
+  const graphQlQuery = `{
+    allImAccounts(${query}) {
+      nodes {
+        wallet,
+        influence,
+        ad3Balance,
+        accountReferalCount,
+        pluginReferalCount,
+        updatedTime,
+        beginMiningTime,
+        beginPreemptTime,
+        twitterProfileImageUri,
+        hnftContractAddr,
+        hnftTokenId,
+        tweetStats
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(graphQlQuery, address);
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  const accounts = data.allImAccounts.nodes as ImAccount[];
+  return accounts.map(account => {
+    const tweetStats = JSON.parse(account.tweetStats);
+    return { ...account, tweetId: tweetStats.tweet_id } as ImAccount;
+  });
 }
 
 export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
@@ -152,6 +188,23 @@ export const getPoolSummary = async (address: string) => {
   return summary as PoolSummary;
 }
 
+export const queryYFIStakingActivity = async (address: string) => {
+  const query = `{
+    yfiStakingActivity {
+      id
+    }
+  }`
+
+  const res = await doGraghQueryIM(query, address);
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  console.log('got yfiStakingActivity data', data);
+}
+
 export const generateWithdrawSignature = async (address: string, chainId: number, amount: string) => {
   const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/ad3/withdrawals?chain_id=${chainId}&amount=${amount}`, address, {
     method: 'post',
@@ -241,65 +294,17 @@ export const getIMAccountOfBillboard = async (walletAddress: string, contractAdd
 }
 
 export const getIMAccountOfWallet = async (address: string, chainId: number) => {
-  // todo: get account link info
-  const query = `{
-    allImAccounts( filter: { and: [{wallet: {equalTo: "${address.toLowerCase()}"}}, {chainId: {equalTo: ${chainId}}}]}) {
-      nodes {
-        wallet,
-        influence,
-        ad3Balance,
-        accountReferalCount,
-        pluginReferalCount,
-        updatedTime,
-        beginMiningTime,
-        beginPreemptTime,
-        twitterProfileImageUri,
-        hnftContractAddr,
-        hnftTokenId
-      }
-    }
-  }`;
-
-  const res = await doGraghQueryIM(query, address);
-
-  if (!res) {
+  const query = `filter: { and: [{wallet: {equalTo: "${address.toLowerCase()}"}}, {chainId: {equalTo: ${chainId}}}]}`;
+  const accounts = await queryAllImAccounts(query, address);
+  if (!accounts) {
     return;
   }
-
-  const { data } = await res.json();
-  return data.allImAccounts.nodes[0] as ImAccount;
+  return accounts[0];
 }
 
 export const getLeaderBoardImAccounts = async (address: string, chainId: number) => {
-  // sort by influence
-  const query = `{
-    allImAccounts(first: 20, filter: {chainId: {equalTo: ${chainId}}}) {
-      nodes {
-        wallet,
-        chainId,
-        influence,
-        ad3Balance,
-        accountReferalCount,
-        pluginReferalCount,
-        updatedTime,
-        beginMiningTime,
-        beginPreemptTime,
-        twitterProfileImageUri,
-        hnftContractAddr,
-        hnftTokenId,
-        daoApplicable
-      }
-    }
-  }`;
-
-  const res = await doGraghQueryIM(query, address);
-
-  if (!res) {
-    return;
-  }
-
-  const { data } = await res.json();
-  return data.allImAccounts.nodes as ImAccount[];
+  const query = `orderBy: INFLUENCE_DESC, first: 20, filter: {chainId: {equalTo: ${chainId}}}`;
+  return queryAllImAccounts(query, address);
 }
 
 export const getNumOfMembersOfDao = async (address: string, kolWallet: string, kolChainId: number) => {

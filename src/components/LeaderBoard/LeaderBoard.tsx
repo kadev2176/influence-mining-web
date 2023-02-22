@@ -1,7 +1,6 @@
-import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useAccount, useNetwork } from 'wagmi';
-import { getIMAccountOfBillboard, getIMAccountOfWallet, getLeaderBoardImAccounts, getPoolSummary, PoolSummary } from '../../services/mining.service';
+import { getIMAccountOfWallet, getLeaderBoardImAccounts, getPoolSummary, PoolSummary } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
 import { formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
 import './LeaderBoard.scss';
@@ -10,12 +9,14 @@ export interface LeaderBoardProps { }
 
 const mockTweetIds = ['1627871192869916675', '1627914237099089923', '1627505019074543617', '1627246535581761536', '1627257688240316420', '1627869830723563521', '1627714427586740227', '1625449841991065601', '1627296482570420224', '1615707890903293952', '1627604615511396352', '1627871192869916675', '1627505019074543617', '1627246535581761536', '1627257688240316420', '1627869830723563521', '1627714427586740227', '1625449841991065601', '1627296482570420224', '1615707890903293952', '1627604615511396352'];
 
+const maxTextLength = 70;
+
 const trimText = (text: string) => {
-    const len = text.replace(/[^\x00-\xff]/g,"01").length;
-    if (len < 120) {
+    const len = text.replace(/[^\x00-\xff]/g, "01").length;
+    if (len < maxTextLength) {
         return text;
     }
-    return text.slice(0, Math.floor(120 * text.length / len)) + '...';
+    return text.slice(0, Math.floor(maxTextLength * text.length / len)) + '...';
 }
 
 function LeaderBoard({ }: LeaderBoardProps) {
@@ -36,12 +37,17 @@ function LeaderBoard({ }: LeaderBoardProps) {
         const user = await getIMAccountOfWallet(address, chainId);
         const leaders = await getLeaderBoardImAccounts(address, chainId);
         const accounts = [user, ...leaders ?? []];
+
+        const rank = (leaders ?? []).findIndex(account => account.wallet === user?.wallet);
         const rows = await Promise.all(accounts.map(async (account, index) => {
-            const tweetId = mockTweetIds[index];
-            const tweet = await fetchOembedTweet(tweetId);
+            // const tweetId: string = mockTweetIds[index];
+            const tweet = account?.tweetId ? await fetchOembedTweet(account?.tweetId) : {};
             return {
                 avatar: formatTwitterImageUrl(account?.twitterProfileImageUri),
                 influence: account?.influence,
+                rank: index > 0
+                    ? `${index}`
+                    : (rank >= 0 ? `${rank + 1}` : 'Unknown'),
                 ...tweet
             };
         }));
@@ -53,12 +59,6 @@ function LeaderBoard({ }: LeaderBoardProps) {
             fetchLeaderBoard(address, chain.id);
         }
     }, [address, chain])
-
-    // useEffect(() => {
-    //     fetchOembedTweet('1234903157580296192').then(tweet => {
-    //         console.log('got tweet', tweet);
-    //     });
-    // }, [])
 
     return <>
         <div className='leaderboard-container'>
@@ -74,7 +74,7 @@ function LeaderBoard({ }: LeaderBoardProps) {
             </div>
 
             <div className='dashboard'>
-                <div className='row'>
+                <div className='row first'>
                     <div className='stat'>
                         <div className='label'>Whole Network Score</div>
                         <div className='value'>{formatInfluenceScore(poolSummary?.totalInfluence ?? '0')}</div>
@@ -97,77 +97,57 @@ function LeaderBoard({ }: LeaderBoardProps) {
 
             <div className='leaderboard-table-container'>
                 <table className='leaderboard-table'>
-                    <tr>
-                        <th>Position</th>
-                        <th>Miner</th>
-                        <th>Boost</th>
-                        <th>Scores</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Miner</th>
+                            <th>Boost</th>
+                            <th>Scores</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {leaderboardRows && leaderboardRows.length > 0 && <>
                             {leaderboardRows.map((row, index) => {
-                                return <tr className={index ? '' : 'tr-user'}>
-                                    <td>{index ? index : 'Unknown'}</td>
+                                return <tr className={index ? '' : 'tr-user'} key={index}>
+                                    <td>{row.rank}</td>
                                     <td>
-                                        <div className='tweet'>
-                                            <img src={row.avatar} className='avatar' referrerPolicy="no-referrer"></img>
-                                            <div className='content'>
-                                                <span className='author'>@{row.authorName}: </span>
-                                                <span className='text'>
-                                                    {trimText(row.tweetContent)}
-                                                </span>
+                                        {row.tweetUrl && <>
+                                            <div className='tweet active' onClick={() => {
+                                                window.open(row.tweetUrl);
+                                            }}>
+                                                <img src={row.avatar} className='avatar' referrerPolicy="no-referrer" onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    window.open(row.authorUrl);
+                                                }}></img>
+                                                <div className='content'>
+                                                    <span className='author' onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        window.open(row.authorUrl);
+                                                    }}>@{row.authorName}: </span>
+                                                    <span className='text'>
+                                                        {trimText(row.tweetContent)}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </>}
+                                        {!row.tweetUrl && <>
+                                            <div className='tweet'>
+                                                <img src={row.avatar} className='avatar' referrerPolicy="no-referrer"></img>
+                                                <div className='content'>
+                                                    No GPTMiner tweet at the moment.
+                                                </div>
+                                            </div>
+                                        </>}
                                     </td>
                                     <td>1 x</td>
                                     <td>{formatInfluenceScore(row.influence)}</td>
                                 </tr>
-                                return <>
-                                    <Row>
-                                        <Col span={3}>{index ? index : 'Unknown'}</Col>
-                                        <Col span={15}>
-                                            <div className='tweet'>
-                                                <img src={row.avatar} className='avatar' referrerPolicy="no-referrer"></img>
-                                                <div className='content'>
-                                                    <span className='author'>@{row.authorName}: </span>
-                                                    {row.tweetContent}
-                                                </div>
-                                            </div>
-                                        </Col>
-                                        <Col span={3}>1 x</Col>
-                                        <Col span={3}>{formatInfluenceScore(row.influence)}</Col>
-                                    </Row>
-                                </>
                             })}
                         </>}
                     </tbody>
                 </table>
-                {/* <Row className='table-head'>
-                    <Col span={3}>Position</Col>
-                    <Col span={15}>Miner</Col>
-                    <Col span={3}>Boost</Col>
-                    <Col span={3}>Scores</Col>
-                </Row>
-                {leaderboardRows && leaderboardRows.length > 0 && <>
-                    {leaderboardRows.map((row, index) => {
-                        return <>
-                            <Row>
-                                <Col span={3}>{index ? index : 'Unknown'}</Col>
-                                <Col span={15}>
-                                    <div className='tweet'>
-                                        <img src={row.avatar} className='avatar' referrerPolicy="no-referrer"></img>
-                                        <div className='content'>
-                                            <span className='author'>@{row.authorName}: </span>
-                                            {row.tweetContent}
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col span={3}>1 x</Col>
-                                <Col span={3}>{formatInfluenceScore(row.influence)}</Col>
-                            </Row>
-                        </>
-                    })}
-                </>} */}
             </div>
         </div>
     </>;

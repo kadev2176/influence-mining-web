@@ -145,3 +145,47 @@
     border-top: 1px solid $text-light-color;
   }
 }
+
+@media only screen and (max-width: 991px) {
+  .vault-container {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 80px;
+
+    .action-btn {
+      min-width: 60px;
+    }
+
+    .user-section {
+      padding-bottom: 30px;
+      
+      .tweet-status {
+        .miner-tweet {
+          .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            margin-right: 10px;
+          }
+        }
+
+        .score-status {
+          font-size: 1rem;
+  
+          .info {
+            color: $text-light-color;
+          }
+  
+          .value {
+            white-space: nowrap;
+            font-weight: 500;
+            margin-left: 20px;
+          }
+        }
+      }
+    }
+
+
+
+  }
+}

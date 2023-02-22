@@ -18,6 +18,7 @@ export const useImAccount = () => {
       setLoading(true);
       getIMAccountOfWallet(address, chain.id).then(imAccount => {
         if (imAccount) {
+          console.log('got user im account', imAccount);
           setImAccount({
             ...imAccount,
             twitterProfileImageUri: formatTwitterImageUrl(imAccount.twitterProfileImageUri),

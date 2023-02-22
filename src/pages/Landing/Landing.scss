@@ -25,3 +25,11 @@
     }
   }
 }
+
+@media only screen and (max-width: 991px) {
+  .content-container {
+    .title-section {
+      padding: 20px 40px;
+    }
+  }
+}
