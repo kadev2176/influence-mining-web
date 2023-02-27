@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useAccount, useNetwork } from 'wagmi';
-import { getIMAccountOfWallet, getLeaderBoardImAccounts, getPoolSummary, PoolSummary } from '../../services/mining.service';
+import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
 import { formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
 import './LeaderBoard.scss';
 
 export interface LeaderBoardProps { }
-
-const mockTweetIds = ['1627871192869916675', '1627914237099089923', '1627505019074543617', '1627246535581761536', '1627257688240316420', '1627869830723563521', '1627714427586740227', '1625449841991065601', '1627296482570420224', '1615707890903293952', '1627604615511396352', '1627871192869916675', '1627505019074543617', '1627246535581761536', '1627257688240316420', '1627869830723563521', '1627714427586740227', '1625449841991065601', '1627296482570420224', '1615707890903293952', '1627604615511396352'];
 
 const maxTextLength = 70;
 
@@ -21,26 +18,16 @@ const trimText = (text: string) => {
 
 function LeaderBoard({ }: LeaderBoardProps) {
     const [poolSummary, setPoolSummary] = useState<PoolSummary>();
-    const { address } = useAccount();
-    const { chain } = useNetwork();
     const [leaderboardRows, setLeaderBoardRows] = useState<any[]>();
+    const [halveTime, setHalveTime] = useState<string>('-');
 
-    useEffect(() => {
-        if (address) {
-            getPoolSummary(address).then((res) => {
-                setPoolSummary(res);
-            })
-        }
-    }, [address]);
-
-    const fetchLeaderBoard = async (address: string, chainId: number) => {
-        const user = await getIMAccountOfWallet(address, chainId);
-        const leaders = await getLeaderBoardImAccounts(address, chainId);
+    const fetchLeaderBoard = async () => {
+        const user = await getMyIMAccount();
+        const leaders = await getLeaderBoardImAccounts();
         const accounts = [user, ...leaders ?? []];
 
-        const rank = (leaders ?? []).findIndex(account => account.wallet === user?.wallet);
+        const rank = (leaders ?? []).findIndex(account => account.id === user?.id);
         const rows = await Promise.all(accounts.map(async (account, index) => {
-            // const tweetId: string = mockTweetIds[index];
             const tweet = account?.tweetId ? await fetchOembedTweet(account?.tweetId) : {};
             return {
                 avatar: formatTwitterImageUrl(account?.twitterProfileImageUri),
@@ -55,10 +42,20 @@ function LeaderBoard({ }: LeaderBoardProps) {
     }
 
     useEffect(() => {
-        if (address && chain) {
-            fetchLeaderBoard(address, chain.id);
-        }
-    }, [address, chain])
+        fetchLeaderBoard();
+        getPoolSummary().then((res) => {
+            setPoolSummary(res);
+        });
+        getAD3Activity().then(res => {
+            if (res?.halveTime) {
+                const diffInSeconds = Number(res.halveTime) - (Date.now() / 1000);
+                if (diffInSeconds > 0) {
+                    const days = Math.ceil(diffInSeconds / 86400);
+                    setHalveTime(`${days} Day${days > 1 ? 's' : ''}`);
+                }
+            }
+        })
+    }, []);
 
     return <>
         <div className='leaderboard-container'>
@@ -70,7 +67,7 @@ function LeaderBoard({ }: LeaderBoardProps) {
                     We use <span className='label'>ChatGPT</span> to evaluate your twitter mining influence, which considers factors such as twitter account rating, mining twitter content, interaction, likes and comments and other data.
                     <a className='link'>Click here for details.</a>
                 </div>
-                <div className='sub-title'>Update per 5 mins</div>
+                <div className='sub-title'>Updated every 5 minutes</div>
             </div>
 
             <div className='dashboard'>
@@ -89,7 +86,7 @@ function LeaderBoard({ }: LeaderBoardProps) {
 
                     <div className='stat'>
                         <div className='label'>Next Halving</div>
-                        <div className='value'>10 Days</div>
+                        <div className='value'>{halveTime}</div>
                     </div>
                 </div>
             </div>
@@ -115,11 +112,13 @@ function LeaderBoard({ }: LeaderBoardProps) {
                                             <div className='tweet active' onClick={() => {
                                                 window.open(row.tweetUrl);
                                             }}>
-                                                <img src={row.avatar} className='avatar' referrerPolicy="no-referrer" onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    window.open(row.authorUrl);
-                                                }}></img>
+                                                {!!row.avatar && <>
+                                                    <img src={row.avatar} className='avatar' referrerPolicy="no-referrer" onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        window.open(row.authorUrl);
+                                                    }}></img>
+                                                </>}
                                                 <div className='content'>
                                                     <span className='author' onClick={(e) => {
                                                         e.preventDefault();
@@ -134,7 +133,9 @@ function LeaderBoard({ }: LeaderBoardProps) {
                                         </>}
                                         {!row.tweetUrl && <>
                                             <div className='tweet'>
-                                                <img src={row.avatar} className='avatar' referrerPolicy="no-referrer"></img>
+                                                {!!row.avatar && <>
+                                                    <img src={row.avatar} className='avatar' referrerPolicy="no-referrer"></img>
+                                                </>}
                                                 <div className='content'>
                                                     No GPTMiner tweet at the moment.
                                                 </div>

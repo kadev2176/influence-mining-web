@@ -19,7 +19,7 @@ function InfluenceStat({ influence }: InfluenceStatProps) {
 
     useEffect(() => {
         if (address) {
-            getPoolSummary(address).then((res) => {
+            getPoolSummary().then((res) => {
                 setPoolSummary(res);
             })
         }

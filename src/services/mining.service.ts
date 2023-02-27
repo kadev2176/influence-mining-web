@@ -1,31 +1,35 @@
 import { PARAMI_AIRDROP } from "../models/parami";
-import { doGraghQueryIM, fetchWithSig } from "../utils/api.util";
+import { doGraghQueryIM, fetchWithCredentials, fetchWithSig } from "../utils/api.util";
+import { formatTwitterImageUrl } from "../utils/format.util";
 
 export type Balance = {
-  total: string;
-  withdrawable: string;
-  locked: string;
+  earned: string;
+  balance: string;
 }
 
 // imAccount
 // todo: linkedTo
 export type ImAccount = {
+  id: string;
   wallet: string;
   chainId: number;
   influence: string;
-  ad3Balance: number;
+  ad3Balance: string;
   accountReferalCount: number;
   pluginReferalCount: number;
   updatedTime: number;
-  beginMiningTime: number;
   beginPreemptTime: number;
   hnftContractAddr: string;
   hnftTokenId: string;
-  twitterProfileImageUri: string;
   linkedTo: string;
   hasDao: boolean;
   tweetStats: string;
   tweetId?: string;
+  twitterId: string;
+  twitterAccount: string;
+  twitterProfileImageUri: string;
+  twitterUsername: string;
+  twitterName: string;
 }
 
 export type Ad3Tx = {
@@ -54,27 +58,47 @@ export interface WithdrawAd3Signature {
   sig: string;
 }
 
-export const queryAllImAccounts = async (query: string, address: string) => {
+export interface UpcomingTweetMiner {
+  id: string;
+  userId: string;
+  tweetId: string;
+  createdTime: string;
+}
+
+export interface Ad3Activity {
+  dailyOutput: string;
+  earningsPerShare: string;
+  finished: boolean;
+  halveTime: number;
+  lastProfitTime: number;
+  miningBalance: string;
+  rewardBudget: string;
+  rewardRemain: string;
+  startTime: number;
+}
+
+export const queryAllImAccounts = async (query: string) => {
   const graphQlQuery = `{
     allImAccounts(${query}) {
       nodes {
+        id,
         wallet,
         influence,
         ad3Balance,
         accountReferalCount,
         pluginReferalCount,
         updatedTime,
-        beginMiningTime,
         beginPreemptTime,
-        twitterProfileImageUri,
         hnftContractAddr,
         hnftTokenId,
-        tweetStats
+        tweetStats,
+        twitterId,
+        twitterAccount
       }
     }
   }`;
 
-  const res = await doGraghQueryIM(graphQlQuery, address);
+  const res = await doGraghQueryIM(graphQlQuery, '');
 
   if (!res) {
     return;
@@ -83,9 +107,55 @@ export const queryAllImAccounts = async (query: string, address: string) => {
   const { data } = await res.json();
   const accounts = data.allImAccounts.nodes as ImAccount[];
   return accounts.map(account => {
+    const twitterAccount = JSON.parse(account.twitterAccount);
     const tweetStats = JSON.parse(account.tweetStats);
-    return { ...account, tweetId: tweetStats.tweet_id } as ImAccount;
+    return {
+      ...account,
+      tweetId: tweetStats.tweet_id,
+      twitterUsername: twitterAccount.username,
+      twitterName: twitterAccount.name,
+      twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url)
+    } as ImAccount;
   });
+}
+
+// todo: add referer?
+export const createAccountOrLogin = async (oauthToken: string, oauthVerifier: string) => {
+  const data = JSON.stringify({
+    oauth_token: oauthToken,
+    oauth_verifier: oauthVerifier
+  });
+
+  const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/accounts`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data,
+    credentials: 'same-origin'
+  })
+
+  if (resp.ok) {
+    const authCookies = await resp.json() as {
+      authcookiebytwitter: string,
+      expiretime: string,
+      userid: string
+    };
+
+    window.localStorage.setItem('authcookiebytwitter', `${authCookies.authcookiebytwitter}`);
+    window.localStorage.setItem('expiretime', `${authCookies.expiretime}`);
+    window.localStorage.setItem('userid', `${authCookies.userid}`);
+
+    return {
+      success: true
+    }
+  }
+
+  const { message } = await resp.json() as { message: string };
+  return {
+    success: false,
+    message
+  }
 }
 
 export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
@@ -152,8 +222,11 @@ export const startPreempt = async (address: string, chainId: number) => {
   return await resp.json();
 }
 
-export const getAd3Balance = async (address: string, chainId: number) => {
-  const res = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/ad3?wallet=${address}&chain_id=${chainId}`, address);
+export const getAd3Balance = async () => {
+  const res = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/ad3`);
+  if (!res) {
+    return;
+  }
   const balance = await res.json();
   return balance as Balance;
 }
@@ -164,15 +237,16 @@ export const getAd3Transactions = async (address: string, chainId: number) => {
   return txs as Ad3Tx[];
 }
 
-export const updateInfluence = async (address: string, chainId: number) => {
-  const data = JSON.stringify({ chainId: chainId });
-  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/influence`, address, {
+export const updateInfluence = async () => {
+  const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/influence`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: data
   });
+  if (!resp) {
+    return;
+  }
   return await resp.json();
 }
 
@@ -182,27 +256,13 @@ export const getInfluenceTransactions = async (address: string, chainId: number)
   return txs as InfluenceTransaction[];
 }
 
-export const getPoolSummary = async (address: string) => {
-  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/pool/summary`, address);
-  const summary = await resp.json();
-  return summary as PoolSummary;
-}
-
-export const queryYFIStakingActivity = async (address: string) => {
-  const query = `{
-    yfiStakingActivity {
-      id
-    }
-  }`
-
-  const res = await doGraghQueryIM(query, address);
-
-  if (!res) {
+export const getPoolSummary = async () => {
+  const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/pool/summary`);
+  if (!resp) {
     return;
   }
-
-  const { data } = await res.json();
-  console.log('got yfiStakingActivity data', data);
+  const summary = await resp.json();
+  return summary as PoolSummary;
 }
 
 export const generateWithdrawSignature = async (address: string, chainId: number, amount: string) => {
@@ -233,7 +293,6 @@ export const getImAccountsReadyForBid = async (address: string, chainId: number)
         accountReferalCount,
         pluginReferalCount,
         updatedTime,
-        beginMiningTime,
         beginPreemptTime,
         twitterProfileImageUri,
         hnftContractAddr,
@@ -270,7 +329,6 @@ export const getIMAccountOfBillboard = async (walletAddress: string, contractAdd
           accountReferalCount,
           pluginReferalCount,
           updatedTime,
-          beginMiningTime,
           beginPreemptTime,
           twitterProfileImageUri,
           hnftContractAddr,
@@ -293,18 +351,18 @@ export const getIMAccountOfBillboard = async (walletAddress: string, contractAdd
   }
 }
 
-export const getIMAccountOfWallet = async (address: string, chainId: number) => {
-  const query = `filter: { and: [{wallet: {equalTo: "${address.toLowerCase()}"}}, {chainId: {equalTo: ${chainId}}}]}`;
-  const accounts = await queryAllImAccounts(query, address);
+export const getMyIMAccount = async () => {
+  const query = `filter: { id: {equalTo: ${localStorage.getItem('userid') as string}}}`;
+  const accounts = await queryAllImAccounts(query);
   if (!accounts) {
     return;
   }
   return accounts[0];
 }
 
-export const getLeaderBoardImAccounts = async (address: string, chainId: number) => {
-  const query = `orderBy: INFLUENCE_DESC, first: 20, filter: {chainId: {equalTo: ${chainId}}}`;
-  return queryAllImAccounts(query, address);
+export const getLeaderBoardImAccounts = async () => {
+  const query = `orderBy: INFLUENCE_DESC, first: 20`;
+  return queryAllImAccounts(query);
 }
 
 export const getNumOfMembersOfDao = async (address: string, kolWallet: string, kolChainId: number) => {
@@ -387,7 +445,6 @@ export const getAvailableDaos = async (address: string, chainId: number) => {
         accountReferalCount,
         pluginReferalCount,
         updatedTime,
-        beginMiningTime,
         beginPreemptTime,
         twitterProfileImageUri,
         hnftContractAddr,
@@ -458,7 +515,58 @@ export const approveDaoApplication = async (address: string, chainId: number, da
   return resp;
 }
 
-export const TestGetSomeImAccounts = async () => {
+export const getUpcomingTweetMiner = async () => {
+  const query = `{
+    allComingTweetMiners(last:1, filter: {userId: {equalTo: ${localStorage.getItem('userid')}}}) {
+      nodes {
+        id,
+        userId,
+        tweetId,
+        createdTime
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(query, '');
+
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  return data.allComingTweetMiners.nodes[0] as UpcomingTweetMiner;
+}
+
+export const getAD3Activity = async () => {
+  // todo: only 1 activity for now
+  const query = `{
+    allYfiStakingActivities(first:1) {
+      nodes {
+        startTime,
+        rewardBudget,
+        rewardRemain,
+        earningsPerShare,
+        miningBalance,
+        dailyOutput,
+        halveTime,
+        lastProfitTime,
+        finished
+      }
+    }
+  }`
+  const res = await doGraghQueryIM(query, '');
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  console.log('ad3 activity', data);
+  return data.allYfiStakingActivities.nodes[0] as Ad3Activity;
+}
+
+export const _TestGetSomeImAccounts = async () => {
   const query = `{
     allImAccounts(first:20) {
       nodes {
@@ -468,11 +576,11 @@ export const TestGetSomeImAccounts = async () => {
         accountReferalCount,
         pluginReferalCount,
         updatedTime,
-        beginMiningTime,
         beginPreemptTime,
         twitterProfileImageUri,
         hnftContractAddr,
-        hnftTokenId
+        hnftTokenId,
+        id
       }
     }
   }`;
@@ -487,7 +595,7 @@ export const TestGetSomeImAccounts = async () => {
   return data.allImAccounts.nodes as ImAccount[];
 }
 
-export const getQueryFields = async () => {
+export const _getQueryFields = async () => {
   const query = `{
     __schema {
       queryType {

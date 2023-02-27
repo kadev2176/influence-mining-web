@@ -1,35 +1,31 @@
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { getIMAccountOfWallet, ImAccount } from "../services/mining.service";
+import { getMyIMAccount, ImAccount } from "../services/mining.service";
 import { formatTwitterImageUrl } from "../utils/format.util";
 
 export const useImAccount = () => {
-  const { address } = useAccount();
-  const { chain } = useNetwork();
   const [imAccount, setImAccount] = useState<ImAccount>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     refresh();
-  }, [address, chain]);
+  }, []);
 
   const refresh = () => {
-    if (address && chain?.id) {
-      setLoading(true);
-      getIMAccountOfWallet(address, chain.id).then(imAccount => {
-        if (imAccount) {
-          console.log('got user im account', imAccount);
-          setImAccount({
-            ...imAccount,
-            twitterProfileImageUri: formatTwitterImageUrl(imAccount.twitterProfileImageUri),
-          });
-        }
-        setLoading(false);
-      }).catch((e) => {
-        console.log('Query imAccount error', e);
-        setLoading(false);
-      })
-    }
+    setLoading(true);
+    getMyIMAccount().then(imAccount => {
+      if (imAccount) {
+        console.log('User imAccount:', imAccount);
+        setImAccount({
+          ...imAccount,
+          twitterProfileImageUri: formatTwitterImageUrl(imAccount.twitterProfileImageUri),
+        });
+      }
+      setLoading(false);
+    }).catch((e) => {
+      console.log('Query imAccount error', e);
+      setLoading(false);
+    })
   }
 
   return {

@@ -23,7 +23,7 @@ function Profile({ }: ProfileProps) {
 
     useEffect(() => {
         if (imAccount) {
-            updateInfluence(address!, chain!.id);
+            updateInfluence();
         }
     }, [imAccount])
 
@@ -70,24 +70,24 @@ function Profile({ }: ProfileProps) {
                         </div>
 
 
-                        {(!imAccount?.beginMiningTime || imAccount?.beginMiningTime == 0) && <>
+                        {/* {(!imAccount?.beginMiningTime || imAccount?.beginMiningTime == 0) && <>
                             <div className='btn-container'>
                                 <div className='btn active' onClick={handleStartMining}>
                                     Start Mining
                                 </div>
                             </div>
-                        </>}
+                        </>} */}
                     </div>
                 </div>
             </>}
 
-            {imAccount && <>
+            {/* {imAccount && <>
                 {!!imAccount?.beginMiningTime && <>
                     <AD3Balance></AD3Balance>
 
                     <InfluenceStat influence={imAccount}></InfluenceStat>
                 </>}
-            </>}
+            </>} */}
         </div>
     </>;
 };

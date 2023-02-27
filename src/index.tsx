@@ -72,6 +72,7 @@ root.render(
               <Route path="/" element={<Landing />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/vault" element={<Vault />} />
+              <Route path="/test" element={<Test />} />
               <Route path='*' element={<Navigate to='/' />} />
             </Route>
 

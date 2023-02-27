@@ -1,89 +1,185 @@
-import React, { useEffect, useState } from 'react';
-import { useAccount, useNetwork } from 'wagmi';
+import React, { useCallback, useEffect, useState } from 'react';
+import CountUp from 'react-countup';
+import { useNavigate } from 'react-router-dom';
 import LeaderBoard from '../../components/LeaderBoard/LeaderBoard';
 import { useImAccount } from '../../hooks/useImAccount';
-import { getAd3Balance, queryYFIStakingActivity } from '../../services/mining.service';
+import { useInterval } from '../../hooks/useInterval';
+import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, updateInfluence } from '../../services/mining.service';
 import { fetchOembedTweet, OembedTweet } from '../../services/twitter.service';
-import { formatAd3Amount } from '../../utils/format.util';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { amountToFloatString } from '../../utils/format.util';
 import './Vault.scss';
-import { useNavigate } from 'react-router-dom';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import { Dropdown } from 'antd';
+import { isMobile } from 'react-device-detect';
 
 export interface VaultProps { }
 
 const MinerTweetHashTag = '#GPTTest';
 
 function Vault({ }: VaultProps) {
-    const { address, isConnected } = useAccount();
-    const { chain } = useNetwork();
     const [totalBalance, setTotalBalance] = useState<string>();
     const [minerTweet, setMinerTweet] = useState<OembedTweet>();
-    const { imAccount } = useImAccount();
-    const navigate = useNavigate();
+    const { imAccount, refresh, loading } = useImAccount();
     const [countdown, setCountdown] = useState<{ hours: string; mins: string }>({ hours: '-', mins: '-' });
+    const navigate = useNavigate();
+    const [ad3Activity, setAd3Activity] = useState<Ad3Activity>();
+
+    const [profitStep, setProfitStep] = useState<string>('0');
 
     useEffect(() => {
-        if (!isConnected) {
+        if (!loading && !imAccount) {
             navigate('/auth');
         }
-    }, [isConnected]);
+    }, [imAccount, loading])
 
     useEffect(() => {
-        if (imAccount?.tweetId) {
-            fetchOembedTweet(imAccount.tweetId).then(tweet => {
-                setMinerTweet(tweet);
-            });
+        getAd3Balance().then(balance => {
+            console.log('got ad3 balance', balance);
+            if (balance) {
+                setTotalBalance(amountToFloatString(BigInt(balance.balance) + BigInt(balance.earned)));
+            }
+        })
+
+        getAD3Activity().then(ad3Activity => {
+            if (ad3Activity) {
+                setAd3Activity(ad3Activity);
+            }
+        })
+    }, [])
+
+    useEffect(() => {
+        // todo: change calculation
+        if (ad3Activity && imAccount) {
+            const outputPerSecond = BigInt(ad3Activity.dailyOutput) / BigInt(86400);
+            const profitPerSecond = outputPerSecond * BigInt(imAccount.influence) / BigInt(ad3Activity.miningBalance);
+            const step = profitPerSecond * BigInt(2);
+
+
+            // const now = Math.floor(Date.now() / 1000);
+            // const lastTime = lastProfit ?? ad3Activity.lastProfitTime;
+            // console.log(`updating balance. lastTime: ${lastTime}. now: ${now}`);
+            console.log('ad3Activity', ad3Activity);
+            console.log('profit step (2 sec)', step);
+            // const profitPerSecond = BigInt(ad3Activity.earningsPerShare) * (BigInt(imAccount.influence) / BigInt(ad3Activity.miningBalance));
+            // mock data
+
+            // const profitPerSecond = Number(amountToFloatString('10000000000000000')) * (Number(amountToFloatString('1000000000000000000')) / Number(amountToFloatString(ad3Activity.miningBalance)));
+
+            // console.log('profit per second');
+            // const newProfit = profitPerSecond * (now - lastTime);
+            // const step = profitPerSecond * 2;
+            // console.log('profit', 'new:', newProfit, 'step:', step);
+
+            // const balance = (Number(amountToFloatString(imAccount.ad3Balance)) + newProfit).toString();
+            // setTotalBalance((balance));
+            setProfitStep(amountToFloatString(step));
         }
-    }, [imAccount]);
+    }, [ad3Activity, imAccount])
 
-    useEffect(() => {
-        if (address && chain) {
-            getAd3Balance(address, chain.id).then(balance => {
-                setTotalBalance((BigInt(balance.withdrawable) + BigInt(balance.locked)).toString());
-            })
-
-            // queryYFIStakingActivity(address);
+    const addBalance = () => {
+        if (totalBalance && profitStep) {
+            setTotalBalance((Number(totalBalance) + Number(profitStep)).toString());
         }
-    }, [address, chain])
+    }
 
-    useEffect(() => {
-        const id = setInterval(() => {
-            const deadline = new Date();
-            deadline.setHours(24, 0, 0, 0);
-            const diff = deadline.getTime() - Date.now()
-            const hours = Math.floor(diff / (3600 * 1000));
-            const mins = Math.ceil((diff % (3600 * 1000) / 1000 / 60));
-            setCountdown({
-                hours: `${hours}`,
-                mins: `${mins}`
-            })
-        }, 1000);
+    useInterval(addBalance, 2000);
 
-        return () => clearInterval(id);
-    }, []);
+    const updateUpcomingMiner = async () => {
+        const miner = await getUpcomingTweetMiner();
+        if (miner?.tweetId) {
+            const minerTweet = await fetchOembedTweet(miner.tweetId);
+            setMinerTweet(minerTweet);
+        }
+    }
+
+    useInterval(updateUpcomingMiner, 5000, true);
+
+    const refreshInfluence = async () => {
+        console.log('updating influence, once per minute...');
+        updateInfluence().then((_) => {
+            refresh();
+        })
+    }
+
+    useInterval(refreshInfluence, 60 * 1000, true);
+
+    useInterval(() => {
+        const deadline = new Date();
+        deadline.setHours(24, 0, 0, 0);
+        const diff = deadline.getTime() - Date.now()
+        const hours = Math.floor(diff / (3600 * 1000));
+        const mins = Math.ceil((diff % (3600 * 1000) / 1000 / 60));
+        setCountdown({
+            hours: `${hours}`,
+            mins: `${mins}`
+        })
+    }, 1000, true);
 
     return <>
+        <div className='user-profile-container'>
+            {imAccount && <>
+                <Dropdown dropdownRender={() => {
+                    return <>
+                        <div className='user-profile-dropdown'>
+                            <div className='logout-btn' onClick={() => {
+                                window.localStorage.removeItem('authcookiebytwitter');
+                                window.localStorage.removeItem('expiretime');
+                                window.localStorage.removeItem('userid');
+                                navigate('/auth');
+                            }}>logout</div>
+                        </div>
+                    </>
+                }}>
+                    <div className='user-profile'>
+                        {imAccount && <>
+                            <img src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer" className='pfp'></img>
+                            {!!imAccount.twitterName && <>
+                                <span className='user-name'>
+                                    {`@${imAccount.twitterName}`}
+                                </span>
+                            </>}
+                        </>}
+                    </div>
+                </Dropdown>
+            </>}
+        </div>
+
         <div className='vault-container'>
             <div className='user-section'>
                 <div className='mining-reward'>
-                    <div className='label'>My Claimable Mining Reward</div>
-                    <div className='reward-row'>
-                        <div className='reward'>
-                            <div className='balance'>{formatAd3Amount(totalBalance ?? '')}</div>
-                            <div className='unit'>$AD3</div>
-                        </div>
+                    <div className='label-row'>
+                        <div className='label'>My Claimable Mining Reward</div>
                         <div className='action-btn disabled'>Claim</div>
+                    </div>
+
+                    <div className='reward-row'>
+                        <div className='balance'>
+                            {totalBalance !== undefined && <>
+                                {(Number(totalBalance) + Number(profitStep)).toString() === '0' && <>
+                                    0.00
+                                </>}
+                                {(Number(totalBalance) + Number(profitStep)).toString() !== '0' && <>
+                                    <CountUp end={Number(totalBalance) + Number(profitStep)} start={Number(totalBalance)} decimals={18} delay={0} duration={1}></CountUp>
+                                </>}
+                            </>}
+                        </div>
+                        <div className='unit'>$AD3</div>
                     </div>
                 </div>
 
                 <div className='tweet-status'>
-                    {imAccount && !imAccount.tweetId && <>
+                    {!minerTweet && <>
                         <div className='no-tweet-info'>
                             <div className='row'>You have not yet posted a tweet to participate in GPT mining.</div>
                             <div className='row'>Post any tweet with {MinerTweetHashTag} to participate in mining.</div>
                         </div>
                         <div className='button-container'>
                             <div className='action-btn active' onClick={() => {
+                                if (isMobile) {
+                                    window.open(`twitter://post?message=${encodeURIComponent(MinerTweetHashTag)}`);
+                                    return;
+                                }
+
                                 window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(MinerTweetHashTag)}`);
                             }}>Start Mining</div>
                         </div>
@@ -93,10 +189,16 @@ function Vault({ }: VaultProps) {
                         <div className='tweet-label'>My {MinerTweetHashTag} Tweet:</div>
 
                         <div className='miner-tweet'>
-                            <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer"></img>
+                            <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
+                                window.open(minerTweet.authorUrl);
+                            }}></img>
                             <div className='tweet-content'>
-                                <div className='author'>@{minerTweet.authorName}</div>
-                                <div className='content'>{minerTweet.tweetContent}</div>
+                                <div className='author' onClick={() => {
+                                    window.open(minerTweet.authorUrl);
+                                }}>@{minerTweet.authorName}</div>
+                                <div className='content' onClick={() => {
+                                    window.open(minerTweet.tweetUrl);
+                                }}>{minerTweet.tweetContent}</div>
                             </div>
                         </div>
 

@@ -4,7 +4,7 @@ import { Layout, Menu } from 'antd';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { parseUrlParams } from './utils/window.util';
-import { getIMAccountOfWallet } from './services/mining.service';
+import { getMyIMAccount } from './services/mining.service';
 
 const { Header, Content, Sider } = Layout;
 
@@ -123,7 +123,7 @@ function App() {
 
   useEffect(() => {
     if (address && chain?.id) {
-      getIMAccountOfWallet(address!, chain.id).then(imAccount => {
+      getMyIMAccount().then(imAccount => {
         if (!imAccount?.updatedTime) {
           navigate('/auth');
         } else if (location.pathname === '/') {

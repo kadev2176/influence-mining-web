@@ -19,7 +19,7 @@ function AD3Balance({ }: AD3BalanceProps) {
     const [withdrawModal, setWithdrawModal] = useState<boolean>(false);
 
     const fetchBalance = async (address: string, chainId: number) => {
-        const balance = await getAd3Balance(address, chainId);
+        const balance = await getAd3Balance();
         setBalance(balance);
     }
 
@@ -45,7 +45,7 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     navigate('/ad3Tx')
                                 }}>
                                     <div className='balance'>
-                                        {formatAd3Amount(balance.total)}
+                                        {/* {formatAd3Amount(balance.total)} */}
                                     </div>
                                     <div className='unit'>$AD3</div>
                                 </div>
@@ -58,7 +58,7 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <span className='text'>Withdrawable Balance</span>
                                 </Col>
                                 <Col className='value'>
-                                    <div className='balance'>{formatAd3Amount(balance.withdrawable)}</div>
+                                    {/* <div className='balance'>{formatAd3Amount(balance.withdrawable)}</div> */}
                                     <div className='unit'>$AD3</div>
                                 </Col>
                                 <Col className='action'>
@@ -75,7 +75,7 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <span className='text'>Locked Balance</span>
                                 </Col>
                                 <Col className='value'>
-                                    <div className='balance'>{formatAd3Amount(balance.locked)}</div>
+                                    {/* <div className='balance'>{formatAd3Amount(balance.locked)}</div> */}
                                     <div className='unit'>$AD3</div>
                                 </Col>
                             </Row>
@@ -86,7 +86,7 @@ function AD3Balance({ }: AD3BalanceProps) {
         </div>
 
         {withdrawModal && <>
-            <WithdrawAd3Modal
+            {/* <WithdrawAd3Modal
                 onCancel={() => {
                     setWithdrawModal(false);
                 }}
@@ -95,7 +95,7 @@ function AD3Balance({ }: AD3BalanceProps) {
                     fetchBalance(address!, chain!.id);
                 }}
                 withdrawableAmount={balance?.withdrawable}
-            ></WithdrawAd3Modal>
+            ></WithdrawAd3Modal> */}
         </>}
     </>;
 };
