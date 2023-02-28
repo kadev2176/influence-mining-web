@@ -18,7 +18,7 @@ const MinerTweetHashTag = '#GPTTest';
 
 function Vault({ }: VaultProps) {
     const [totalBalance, setTotalBalance] = useState<string>();
-    const [minerTweet, setMinerTweet] = useState<OembedTweet>();
+    const [minerTweet, setMinerTweet] = useState<OembedTweet | null>();
     const { imAccount, refresh, loading } = useImAccount();
     const [countdown, setCountdown] = useState<{ hours: string; mins: string }>({ hours: '-', mins: '-' });
     const navigate = useNavigate();
@@ -50,6 +50,10 @@ function Vault({ }: VaultProps) {
     useEffect(() => {
         // todo: change calculation
         if (ad3Activity && imAccount) {
+            if (Number(ad3Activity.miningBalance) === 0) {
+                return;
+            }
+
             const outputPerSecond = BigInt(ad3Activity.dailyOutput) / BigInt(86400);
             const profitPerSecond = outputPerSecond * BigInt(imAccount.influence) / BigInt(ad3Activity.miningBalance);
             const step = profitPerSecond * BigInt(2);
@@ -89,6 +93,8 @@ function Vault({ }: VaultProps) {
         if (miner?.tweetId) {
             const minerTweet = await fetchOembedTweet(miner.tweetId);
             setMinerTweet(minerTweet);
+        } else {
+            setMinerTweet(null);
         }
     }
 
@@ -168,55 +174,58 @@ function Vault({ }: VaultProps) {
                 </div>
 
                 <div className='tweet-status'>
-                    {!minerTweet && <>
-                        <div className='no-tweet-info'>
-                            <div className='row'>You have not yet posted a tweet to participate in GPT mining.</div>
-                            <div className='row'>Post any tweet with {MinerTweetHashTag} to participate in mining.</div>
-                        </div>
-                        <div className='button-container'>
-                            <div className='action-btn active' onClick={() => {
-                                if (isMobile) {
-                                    window.open(`twitter://post?message=${encodeURIComponent(MinerTweetHashTag)}`);
-                                    return;
-                                }
+                    {minerTweet !== undefined && <>
+                        {!minerTweet && <>
+                            <div className='no-tweet-info'>
+                                <div className='row'>You have not yet posted a tweet to participate in GPT mining.</div>
+                                <div className='row'>Post any tweet with {MinerTweetHashTag} to participate in mining.</div>
+                            </div>
+                            <div className='button-container'>
+                                <div className='action-btn active' onClick={() => {
+                                    if (isMobile) {
+                                        window.open(`twitter://post?message=${encodeURIComponent(MinerTweetHashTag)}`);
+                                        return;
+                                    }
 
-                                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(MinerTweetHashTag)}`);
-                            }}>Start Mining</div>
-                        </div>
-                    </>}
+                                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(MinerTweetHashTag)}`);
+                                }}>Start Mining</div>
+                            </div>
+                        </>}
 
-                    {minerTweet && <>
-                        <div className='tweet-label'>My {MinerTweetHashTag} Tweet:</div>
+                        {minerTweet && <>
+                            <div className='tweet-label'>My {MinerTweetHashTag} Tweet:</div>
 
-                        <div className='miner-tweet'>
-                            <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
-                                window.open(minerTweet.authorUrl);
-                            }}></img>
-                            <div className='tweet-content'>
-                                <div className='author' onClick={() => {
+                            <div className='miner-tweet'>
+                                <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
                                     window.open(minerTweet.authorUrl);
-                                }}>@{minerTweet.authorName}</div>
-                                <div className='content' onClick={() => {
-                                    window.open(minerTweet.tweetUrl);
-                                }}>{minerTweet.tweetContent}</div>
+                                }}></img>
+                                <div className='tweet-content'>
+                                    <div className='author' onClick={() => {
+                                        window.open(minerTweet.authorUrl);
+                                    }}>@{minerTweet.authorName}</div>
+                                    <div className='content' onClick={() => {
+                                        window.open(minerTweet.tweetUrl);
+                                    }}>{minerTweet.tweetContent}</div>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className='tweet-submit-status'>
-                            <div className='mark'>
-                                <CheckCircleOutlined />
+                            <div className='tweet-submit-status'>
+                                <div className='mark'>
+                                    <CheckCircleOutlined />
+                                </div>
+                                <div className='info'>
+                                    Your tweet has been submitted and under evaluation by ChatGPT.
+                                </div>
                             </div>
-                            <div className='info'>
-                                Your tweet has been submitted and under evaluation by ChatGPT.
+                            <div className='score-status'>
+                                <div className='info'>The final influence score will be calculated after:</div>
+                                <div className='value'>
+                                    <div>{countdown.hours}h {countdown.mins}m</div>
+                                </div>
                             </div>
-                        </div>
-                        <div className='score-status'>
-                            <div className='info'>The final influence score will be calculated after:</div>
-                            <div className='value'>
-                                <div>{countdown.hours}h {countdown.mins}m</div>
-                            </div>
-                        </div>
+                        </>}
                     </>}
+
                 </div>
             </div>
             <div className='divider'></div>

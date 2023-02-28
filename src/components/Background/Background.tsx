@@ -39,13 +39,26 @@ const Background: React.FC<{
   const textureLoader = new THREE.TextureLoader();
   const shape = textureLoader.load('/particleShape/particle.png');
   const avatarTextures = [
-    textureLoader.load('/assets/images/muri.png'),
-    textureLoader.load('/assets/images/bayc.png'),
-    textureLoader.load('/assets/images/azuki.png'),
-    textureLoader.load('/assets/images/coolcat.png'),
-    textureLoader.load('/assets/images/doodle.png'),
-    textureLoader.load('/assets/images/moonbirds.png'),
-    textureLoader.load('/assets/images/pp.png'),
+    textureLoader.load('/assets/avatars/3land.png'),
+    textureLoader.load('/assets/avatars/azuki.png'),
+    textureLoader.load('/assets/avatars/bayc.png'),
+    textureLoader.load('/assets/avatars/cloneX.png'),
+    textureLoader.load('/assets/avatars/coolcat.png'),
+    textureLoader.load('/assets/avatars/creatureWorld.png'),
+    textureLoader.load('/assets/avatars/crypToads.png'),
+    textureLoader.load('/assets/avatars/dead.png'),
+    textureLoader.load('/assets/avatars/doodle.png'),
+    textureLoader.load('/assets/avatars/goblin.png'),
+    textureLoader.load('/assets/avatars/kaiju.png'),
+    textureLoader.load('/assets/avatars/kara.png'),
+    textureLoader.load('/assets/avatars/mayc.png'),
+    textureLoader.load('/assets/avatars/mfers.png'),
+    textureLoader.load('/assets/avatars/moonbirds.png'),
+    textureLoader.load('/assets/avatars/muri.png'),
+    textureLoader.load('/assets/avatars/phantaBear.png'),
+    textureLoader.load('/assets/avatars/pp.png'),
+    textureLoader.load('/assets/avatars/punk.png'),
+    textureLoader.load('/assets/avatars/wow.png'),
   ];
 
   // Scene
@@ -121,11 +134,8 @@ const Background: React.FC<{
       const pos_z = Math.cos(branchAngle + spinAngle) * x + randomZ;
 
       const r2 = pos_x * pos_x + pos_y * pos_y + pos_z * pos_z;
-      // if (true) {
-      //   continue;
-      // }
+      
       if (pos_y > 0.5 && r2 > 0.5 && r2 < 3) {
-        console.log('should continue')
         continue;
       }
 
@@ -173,7 +183,7 @@ const Background: React.FC<{
     const colorInside = new THREE.Color(parameters.insideColor);
 
     // random positions
-    const count = 12;
+    const count = 5;
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     // for (let i = 0; i < count; i++) {
