@@ -10,25 +10,62 @@
   z-index: 99;
 
   .logo {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Josefin Sans';
-    cursor: pointer;
+    flex-grow: 1;
+    // position: relative;
+    // display: flex;
+    // flex-direction: row;
+    // align-items: center;
+    // justify-content: center;
+    // font-family: 'Josefin Sans';
+    // cursor: pointer;
 
-    .logo-img {
-      width: 68px;
-      height: 68px;
-      opacity: 0.8;
+    // .logo-img {
+    //   width: 68px;
+    //   height: 68px;
+    //   opacity: 0.8;
+    // }
+
+    // span {
+    //   font-size: 1.8rem;
+    //   font-weight: 900;
+    //   color: #fff;
+    //   margin-left: 5px;
+    // }
+  }
+
+  .links-mobile {
+    color: #fff;
+    padding: 0 20px;
+
+    .links-dropdown-btn {
+      background: #ffffff21;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
     }
+  }
 
-    span {
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: #fff;
-      margin-left: 5px;
+
+
+  .links {
+    color: #fff;
+    padding: 0 40px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+
+    .link {
+      padding: 5px;
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0.8;
+
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
+      }
     }
   }
 
@@ -38,12 +75,13 @@
     align-items: center;
     justify-content: center;
     text-overflow: ellipsis;
+    min-width: 112px;
 
     .connect-btn {
       min-width: 100px;
       padding: 8px 16px;
     }
-    
+
     .user-profile {
       color: #fff;
       display: flex;
@@ -62,17 +100,29 @@
 
       &:hover {
         cursor: pointer;
+
         .wallet-address {
           text-decoration: underline;
         }
       }
     }
 
-
-
     .text {
       margin-left: 20px;
       margin-right: 20px;
     }
+  }
+}
+
+.links-dropdown {
+  padding: 10px;
+  padding-right: 30px;
+  border-radius: 5px;
+  background: #343434e6;
+  font-size: 1rem;
+  font-weight: 500;
+
+  .link {
+    padding: 10px;
   }
 }

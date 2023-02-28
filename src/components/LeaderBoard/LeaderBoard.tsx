@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
-import { formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
+import { amountToFloatString, formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
 import './LeaderBoard.scss';
 
 export interface LeaderBoardProps { }
@@ -81,7 +81,7 @@ function LeaderBoard({ }: LeaderBoardProps) {
                 <div className='row'>
                     <div className='stat'>
                         <div className='label'>Reward per Block(24h)</div>
-                        <div className='value'>{formatAd3Amount(poolSummary?.currentDailyOutput ?? '0')} $AD3</div>
+                        <div className='value'>{Number(amountToFloatString(poolSummary?.currentDailyOutput ?? '0')).toLocaleString('en-US')} $AD3</div>
                     </div>
 
                     <div className='stat'>

@@ -73,5 +73,5 @@ export const formatTwitterImageUrl = (url?: string) => {
 }
 
 export const formatInfluenceScore = (value: string | bigint) => {
-	return Number(amountToFloatString(value)).toFixed(2);
+	return Number(amountToFloatString(value, 2)).toLocaleString('en-US');
 }
