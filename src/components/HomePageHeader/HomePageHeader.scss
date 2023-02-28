@@ -11,26 +11,25 @@
 
   .logo {
     flex-grow: 1;
-    // position: relative;
-    // display: flex;
-    // flex-direction: row;
-    // align-items: center;
-    // justify-content: center;
-    // font-family: 'Josefin Sans';
-    // cursor: pointer;
+  }
 
-    // .logo-img {
-    //   width: 68px;
-    //   height: 68px;
-    //   opacity: 0.8;
-    // }
+  .menu {
+    color: #fff;
 
-    // span {
-    //   font-size: 1.8rem;
-    //   font-weight: 900;
-    //   color: #fff;
-    //   margin-left: 5px;
-    // }
+    .menu-btn {
+      display: flex;
+      align-items: center;
+      font-size: 1rem;
+      font-weight: 500;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .text {
+        margin-right: 10px;
+      }
+    }
   }
 
   .links-mobile {
@@ -75,17 +74,15 @@
     align-items: center;
     justify-content: center;
     text-overflow: ellipsis;
-    min-width: 112px;
-
-    .connect-btn {
-      min-width: 100px;
-      padding: 8px 16px;
-    }
+    color: #fff;
 
     .user-profile {
-      color: #fff;
       display: flex;
       align-items: center;
+
+      &:hover {
+        cursor: pointer;
+      }
 
       .pfp {
         width: 32px;
@@ -93,28 +90,25 @@
         border-radius: 16px;
       }
 
-      .wallet-address {
+      .user-name {
         margin-left: 10px;
         font-weight: 500;
-      }
-
-      &:hover {
-        cursor: pointer;
-
-        .wallet-address {
-          text-decoration: underline;
-        }
+        max-width: 120px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
     }
 
-    .text {
-      margin-left: 20px;
-      margin-right: 20px;
+    .connect-btn {
+      min-width: 100px;
+      padding: 8px 16px;
     }
   }
 }
 
 .links-dropdown {
+  margin-top: 10px;
   padding: 10px;
   padding-right: 30px;
   border-radius: 5px;
@@ -124,5 +118,28 @@
 
   .link {
     padding: 10px;
+    padding-right: 20px;
+    opacity: 0.8;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
+  }
+}
+
+.user-profile-dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .logout-btn {
+    font-weight: 500;
+    opacity: 0.85;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
+    }
   }
 }

@@ -1,51 +1,5 @@
 @import '../../common.scss';
 
-.user-profile-dropdown {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  
-  .logout-btn {
-    font-weight: 500;
-    opacity: 0.85;
-
-    &:hover {
-      cursor: pointer;
-      opacity: 1;
-    }
-  }
-}
-
-.user-profile-container {
-  color: #fff;
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 2%;
-  z-index: 100;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  .user-profile {
-    display: flex;
-    align-items: center;
-
-    .pfp {
-      width: 32px;
-      height: 32px;
-      border-radius: 16px;
-    }
-
-    .user-name {
-      margin-left: 10px;
-      font-weight: 500;
-    }
-  }
-}
-
-
 .vault-container {
   padding-top: 120px;
   padding-left: 20%;

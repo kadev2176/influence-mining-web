@@ -14,10 +14,31 @@ function HomePageHeader({ }: HomePageHeaderProps) {
         window.open('https://parami.gitbook.io/gpt-miner/');
     }
 
+    const { imAccount } = useImAccount();
+
     return <>
         <div className='header-container'>
             {/* <div className='logo'>
             </div> */}
+            <BrowserView className='menu'>
+                <Dropdown dropdownRender={() => {
+                    return <>
+                        <div className='links-dropdown'>
+                            <div className='link' onClick={openWhitepaper}>Wallet</div>
+                            <div className='link' onClick={openWhitepaper}>Swap</div>
+                            <div className='link' onClick={openWhitepaper}>Staking</div>
+                            <div className='link' onClick={openWhitepaper}>hNFT</div>
+                            <div className='link' onClick={openWhitepaper}>Bid War</div>
+                        </div>
+                    </>
+                }}>
+                    <div className='menu-btn'>
+                        <div className='text'>Explore Apps</div>
+                        <i className="fa-solid fa-chevron-down"></i>
+                    </div>
+                </Dropdown>
+            </BrowserView>
+
             <BrowserView className='links'>
                 <div className='link' onClick={openWhitepaper}>Whitepaper</div>
             </BrowserView>
@@ -25,12 +46,12 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                 <Dropdown dropdownRender={() => {
                     return <>
                         <div className='links-dropdown'>
-                            <div className='link' onClick={openWhitepaper}>Whitepaper</div>
                             <div className='link' onClick={openWhitepaper}>Wallet</div>
                             <div className='link' onClick={openWhitepaper}>Swap</div>
                             <div className='link' onClick={openWhitepaper}>Staking</div>
                             <div className='link' onClick={openWhitepaper}>hNFT</div>
                             <div className='link' onClick={openWhitepaper}>Bid War</div>
+                            <div className='link' onClick={openWhitepaper}>Whitepaper</div>
                         </div>
                     </>
                 }}>
@@ -49,26 +70,33 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                     </div>
                 </>}
 
-                {/* {location.pathname === '/vault' && <>
-                    {loading && <>
-                        <div className='connect-btn action-btn'>
-                            <LoadingOutlined spin />
-                        </div>
-                    </>}
-
-                    {!loading && <>
-                        {!!imAccount?.updatedTime && <>
-                            <div className='user-profile' onClick={() => {
-                                navigate('/vault');
-                            }}>
-                                <img src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer" className='pfp'></img>
-                                <span className='wallet-address'>
-                                    {imAccount.wallet}
-                                </span>
+                {location.pathname === '/vault' && <>
+                    {imAccount && <>
+                        <Dropdown dropdownRender={() => {
+                            return <>
+                                <div className='user-profile-dropdown'>
+                                    <div className='logout-btn' onClick={() => {
+                                        window.localStorage.removeItem('authcookiebytwitter');
+                                        window.localStorage.removeItem('expiretime');
+                                        window.localStorage.removeItem('userid');
+                                        navigate('/auth');
+                                    }}>logout</div>
+                                </div>
+                            </>
+                        }}>
+                            <div className='user-profile'>
+                                {imAccount && <>
+                                    <img src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer" className='pfp'></img>
+                                    {!!imAccount.twitterName && <>
+                                        <span className='user-name'>
+                                            {`@${imAccount.twitterName}`}
+                                        </span>
+                                    </>}
+                                </>}
                             </div>
-                        </>}
+                        </Dropdown>
                     </>}
-                </>} */}
+                </>}
             </div>
         </div>
     </>;

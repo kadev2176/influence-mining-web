@@ -122,34 +122,6 @@ function Vault({ }: VaultProps) {
     }, 1000, true);
 
     return <>
-        <div className='user-profile-container'>
-            {imAccount && <>
-                <Dropdown dropdownRender={() => {
-                    return <>
-                        <div className='user-profile-dropdown'>
-                            <div className='logout-btn' onClick={() => {
-                                window.localStorage.removeItem('authcookiebytwitter');
-                                window.localStorage.removeItem('expiretime');
-                                window.localStorage.removeItem('userid');
-                                navigate('/auth');
-                            }}>logout</div>
-                        </div>
-                    </>
-                }}>
-                    <div className='user-profile'>
-                        {imAccount && <>
-                            <img src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer" className='pfp'></img>
-                            {!!imAccount.twitterName && <>
-                                <span className='user-name'>
-                                    {`@${imAccount.twitterName}`}
-                                </span>
-                            </>}
-                        </>}
-                    </div>
-                </Dropdown>
-            </>}
-        </div>
-
         <div className='vault-container'>
             <div className='user-section'>
                 <div className='mining-reward'>
