@@ -18,9 +18,9 @@ function HomePageHeader({ }: HomePageHeaderProps) {
 
     return <>
         <div className='header-container'>
-            {/* <div className='logo'>
-            </div> */}
-            <BrowserView className='menu'>
+            <div className='logo'>
+            </div>
+            {/* <BrowserView className='menu'>
                 <Dropdown dropdownRender={() => {
                     return <>
                         <div className='links-dropdown'>
@@ -33,7 +33,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                     </>
                 }}>
                     <div className='menu-btn'>
-                        <div className='text'>Explore Apps</div>
+                        <div className='text'>Explore</div>
                         <i className="fa-solid fa-chevron-down"></i>
                     </div>
                 </Dropdown>
@@ -59,7 +59,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                         <i className="fa-solid fa-chevron-down"></i>
                     </div>
                 </Dropdown>
-            </MobileView>
+            </MobileView> */}
 
             <div className='connect-wallet'>
                 {location.pathname !== '/vault' && <>

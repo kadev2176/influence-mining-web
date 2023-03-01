@@ -62,13 +62,13 @@ function LeaderBoard({ }: LeaderBoardProps) {
             <div className='title'>
                 ROLLING 24H LEADERBOARD
             </div>
-            <div className='description'>
+            {/* <div className='description'>
                 <div className='info'>
                     We use <span className='label'>ChatGPT</span> to evaluate your twitter mining influence, which considers factors such as twitter account rating, mining twitter content, interaction, likes and comments and other data.
                     <a className='link'>Click here for details.</a>
                 </div>
                 <div className='sub-title'>Updated every 5 minutes</div>
-            </div>
+            </div> */}
 
             <div className='dashboard'>
                 <div className='row first'>
@@ -97,9 +97,9 @@ function LeaderBoard({ }: LeaderBoardProps) {
                     <thead>
                         <tr>
                             <th>Position</th>
-                            <th>Miner</th>
+                            <th>User</th>
                             <th>Boost</th>
-                            <th>Scores</th>
+                            <th>Score</th>
                         </tr>
                     </thead>
                     <tbody>

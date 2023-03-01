@@ -89,6 +89,20 @@
         margin-bottom: 20px;
       }
 
+      .post-hint {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        .text {
+          margin-bottom: 20px;
+        }
+
+        .action-btn {
+          font-size: 1rem;
+        }
+      }
+
       .tweet-row {
         display: flex;
         justify-content: space-between;
@@ -138,24 +152,14 @@
           margin-left: 20px;
 
           .tag {
+            display: flex;
             padding: 4px 8px;
             background: rgb(48, 48, 48);
             border-radius: 10px;
-          }
-
-          .expand-btn {
-            padding: 4px 8px;
-            background: rgba(48, 48, 48, 0.8);
-            border-radius: 10px;
-
-            &:hover {
-              cursor: pointer;
-              background: rgb(48, 48, 48);
-            }
 
             .text {
               margin-left: 5px;
-              margin-right: 5px;
+              white-space: nowrap;
             }
           }
         }
@@ -193,12 +197,12 @@
 
       .gpt-row {
         overflow: hidden;
-        transition: max-height 0.5s ease-in-out;
-        max-height: 300px;
+        // transition: max-height 0.5s ease-in-out;
+        // max-height: 300px;
 
-        &.hide {
-          max-height: 0px;
-        }
+        // &.hide {
+        //   max-height: 0px;
+        // }
 
         .gpt-evaluation {
           padding: 20px;
@@ -212,6 +216,11 @@
 
           .content {
             color: #a2a2a2;
+
+            .count-down {
+              margin-left: 5px;
+              color: #fff;
+            }
           }
         }
       }

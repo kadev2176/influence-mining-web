@@ -28,7 +28,7 @@ function Landing({ }: LandingProps) {
                 <h1 className='title'>GPT Miner</h1>
                 <div className='description'>
                     <h4>Just be U<span className='superscript'>AI</span></h4>
-                    <h4>World's 1st "Social Influence" Mining Initiative Converging AI with Web3</h4>
+                    <h4>The World's First 'Social Influence' Mining Initiative Converging AI with Web3</h4>
                 </div>
             </div>
 

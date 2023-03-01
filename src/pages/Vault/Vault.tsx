@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LeaderBoard from '../../components/LeaderBoard/LeaderBoard';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useInterval } from '../../hooks/useInterval';
-import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, updateInfluence } from '../../services/mining.service';
+import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, UpcomingTweetMiner, updateInfluence } from '../../services/mining.service';
 import { fetchOembedTweet, OembedTweet } from '../../services/twitter.service';
 import { amountToFloatString } from '../../utils/format.util';
 import './Vault.scss';
@@ -16,9 +16,25 @@ export interface VaultProps { }
 
 const MinerTweetHashTag = '#GPTTest';
 
+const postTweet = () => {
+    if (isMobile) {
+        window.open(`twitter://post?message=${encodeURIComponent(MinerTweetHashTag)}`);
+        return;
+    }
+
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(MinerTweetHashTag)}`);
+}
+
+interface MostRecentTweet extends OembedTweet {
+    evaluation: string;
+    justPosted: boolean;
+}
+
 function Vault({ }: VaultProps) {
     const [totalBalance, setTotalBalance] = useState<string>();
-    const [minerTweet, setMinerTweet] = useState<OembedTweet | null>();
+    const [upcomingTweet, setUpcomingTweet] = useState<UpcomingTweetMiner | null>();
+    const [mostRecentTweet, setMostRecentTweet] = useState<MostRecentTweet | null>();
+    // const [minerTweet, setMinerTweet] = useState<OembedTweet | null>();
     const { imAccount, refresh, loading } = useImAccount();
     const [countdown, setCountdown] = useState<{ hours: string; mins: string }>({ hours: '-', mins: '-' });
     const navigate = useNavigate();
@@ -26,7 +42,7 @@ function Vault({ }: VaultProps) {
 
     const [profitStep, setProfitStep] = useState<string>('0');
     const [decimals, setDecimals] = useState<number>(2);
-    const [gptEvaluationExpand, setGptEvaluationExpand] = useState<boolean>(false);
+    // const [gptEvaluationExpand, setGptEvaluationExpand] = useState<boolean>(false);
 
     useEffect(() => {
         if (!loading && !imAccount) {
@@ -81,16 +97,35 @@ function Vault({ }: VaultProps) {
     useInterval(addBalance, 2000);
 
     const updateUpcomingMiner = async () => {
-        const miner = await getUpcomingTweetMiner();
-        if (miner?.tweetId) {
-            const minerTweet = await fetchOembedTweet(miner.tweetId);
-            setMinerTweet(minerTweet);
-        } else {
-            setMinerTweet(null);
-        }
+        const tweet = await getUpcomingTweetMiner();
+        setUpcomingTweet(tweet || null);
     }
 
     useInterval(updateUpcomingMiner, 5000, true);
+
+    const updateMostRecentTweet = async () => {
+        const id = upcomingTweet?.tweetId ?? imAccount?.tweetId;
+        if (id) {
+            const tweet = await fetchOembedTweet(id);
+            const postedTime = (new Date(upcomingTweet?.createdTime ?? '0')).getTime();
+            const zero = new Date();
+            zero.setHours(0, 0, 0, 0);
+            
+            setMostRecentTweet({
+                ...tweet,
+                evaluation: (upcomingTweet?.tweetId === imAccount?.tweetId) ? imAccount?.tweetEvaluation ?? '' : '',
+                justPosted: postedTime > zero.getTime()
+            });
+        } else {
+            setMostRecentTweet(null);
+        }
+    }
+
+    useEffect(() => {
+        if (imAccount && upcomingTweet !== undefined) {
+            updateMostRecentTweet();
+        }
+    }, [imAccount, upcomingTweet])
 
     const refreshInfluence = async () => {
         console.log('updating influence, once per minute...');
@@ -118,7 +153,7 @@ function Vault({ }: VaultProps) {
             <div className='user-section'>
                 <div className='mining-reward'>
                     <div className='label-row'>
-                        <div className='label'>My Claimable Mining Reward</div>
+                        <div className='label'>My Mining Rewards</div>
                         <div className='action-btn disabled'>Claim</div>
                     </div>
 
@@ -138,76 +173,71 @@ function Vault({ }: VaultProps) {
                 </div>
 
                 <div className='tweet-status'>
-                    {minerTweet !== undefined && <>
-                        {!minerTweet && <>
+                    {mostRecentTweet !== undefined && <>
+                        {!mostRecentTweet && <>
                             <div className='no-tweet-info'>
                                 <div className='row'>You have not yet posted a tweet to participate in GPT mining.</div>
                                 <div className='row'>Post any tweet with {MinerTweetHashTag} to participate in mining.</div>
                             </div>
                             <div className='button-container'>
-                                <div className='action-btn active' onClick={() => {
-                                    if (isMobile) {
-                                        window.open(`twitter://post?message=${encodeURIComponent(MinerTweetHashTag)}`);
-                                        return;
-                                    }
-
-                                    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(MinerTweetHashTag)}`);
-                                }}>Start Mining</div>
+                                <div className='action-btn active' onClick={postTweet}>Start Mining</div>
                             </div>
                         </>}
 
-                        {minerTweet && <>
-                            <div className='tweet-label'>My recent {MinerTweetHashTag} Tweet:</div>
+                        {mostRecentTweet && <>
+                            {!mostRecentTweet.justPosted && <>
+                                <div className='post-hint'>
+                                    <div className='text'>You current GPT Miner is running and will be expired after {countdown.hours}h {countdown.mins}m</div>
+                                    <div className='action-btn active' onClick={postTweet}>Post a New Tweet</div>
+                                </div>
+                            </>}
+
+                            <div className='tweet-label'>Most Recent Tweet:</div>
 
                             <div className='tweet-row'>
                                 <div className='miner-tweet'>
                                     <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
-                                        window.open(minerTweet.authorUrl);
+                                        window.open(mostRecentTweet.authorUrl);
                                     }}></img>
                                     <div className='tweet-content'>
                                         <div className='author' onClick={() => {
-                                            window.open(minerTweet.authorUrl);
-                                        }}>@{minerTweet.authorName}</div>
+                                            window.open(mostRecentTweet.authorUrl);
+                                        }}>@{mostRecentTweet.authorName}</div>
                                         <div className='content' onClick={() => {
-                                            window.open(minerTweet.tweetUrl);
-                                        }}>{minerTweet.tweetContent}</div>
+                                            window.open(mostRecentTweet.tweetUrl);
+                                        }}>{mostRecentTweet.tweetContent}</div>
                                     </div>
                                 </div>
 
-                                {minerTweet.tweetId === imAccount?.tweetId && !!imAccount.tweetEvaluation && <>
-                                    <div className='status' onClick={() => {
-                                        setGptEvaluationExpand(!gptEvaluationExpand);
-                                    }}>
-                                        <div className='expand-btn'>
+                                <div className='status'>
+                                    <div className='tag'>
+                                        {!!mostRecentTweet.evaluation && <>
                                             <CheckCircleOutlined />
                                             <span className='text'>GPT Evaluated</span>
-                                            {gptEvaluationExpand && <>
-                                                <span>
-                                                    <i className="fa-solid fa-chevron-up"></i>
-                                                </span>
-                                            </>}
-                                            {!gptEvaluationExpand && <>
-                                                <span>
-                                                    <i className="fa-solid fa-chevron-down"></i>
-                                                </span>
-                                            </>}
-                                        </div>
-                                    </div>
-                                </>}
+                                        </>}
 
-                                {(minerTweet.tweetId !== imAccount?.tweetId || !imAccount.tweetEvaluation) && <>
-                                    <div className='status'>
-                                        <Tooltip title="Your tweet is under ChatGPT evaluation" placement='bottom'>
-                                            <div className='tag'>Pending...</div>
-                                        </Tooltip>
+                                        {!mostRecentTweet.evaluation && <>
+                                            Pending
+                                        </>}
                                     </div>
-                                </>}
+                                </div>
                             </div>
 
-                            <div className={`gpt-row ${gptEvaluationExpand ? 'show' : 'hide'}`}>
+                            <div className={`gpt-row`}>
                                 <div className={`gpt-evaluation`}>
-                                    <div className='title'>GPT Evaluation:</div>
-                                    <div className='content'>{imAccount?.tweetEvaluation}</div>
+                                    {!!mostRecentTweet.evaluation && <>
+                                        <div className='title'>GPT Evaluation:</div>
+                                        <div className='content'>
+                                            {mostRecentTweet.evaluation}
+                                        </div>
+                                    </>}
+
+                                    {!mostRecentTweet.evaluation && <>
+                                        <div className='content'>
+                                            Your tweet has been submitted and under evaluation by ChatGPT. The final influence score will be calculated after:
+                                            <span className='count-down'>{countdown.hours}h {countdown.mins}m</span>
+                                        </div>
+                                    </>}
                                 </div>
                             </div>
 
@@ -230,7 +260,7 @@ function Vault({ }: VaultProps) {
 
                 </div>
             </div>
-            <div className='divider'></div>
+            {/* <div className='divider'></div> */}
             <LeaderBoard></LeaderBoard>
         </div>
     </>;
