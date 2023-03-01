@@ -1,6 +1,7 @@
 import fetchJsonp from "fetch-jsonp";
 
 export interface OembedTweet {
+  tweetId: string;
   authorName: string;
   authorUrl: string;
   html: string;
@@ -20,6 +21,7 @@ export const fetchOembedTweet = async (tweetId: string) => {
     authorUrl: tweetJson.author_url,
     html: tweetJson.html,
     tweetUrl: tweetJson.url,
-    tweetContent
+    tweetContent,
+    tweetId
   } as OembedTweet;
 }

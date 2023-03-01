@@ -9,8 +9,8 @@ import { fetchOembedTweet, OembedTweet } from '../../services/twitter.service';
 import { amountToFloatString } from '../../utils/format.util';
 import './Vault.scss';
 import { CheckCircleOutlined } from '@ant-design/icons';
-import { Dropdown } from 'antd';
 import { isMobile } from 'react-device-detect';
+import { Tooltip } from 'antd';
 
 export interface VaultProps { }
 
@@ -26,6 +26,7 @@ function Vault({ }: VaultProps) {
 
     const [profitStep, setProfitStep] = useState<string>('0');
     const [decimals, setDecimals] = useState<number>(2);
+    const [gptEvaluationExpand, setGptEvaluationExpand] = useState<boolean>(false);
 
     useEffect(() => {
         if (!loading && !imAccount) {
@@ -60,29 +61,14 @@ function Vault({ }: VaultProps) {
             const step = profitPerSecond * BigInt(2);
 
             if (Number(step) > 0) {
-                const decimals = Math.max(18 - step.toString().length + 2, 2);
+                const decimals = Math.min(18, Math.max(18 - step.toString().length + 2, 2));
                 console.log('got decimals', decimals);
                 setDecimals(decimals);
                 setProfitStep(amountToFloatString(step));
             }
 
-            // const now = Math.floor(Date.now() / 1000);
-            // const lastTime = lastProfit ?? ad3Activity.lastProfitTime;
-            // console.log(`updating balance. lastTime: ${lastTime}. now: ${now}`);
             console.log('ad3Activity', ad3Activity);
             console.log('profit step (2 sec)', step);
-            // const profitPerSecond = BigInt(ad3Activity.earningsPerShare) * (BigInt(imAccount.influence) / BigInt(ad3Activity.miningBalance));
-            // mock data
-
-            // const profitPerSecond = Number(amountToFloatString('10000000000000000')) * (Number(amountToFloatString('1000000000000000000')) / Number(amountToFloatString(ad3Activity.miningBalance)));
-
-            // console.log('profit per second');
-            // const newProfit = profitPerSecond * (now - lastTime);
-            // const step = profitPerSecond * 2;
-            // console.log('profit', 'new:', newProfit, 'step:', step);
-
-            // const balance = (Number(amountToFloatString(imAccount.ad3Balance)) + newProfit).toString();
-            // setTotalBalance((balance));
         }
     }, [ad3Activity, imAccount])
 
@@ -188,15 +174,44 @@ function Vault({ }: VaultProps) {
                                     </div>
                                 </div>
 
-                                <div className='mark'>
-                                    <CheckCircleOutlined />
+                                {minerTweet.tweetId === imAccount?.tweetId && !!imAccount.tweetEvaluation && <>
+                                    <div className='status' onClick={() => {
+                                        setGptEvaluationExpand(!gptEvaluationExpand);
+                                    }}>
+                                        <div className='expand-btn'>
+                                            <CheckCircleOutlined />
+                                            <span className='text'>GPT Evaluated</span>
+                                            {gptEvaluationExpand && <>
+                                                <span>
+                                                    <i className="fa-solid fa-chevron-up"></i>
+                                                </span>
+                                            </>}
+                                            {!gptEvaluationExpand && <>
+                                                <span>
+                                                    <i className="fa-solid fa-chevron-down"></i>
+                                                </span>
+                                            </>}
+                                        </div>
+                                    </div>
+                                </>}
+
+                                {(minerTweet.tweetId !== imAccount?.tweetId || !imAccount.tweetEvaluation) && <>
+                                    <div className='status'>
+                                        <Tooltip title="Your tweet is under ChatGPT evaluation" placement='bottom'>
+                                            <div className='tag'>Pending...</div>
+                                        </Tooltip>
+                                    </div>
+                                </>}
+                            </div>
+
+                            <div className={`gpt-row ${gptEvaluationExpand ? 'show' : 'hide'}`}>
+                                <div className={`gpt-evaluation`}>
+                                    <div className='title'>GPT Evaluation:</div>
+                                    <div className='content'>{imAccount?.tweetEvaluation}</div>
                                 </div>
                             </div>
 
-                            <div className='gpt-row'>
-                            </div>
-
-                            <div className='tweet-submit-status'>
+                            {/* <div className='tweet-submit-status'>
                                 <div className='mark'>
                                     <CheckCircleOutlined />
                                 </div>
@@ -209,7 +224,7 @@ function Vault({ }: VaultProps) {
                                 <div className='value'>
                                     <div>{countdown.hours}h {countdown.mins}m</div>
                                 </div>
-                            </div>
+                            </div> */}
                         </>}
                     </>}
 

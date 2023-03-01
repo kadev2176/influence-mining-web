@@ -25,6 +25,7 @@ export type ImAccount = {
   hasDao: boolean;
   tweetStats: string;
   tweetId?: string;
+  tweetEvaluation?: string;
   twitterId: string;
   twitterAccount: string;
   twitterProfileImageUri: string;
@@ -112,9 +113,10 @@ export const queryAllImAccounts = async (query: string) => {
     return {
       ...account,
       tweetId: tweetStats.tweet_id,
+      tweetEvaluation: tweetStats.evaluation,
       twitterUsername: twitterAccount.username,
       twitterName: twitterAccount.name,
-      twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url)
+      twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url),
     } as ImAccount;
   });
 }
