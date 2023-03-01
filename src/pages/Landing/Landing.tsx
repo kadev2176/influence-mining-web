@@ -16,6 +16,10 @@ function Landing({ }: LandingProps) {
                     <h4>World's 1st "Social Influence" Mining Initiative Converging AI with Web3</h4>
                 </div>
             </div>
+
+            {/* <div className='type-form-link'>
+                <div className='action-btn active'>Apply for Early Access</div>
+            </div> */}
         </div>
 
     </>;

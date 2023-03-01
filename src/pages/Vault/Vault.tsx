@@ -25,6 +25,7 @@ function Vault({ }: VaultProps) {
     const [ad3Activity, setAd3Activity] = useState<Ad3Activity>();
 
     const [profitStep, setProfitStep] = useState<string>('0');
+    const [decimals, setDecimals] = useState<number>(2);
 
     useEffect(() => {
         if (!loading && !imAccount) {
@@ -58,6 +59,12 @@ function Vault({ }: VaultProps) {
             const profitPerSecond = outputPerSecond * BigInt(imAccount.influence) / BigInt(ad3Activity.miningBalance);
             const step = profitPerSecond * BigInt(2);
 
+            if (Number(step) > 0) {
+                const decimals = Math.max(18 - step.toString().length + 2, 2);
+                console.log('got decimals', decimals);
+                setDecimals(decimals);
+                setProfitStep(amountToFloatString(step));
+            }
 
             // const now = Math.floor(Date.now() / 1000);
             // const lastTime = lastProfit ?? ad3Activity.lastProfitTime;
@@ -76,7 +83,6 @@ function Vault({ }: VaultProps) {
 
             // const balance = (Number(amountToFloatString(imAccount.ad3Balance)) + newProfit).toString();
             // setTotalBalance((balance));
-            setProfitStep(amountToFloatString(step));
         }
     }, [ad3Activity, imAccount])
 
@@ -137,7 +143,7 @@ function Vault({ }: VaultProps) {
                                     0.00
                                 </>}
                                 {(Number(totalBalance) + Number(profitStep)).toString() !== '0' && <>
-                                    <CountUp end={Number(totalBalance) + Number(profitStep)} start={Number(totalBalance)} decimals={18} delay={0} duration={1}></CountUp>
+                                    <CountUp end={Number(totalBalance) + Number(profitStep)} start={Number(totalBalance)} decimals={decimals} delay={0} duration={1}></CountUp>
                                 </>}
                             </>}
                         </div>
@@ -165,20 +171,29 @@ function Vault({ }: VaultProps) {
                         </>}
 
                         {minerTweet && <>
-                            <div className='tweet-label'>My {MinerTweetHashTag} Tweet:</div>
+                            <div className='tweet-label'>My recent {MinerTweetHashTag} Tweet:</div>
 
-                            <div className='miner-tweet'>
-                                <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
-                                    window.open(minerTweet.authorUrl);
-                                }}></img>
-                                <div className='tweet-content'>
-                                    <div className='author' onClick={() => {
+                            <div className='tweet-row'>
+                                <div className='miner-tweet'>
+                                    <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
                                         window.open(minerTweet.authorUrl);
-                                    }}>@{minerTweet.authorName}</div>
-                                    <div className='content' onClick={() => {
-                                        window.open(minerTweet.tweetUrl);
-                                    }}>{minerTweet.tweetContent}</div>
+                                    }}></img>
+                                    <div className='tweet-content'>
+                                        <div className='author' onClick={() => {
+                                            window.open(minerTweet.authorUrl);
+                                        }}>@{minerTweet.authorName}</div>
+                                        <div className='content' onClick={() => {
+                                            window.open(minerTweet.tweetUrl);
+                                        }}>{minerTweet.tweetContent}</div>
+                                    </div>
                                 </div>
+
+                                <div className='mark'>
+                                    <CheckCircleOutlined />
+                                </div>
+                            </div>
+
+                            <div className='gpt-row'>
                             </div>
 
                             <div className='tweet-submit-status'>

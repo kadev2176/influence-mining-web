@@ -19,6 +19,7 @@
       line-height: 28px;
 
       .superscript {
+        text-align: center;
         position: relative;
         top: -9px;
         font-size: 0.8rem;
@@ -30,6 +31,15 @@
         display: inline-block;
         line-height: 15px;
       }
+    }
+  }
+
+  .type-form-link {
+    padding: 0 80px;
+
+    .action-btn {
+      width: fit-content;
+      padding: 5px;
     }
   }
 }

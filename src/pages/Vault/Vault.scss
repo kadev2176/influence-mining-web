@@ -89,42 +89,53 @@
         margin-bottom: 20px;
       }
 
-      .miner-tweet {
+      .tweet-row {
         display: flex;
-        margin-bottom: 30px;
+        justify-content: space-between;
 
-        .avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 20px;
-          margin-right: 20px;
-
-          &:hover {
-            cursor: pointer;
-          }
-        }
-
-        .tweet-content {
+        .miner-tweet {
           display: flex;
-          flex-direction: column;
+          margin-bottom: 30px;
 
-          .author {
-            width: fit-content;
-            border-bottom: 1px solid;
-            padding-bottom: 1px;
-            font-weight: 500;
-            margin-bottom: 4px;
-          }
+          .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            margin-right: 20px;
 
-          .author,
-          .content {
             &:hover {
-              text-shadow: 1px 1px 1px #ffffff8b;
               cursor: pointer;
             }
           }
+
+          .tweet-content {
+            display: flex;
+            flex-direction: column;
+
+            .author {
+              width: fit-content;
+              border-bottom: 1px solid;
+              padding-bottom: 1px;
+              font-weight: 500;
+              margin-bottom: 4px;
+            }
+
+            .author,
+            .content {
+              &:hover {
+                text-shadow: 1px 1px 1px #ffffff8b;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+
+        .mark {
+          font-size: 1.5rem;
         }
       }
+
+
 
       .tweet-submit-status {
         display: flex;
