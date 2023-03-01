@@ -6,7 +6,8 @@
  * @ Description: i@rua.moe
  */
 
-import { useEffect } from 'react';
+import React from 'react';
+import { useCallback, useEffect } from 'react';
 import * as THREE from 'three';
 import { AdditiveBlending } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -31,7 +32,8 @@ const Background: React.FC<{
   pullup?: boolean;
   leftDays?: number;
   complex?: boolean;
-}> = ({ speedup, pullup, leftDays, complex }) => {
+  scrollY?: number;
+}> = ({ speedup, pullup, leftDays, complex, scrollY = 0 }) => {
   const count = [10000, 70000];
   const randomness = [1, 0.3];
   const stars = [1000, 9000];
@@ -134,7 +136,7 @@ const Background: React.FC<{
       const pos_z = Math.cos(branchAngle + spinAngle) * x + randomZ;
 
       const r2 = pos_x * pos_x + pos_y * pos_y + pos_z * pos_z;
-      
+
       if (pos_y > 0.5 && r2 > 0.5 && r2 < 3) {
         continue;
       }
@@ -256,7 +258,7 @@ const Background: React.FC<{
     scene.add(bgStarts);
     scene.add(bgAvatars);
     avatars.push(bgAvatars);
-    
+
     avatars.push(bgStarts);
   };
 
@@ -268,36 +270,49 @@ const Background: React.FC<{
 
   // Camera
   const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 50);
-  camera.position.x = 1;
-  camera.position.y = 1;
-  camera.position.z = 1;
+  const initialCameraPosition = 1;
+  camera.position.x = initialCameraPosition;
+  camera.position.y = initialCameraPosition;
+  camera.position.z = initialCameraPosition;
 
   scene.add(camera);
   // Animate
   const clock = new THREE.Clock();
   let g_renderer: any;
+  const scrollRef = React.useRef<number>();
+  scrollRef.current = scrollY;
+
+
   const tick = () => {
     // Call tick again on the next frame
     if (!!g_renderer) {
       const elapsedTime = clock.getElapsedTime();
-      //Update the camera
-      points.rotation.y = elapsedTime * 0.2;
+
+      // points.rotation.y = elapsedTime * speedRef.current!;
+      // avatars.forEach((avatar: any) => {
+      //   avatar.rotation.y = elapsedTime * speedRef.current!;
+      // })
+
+      // update points and avatars
+      const initialSpeed = 0.004;
+      const speed = Math.max((1000 - (scrollRef.current ?? 0)), 0) / 1000 * initialSpeed;
+
+      points.rotation.y += speed;
       avatars.forEach((avatar: any) => {
-        avatar.rotation.y = elapsedTime * 0.2;
+        avatar.rotation.y += speed;
       })
-      // bgStars.rotation.y = -elapsedTime * 0.05;
-      if (speedup) {
-        points.rotation.y += points.rotation.y * 1.1;
-        avatars.forEach((avatar: any) => {
-          avatar.rotation.y += avatar.rotation.y * 1.1;
-        })
-        // bgStars.rotation.y += bgStars.rotation.y * 1.1;
-      }
-      if (pullup && camera.position.x > 1) {
-        camera.position.x -= 0.01;
-        camera.position.y -= 0.01;
-        camera.position.z -= 0.01;
-      }
+
+      // update camera
+      const newPosition = initialCameraPosition - 0.5 * (Math.min((scrollRef.current ?? 0), 1000) / 1000)
+      camera.position.x = newPosition;
+      camera.position.y = newPosition;
+      camera.position.z = newPosition;
+      // if (pullup && camera.position.x > 0.1) {
+      //   camera.position.x -= 0.001;
+      //   camera.position.y -= 0.001;
+      //   camera.position.z -= 0.001;
+      // }
+
       // Render
       g_renderer.render(scene, camera, points, bgStars);
       window.requestAnimationFrame(tick);
