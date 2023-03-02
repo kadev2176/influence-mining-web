@@ -12,7 +12,7 @@ import { useImAccount } from '../../hooks/useImAccount';
 import { parseUrlParams } from '../../utils/window.util';
 
 function Auth() {
-    const { open } = useWeb3Modal();
+    // const { open } = useWeb3Modal();
     // const [searchParams, setSearchParams] = useSearchParams();
     // const { address, isConnected } = useAccount();
     // const { chain } = useNetwork();

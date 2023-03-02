@@ -137,3 +137,16 @@
     color: $text-light-color;
   }
 }
+
+.ant-notification-notice {
+  background: #171717 !important;
+  border: 2px solid #474747 !important;
+
+  .ant-notification-notice-icon, .ant-notification-notice-description, .ant-notification-notice-message {
+    color: #ffffff !important;
+  }
+
+  .ant-notification-notice-close {
+    color: #696969;
+  }
+}
