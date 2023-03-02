@@ -44,6 +44,10 @@ function Vault({ }: VaultProps) {
     const [decimals, setDecimals] = useState<number>(2);
 
     useEffect(() => {
+        document.title = 'GPT Miner | Vault';
+    }, []);
+
+    useEffect(() => {
         if (!loading && !imAccount) {
             navigate('/auth');
         }
@@ -118,7 +122,7 @@ function Vault({ }: VaultProps) {
                 ...tweet,
                 evaluation: (upcomingTweet?.tweetId === imAccount?.tweetId) ? imAccount?.tweetEvaluation ?? '' : '',
                 justPosted: postedTime > zero.getTime(),
-                isMiner: upcomingTweet?.tweetId === imAccount?.tweetId
+                isMiner: !imAccount?.tweetId || upcomingTweet?.tweetId === imAccount?.tweetId
             });
         } else {
             setMostRecentTweet(null);
