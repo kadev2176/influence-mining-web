@@ -34,11 +34,14 @@ function Landing({ }: LandingProps) {
                 <div>
                     <div className='action-btn active' onClick={() => {
                         window.open('https://k1ken8ha0bo.typeform.com/to/bCPaD46i');
-                    }}>Apply for Early Access</div>
+                    }}>Apply for Beta Access & Whitelist</div>
                 </div>
             </div>
 
-            <div className='xx-section' style={{ height: '2000px' }}></div>
+            <div className='origin-section'>
+                <h4 className='title'>A Concept Co-developed by Human & AI</h4>
+                <div className='action-btn active'>ORIGIN</div>
+            </div>
 
             {/* <div className='type-form-link'>
                 <div className='action-btn active'>Apply for Early Access</div>
