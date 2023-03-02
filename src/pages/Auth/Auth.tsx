@@ -126,7 +126,7 @@ function Auth() {
     return <>
         <div className='auth-container'>
             <div className='logo-container'>
-                <img className='logo' src='/assets/images/logo-core-colored.svg'></img>
+                {/* <img className='logo' src='/assets/images/logo-core-colored.svg'></img> */}
             </div>
 
             <div className='btn-container'>

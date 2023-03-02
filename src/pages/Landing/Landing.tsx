@@ -30,6 +30,12 @@ function Landing({ }: LandingProps) {
                     <h4>Just be U<span className='superscript'>AI</span></h4>
                     <h4>The World's First 'Social Influence' Mining Initiative Converging AI with Web3</h4>
                 </div>
+
+                <div>
+                    <div className='action-btn active' onClick={() => {
+                        window.open('https://k1ken8ha0bo.typeform.com/to/bCPaD46i');
+                    }}>Apply for Early Access</div>
+                </div>
             </div>
 
             <div className='xx-section' style={{ height: '2000px' }}></div>

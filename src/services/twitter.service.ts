@@ -10,7 +10,13 @@ export interface OembedTweet {
 }
 
 export const fetchOembedTweet = async (tweetId: string) => {
-  const resp = await fetchJsonp(`https://publish.twitter.com/oembed?url=https://twitter.com/twitter/status/${tweetId}&hide_media=true&hide_thread=true&omit_script=true`);
+  const resp = await fetchJsonp(`https://publish.twitter.com/oembed?url=https://twitter.com/twitter/status/${tweetId}&hide_media=true&hide_thread=true&omit_script=true`).catch((error) => {
+    console.log('fetch tweet error', error);
+    return null;
+  });
+  if (!resp) {
+    return null;
+  }
   const tweetJson = await resp.json();
   
   const parser = new DOMParser();

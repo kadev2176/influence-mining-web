@@ -14,7 +14,7 @@ import { Tooltip } from 'antd';
 
 export interface VaultProps { }
 
-const MinerTweetHashTag = '#GPTTest';
+const MinerTweetHashTag = '#GPTMiner';
 
 const postTweet = () => {
     if (isMobile) {
@@ -28,13 +28,13 @@ const postTweet = () => {
 interface MostRecentTweet extends OembedTweet {
     evaluation: string;
     justPosted: boolean;
+    isMiner: boolean;
 }
 
 function Vault({ }: VaultProps) {
     const [totalBalance, setTotalBalance] = useState<string>();
     const [upcomingTweet, setUpcomingTweet] = useState<UpcomingTweetMiner | null>();
     const [mostRecentTweet, setMostRecentTweet] = useState<MostRecentTweet | null>();
-    // const [minerTweet, setMinerTweet] = useState<OembedTweet | null>();
     const { imAccount, refresh, loading } = useImAccount();
     const [countdown, setCountdown] = useState<{ hours: string; mins: string }>({ hours: '-', mins: '-' });
     const navigate = useNavigate();
@@ -42,7 +42,6 @@ function Vault({ }: VaultProps) {
 
     const [profitStep, setProfitStep] = useState<string>('0');
     const [decimals, setDecimals] = useState<number>(2);
-    // const [gptEvaluationExpand, setGptEvaluationExpand] = useState<boolean>(false);
 
     useEffect(() => {
         if (!loading && !imAccount) {
@@ -107,14 +106,19 @@ function Vault({ }: VaultProps) {
         const id = upcomingTweet?.tweetId ?? imAccount?.tweetId;
         if (id) {
             const tweet = await fetchOembedTweet(id);
+            if (!tweet) {
+                setMostRecentTweet(null);
+                return;
+            }
             const postedTime = (new Date(upcomingTweet?.createdTime ?? '0')).getTime();
             const zero = new Date();
             zero.setHours(0, 0, 0, 0);
-            
+
             setMostRecentTweet({
                 ...tweet,
                 evaluation: (upcomingTweet?.tweetId === imAccount?.tweetId) ? imAccount?.tweetEvaluation ?? '' : '',
-                justPosted: postedTime > zero.getTime()
+                justPosted: postedTime > zero.getTime(),
+                isMiner: upcomingTweet?.tweetId === imAccount?.tweetId
             });
         } else {
             setMostRecentTweet(null);
@@ -176,8 +180,8 @@ function Vault({ }: VaultProps) {
                     {mostRecentTweet !== undefined && <>
                         {!mostRecentTweet && <>
                             <div className='no-tweet-info'>
-                                <div className='row'>You have not yet posted a tweet to participate in GPT mining.</div>
-                                <div className='row'>Post any tweet with {MinerTweetHashTag} to participate in mining.</div>
+                                <div className='row'>You have no active GPT mining tweets.</div>
+                                <div className='row'>Post any tweet with {MinerTweetHashTag} to begin mining.</div>
                             </div>
                             <div className='button-container'>
                                 <div className='action-btn active' onClick={postTweet}>Start Mining</div>
@@ -187,7 +191,7 @@ function Vault({ }: VaultProps) {
                         {mostRecentTweet && <>
                             {!mostRecentTweet.justPosted && <>
                                 <div className='post-hint'>
-                                    <div className='text'>You current GPT Miner is running and will be expired after {countdown.hours}h {countdown.mins}m</div>
+                                    <div className='text'>You current tweet is mining and will expire in: {countdown.hours}h {countdown.mins}m</div>
                                     <div className='action-btn active' onClick={postTweet}>Post a New Tweet</div>
                                 </div>
                             </>}
@@ -234,34 +238,28 @@ function Vault({ }: VaultProps) {
 
                                     {!mostRecentTweet.evaluation && <>
                                         <div className='content'>
-                                            Your tweet has been submitted and under evaluation by ChatGPT. The final influence score will be calculated after:
-                                            <span className='count-down'>{countdown.hours}h {countdown.mins}m</span>
+                                            {mostRecentTweet.isMiner && <>
+                                                Your tweet has been submitted and is being evaluated by ChatGPT. The influence score will be calculated in a minute.
+                                            </>}
+
+                                            {!mostRecentTweet.isMiner && <>
+                                                Your tweet has been submitted and is being evaluated by ChatGPT. The final influence score will be calculated in:
+                                                <span className='count-down'>
+                                                    {countdown.hours}h {countdown.mins}m
+                                                </span>
+                                            </>}
                                         </div>
                                     </>}
                                 </div>
                             </div>
-
-                            {/* <div className='tweet-submit-status'>
-                                <div className='mark'>
-                                    <CheckCircleOutlined />
-                                </div>
-                                <div className='info'>
-                                    Your tweet has been submitted and under evaluation by ChatGPT.
-                                </div>
-                            </div>
-                            <div className='score-status'>
-                                <div className='info'>The final influence score will be calculated after:</div>
-                                <div className='value'>
-                                    <div>{countdown.hours}h {countdown.mins}m</div>
-                                </div>
-                            </div> */}
                         </>}
                     </>}
 
                 </div>
             </div>
-            {/* <div className='divider'></div> */}
-            <LeaderBoard></LeaderBoard>
+
+            {imAccount && <LeaderBoard imAccount={imAccount}></LeaderBoard>}
+
         </div>
     </>;
 };

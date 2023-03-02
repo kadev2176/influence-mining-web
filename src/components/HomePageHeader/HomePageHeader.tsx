@@ -18,8 +18,12 @@ function HomePageHeader({ }: HomePageHeaderProps) {
 
     return <>
         <div className='header-container'>
-            <div className='logo'>
+            <div className='links'>
+                <div className='link' onClick={openWhitepaper}>Whitepaper</div>
             </div>
+
+            {/* <div className='logo'>
+            </div> */}
             {/* <BrowserView className='menu'>
                 <Dropdown dropdownRender={() => {
                     return <>

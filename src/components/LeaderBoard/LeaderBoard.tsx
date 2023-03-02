@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity } from '../../services/mining.service';
+import { useInterval } from '../../hooks/useInterval';
+import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity, ImAccount } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
 import { amountToFloatString, formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
 import './LeaderBoard.scss';
 
-export interface LeaderBoardProps { }
+export interface LeaderBoardProps {
+    imAccount: ImAccount
+}
 
 const maxTextLength = 70;
 
@@ -16,17 +19,16 @@ const trimText = (text: string) => {
     return text.slice(0, Math.floor(maxTextLength * text.length / len)) + '...';
 }
 
-function LeaderBoard({ }: LeaderBoardProps) {
+function LeaderBoard({ imAccount }: LeaderBoardProps) {
     const [poolSummary, setPoolSummary] = useState<PoolSummary>();
     const [leaderboardRows, setLeaderBoardRows] = useState<any[]>();
     const [halveTime, setHalveTime] = useState<string>('-');
 
-    const fetchLeaderBoard = async () => {
-        const user = await getMyIMAccount();
+    const fetchLeaderBoard = async (imAccount: ImAccount) => {
         const leaders = await getLeaderBoardImAccounts();
-        const accounts = [user, ...leaders ?? []];
+        const accounts = [imAccount, ...leaders ?? []];
 
-        const rank = (leaders ?? []).findIndex(account => account.id === user?.id);
+        const rank = (leaders ?? []).findIndex(account => account.id === imAccount?.id);
         const rows = await Promise.all(accounts.map(async (account, index) => {
             const tweet = account?.tweetId ? await fetchOembedTweet(account?.tweetId) : {};
             return {
@@ -42,7 +44,10 @@ function LeaderBoard({ }: LeaderBoardProps) {
     }
 
     useEffect(() => {
-        fetchLeaderBoard();
+        fetchLeaderBoard(imAccount);
+    }, [imAccount])
+
+    useEffect(() => {
         getPoolSummary().then((res) => {
             setPoolSummary(res);
         });
