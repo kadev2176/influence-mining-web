@@ -8,13 +8,7 @@ export const useCountdown = () => {
   const [countdown, setCountdown] = useState<{ hours: string; mins: string }>({ hours: '-', mins: '-' });
 
   useInterval(() => {
-    const deadline = new Date();
-    deadline.setHours(24, 0, 0, 0);
-
     const nextMidnight = (dayjs as any).utc().hour(0).minute(0).second(0).millisecond(0).add(1, 'day');
-    console.log('current utc', (dayjs as any).utc().toISOString())
-    console.log('next midnight', nextMidnight.toISOString());
-    
     const diff = nextMidnight.unix() - (dayjs as any).utc().unix();
     const hours = Math.floor(diff / 3600);
     const mins = Math.ceil((diff % 3600 / 60));
