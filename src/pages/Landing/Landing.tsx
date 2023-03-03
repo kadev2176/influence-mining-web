@@ -31,17 +31,17 @@ function Landing({ }: LandingProps) {
                     <h4>The World's First 'Social Influence' Mining Initiative Converging AI with Web3</h4>
                 </div>
 
-                <div>
+                {/* <div>
                     <div className='action-btn active' onClick={() => {
                         window.open('https://k1ken8ha0bo.typeform.com/to/bCPaD46i');
                     }}>Apply for Beta Access & Whitelist</div>
-                </div>
+                </div> */}
             </div>
 
-            <div className='origin-section'>
+            {/* <div className='origin-section'>
                 <h4 className='title'>A Concept Co-developed by Human & AI</h4>
                 <div className='action-btn active'>ORIGIN</div>
-            </div>
+            </div> */}
 
             {/* <div className='type-form-link'>
                 <div className='action-btn active'>Apply for Early Access</div>

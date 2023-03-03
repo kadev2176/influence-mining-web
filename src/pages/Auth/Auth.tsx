@@ -35,6 +35,16 @@ function Auth() {
                     return;
                 }
 
+                if (res.status === 403) {
+                    notification.warning({
+                        message: 'Please Apply for Beta Access'
+                    });
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1000);
+                    return;
+                }
+
                 notification.warning({
                     message: res.message
                 })

@@ -10,7 +10,11 @@ import { amountToFloatString } from '../../utils/format.util';
 import './Vault.scss';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
-import { Tooltip } from 'antd';
+import dayjs from 'dayjs'
+import { useCountdown } from '../../hooks/useCountdown';
+
+const utc = require('dayjs/plugin/utc');
+dayjs.extend(utc);
 
 export interface VaultProps { }
 
@@ -36,7 +40,8 @@ function Vault({ }: VaultProps) {
     const [upcomingTweet, setUpcomingTweet] = useState<UpcomingTweetMiner | null>();
     const [mostRecentTweet, setMostRecentTweet] = useState<MostRecentTweet | null>();
     const { imAccount, refresh, loading } = useImAccount();
-    const [countdown, setCountdown] = useState<{ hours: string; mins: string }>({ hours: '-', mins: '-' });
+    const countdown = useCountdown();
+
     const navigate = useNavigate();
     const [ad3Activity, setAd3Activity] = useState<Ad3Activity>();
 
@@ -114,14 +119,14 @@ function Vault({ }: VaultProps) {
                 setMostRecentTweet(null);
                 return;
             }
-            const postedTime = (new Date(upcomingTweet?.createdTime ?? '0')).getTime();
-            const zero = new Date();
-            zero.setHours(0, 0, 0, 0);
+
+            const createdTime = (dayjs as any).utc(upcomingTweet?.createdTime ?? '0');
+            const latestMidnight = (dayjs as any).utc().hour(0).minute(0).second(0).millisecond(0);
 
             setMostRecentTweet({
                 ...tweet,
                 evaluation: (upcomingTweet?.tweetId === imAccount?.tweetId) ? imAccount?.tweetEvaluation ?? '' : '',
-                justPosted: postedTime > zero.getTime(),
+                justPosted: createdTime.unix() > latestMidnight.unix(),
                 isMiner: !imAccount?.tweetId || upcomingTweet?.tweetId === imAccount?.tweetId
             });
         } else {
@@ -135,26 +140,13 @@ function Vault({ }: VaultProps) {
         }
     }, [imAccount, upcomingTweet])
 
-    const refreshInfluence = async () => {
-        console.log('updating influence, once per minute...');
-        updateInfluence().then((_) => {
-            refresh();
-        })
-    }
-
-    useInterval(refreshInfluence, 60 * 1000, true);
-
-    useInterval(() => {
-        const deadline = new Date();
-        deadline.setHours(24, 0, 0, 0);
-        const diff = deadline.getTime() - Date.now()
-        const hours = Math.floor(diff / (3600 * 1000));
-        const mins = Math.ceil((diff % (3600 * 1000) / 1000 / 60));
-        setCountdown({
-            hours: `${hours}`,
-            mins: `${mins}`
-        })
-    }, 1000, true);
+    // todo: subscribe to graphQL changes
+    // const refreshInfluence = async () => {
+    //     console.log('updating influence, once per minute...');
+    //     updateInfluence().then((_) => {
+    //         refresh();
+    //     })
+    // }
 
     return <>
         <div className='vault-container'>

@@ -156,7 +156,8 @@ export const createAccountOrLogin = async (oauthToken: string, oauthVerifier: st
   const { message } = await resp.json() as { message: string };
   return {
     success: false,
-    message
+    status: resp.status,
+    message,
   }
 }
 
