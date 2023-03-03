@@ -3,21 +3,22 @@ import { useInterval } from '../../hooks/useInterval';
 import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity, ImAccount } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
 import { amountToFloatString, formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
+import LeaderBoardTweet from '../LeaderBoardTweet/LeaderBoardTweet';
 import './LeaderBoard.scss';
 
 export interface LeaderBoardProps {
     imAccount: ImAccount
 }
 
-const maxTextLength = 70;
+// const maxTextLength = 70;
 
-const trimText = (text: string) => {
-    const len = text.replace(/[^\x00-\xff]/g, "01").length;
-    if (len < maxTextLength) {
-        return text;
-    }
-    return text.slice(0, Math.floor(maxTextLength * text.length / len)) + '...';
-}
+// const trimText = (text: string) => {
+//     const len = text.replace(/[^\x00-\xff]/g, "01").length;
+//     if (len < maxTextLength) {
+//         return text;
+//     }
+//     return text.slice(0, Math.floor(maxTextLength * text.length / len)) + '...';
+// }
 
 function LeaderBoard({ imAccount }: LeaderBoardProps) {
     const [poolSummary, setPoolSummary] = useState<PoolSummary>();
@@ -37,7 +38,8 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                 rank: index > 0
                     ? `${index}`
                     : (rank >= 0 ? `${rank + 1}` : 'Unknown'),
-                ...tweet
+                ...tweet,
+                evaluation: account.tweetEvaluation
             };
         }));
         setLeaderBoardRows(rows);
@@ -113,7 +115,8 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                                 return <tr className={index ? '' : 'tr-user'} key={index}>
                                     <td>{row.rank}</td>
                                     <td>
-                                        {row.tweetUrl && <>
+                                        <LeaderBoardTweet tweet={row}/>
+                                        {/* {row.tweetUrl && <>
                                             <div className='tweet active' onClick={() => {
                                                 window.open(row.tweetUrl);
                                             }}>
@@ -133,6 +136,9 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                                                     <span className='text'>
                                                         {trimText(row.tweetContent)}
                                                     </span>
+                                                    {row.evaluation && <>
+                                                    <span>{row.evaluation}</span>
+                                                    </>}
                                                 </div>
                                             </div>
                                         </>}
@@ -145,7 +151,7 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                                                     No GPTMiner tweet at the moment.
                                                 </div>
                                             </div>
-                                        </>}
+                                        </>} */}
                                     </td>
                                     <td>1 x</td>
                                     <td>{formatInfluenceScore(row.influence)}</td>

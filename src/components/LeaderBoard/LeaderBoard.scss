@@ -90,37 +90,37 @@
         min-width: 100px;
       }
 
-      .tweet {
-        padding: 10px;
-        display: flex;
-        text-align: initial;
-        opacity: 0.9;
+      // .tweet {
+      //   padding: 10px;
+      //   display: flex;
+      //   text-align: initial;
+      //   opacity: 0.9;
 
-        &.active:hover {
-          opacity: 1;
-          cursor: pointer;
-        }
+      //   &.active:hover {
+      //     opacity: 1;
+      //     cursor: pointer;
+      //   }
 
-        .avatar {
-          width: 20px;
-          height: 20px;
-          border-radius: 10px;
-          margin-right: 5px;
-        }
+      //   .avatar {
+      //     width: 20px;
+      //     height: 20px;
+      //     border-radius: 10px;
+      //     margin-right: 5px;
+      //   }
 
-        .content {
-          color: $text-light-color;
-          line-height: 20px;
+      //   .content {
+      //     color: $text-light-color;
+      //     line-height: 20px;
 
-          .author {
-            color: #fff;
+      //     .author {
+      //       color: #fff;
 
-            &:hover {
-              text-shadow: 0.5px 0.5px 1px #ffffff97;
-            }
-          }
-        }
-      }
+      //       &:hover {
+      //         text-shadow: 0.5px 0.5px 1px #ffffff97;
+      //       }
+      //     }
+      //   }
+      // }
     }
   }
 }
@@ -161,11 +161,11 @@
           min-width: 12vw;
         }
 
-        .tweet {
-          min-width: 60vw;
-          padding: 5px;
-          opacity: 1;
-        }
+        // .tweet {
+        //   min-width: 60vw;
+        //   padding: 5px;
+        //   opacity: 1;
+        // }
       }
     }
   }
