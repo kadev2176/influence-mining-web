@@ -1,6 +1,7 @@
-import { PARAMI_AIRDROP } from "../models/parami";
 import { doGraghQueryIM, fetchWithCredentials, fetchWithSig } from "../utils/api.util";
 import { formatTwitterImageUrl } from "../utils/format.util";
+
+const PARAMI_AIRDROP = process.env.REACT_APP_AIRDROP_API_URL;
 
 export type Balance = {
   earned: string;
@@ -119,6 +120,17 @@ export const queryAllImAccounts = async (query: string) => {
       twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url),
     } as ImAccount;
   });
+}
+
+export const getTwitterOauthUrl = async (callbackUrl: string) => {
+  try {
+    const resp = await fetch(`${PARAMI_AIRDROP}/request_oauth_token?callbackUrl=${window.origin}`);
+    const { oauthUrl } = await resp.json();
+    return oauthUrl;
+  } catch (e) {
+    console.log('request_oauth_token error', e);
+    return;
+  }
 }
 
 // todo: add referer?

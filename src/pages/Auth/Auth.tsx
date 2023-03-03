@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useWeb3Modal } from "@web3modal/react";
 import { useAccount, useEnsName, useNetwork, useSigner } from 'wagmi';
 import { notification } from 'antd';
-import { bindAccount, createAccountOrLogin } from '../../services/mining.service';
+import { bindAccount, createAccountOrLogin, getTwitterOauthUrl } from '../../services/mining.service';
 import { redirect, useNavigate, useSearchParams } from 'react-router-dom';
-import { PARAMI_AIRDROP } from '../../models/parami';
 import './Auth.scss';
 import { generateSignedMessage, getSigExpirationTime } from '../../utils/api.util';
 import { useImAccount } from '../../hooks/useImAccount';
@@ -80,11 +79,11 @@ function Auth() {
     // }, [userSignature])
 
     const handleConnectTwitter = async () => {
-        const resp = await fetch(`${PARAMI_AIRDROP}/request_oauth_token?callbackUrl=${window.origin}`);
-        const { oauthUrl } = await resp.json();
-
-        // direct oauth
-        window.location.href = oauthUrl;
+        const oauthUrl = await getTwitterOauthUrl(window.origin);
+        if (oauthUrl) {
+            // direct oauth
+            window.location.href = oauthUrl;
+        }
     }
 
     // const signMessage = async () => {

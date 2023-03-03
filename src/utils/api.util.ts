@@ -1,4 +1,6 @@
-import { IM_SUBQUERY, PARAMI_SUBQUERY } from "../models/parami";
+import { PARAMI_SUBQUERY } from "../models/parami";
+
+const IM_SUBQUERY = process.env.REACT_APP_IM_SUBQUERY_ENDPOINT as string;
 
 const ONE_HOUR = 60 * 60 * 1000;
 const ONE_WEEK = 7 * 24 * ONE_HOUR;
