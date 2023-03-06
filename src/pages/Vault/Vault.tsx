@@ -58,6 +58,10 @@ function Vault({ }: VaultProps) {
         }
     }, [imAccount, loading])
 
+    useInterval(() => {
+        refresh()
+    }, 60 * 1000, false);
+
     useEffect(() => {
         getAd3Balance().then(balance => {
             console.log('got ad3 balance', balance);
@@ -112,6 +116,7 @@ function Vault({ }: VaultProps) {
     useInterval(updateUpcomingMiner, 5000, true);
 
     const updateMostRecentTweet = async () => {
+
         const id = upcomingTweet?.tweetId ?? imAccount?.tweetId;
         if (id) {
             const tweet = await fetchOembedTweet(id);
@@ -122,6 +127,12 @@ function Vault({ }: VaultProps) {
 
             const createdTime = (dayjs as any).utc(upcomingTweet?.createdTime ?? '0');
             const latestMidnight = (dayjs as any).utc().hour(0).minute(0).second(0).millisecond(0);
+            const midnightBefore = latestMidnight.subtract(1, 'day');
+            
+            if (midnightBefore.unix() > createdTime.unix()) {
+                setMostRecentTweet(null);
+                return;
+            }
 
             setMostRecentTweet({
                 ...tweet,
@@ -136,6 +147,10 @@ function Vault({ }: VaultProps) {
 
     useEffect(() => {
         if (imAccount && upcomingTweet !== undefined) {
+            // if (upcomingTweet?.id && upcomingTweet.id !== mostRecentTweet?.tweetId) {
+            //     refresh();
+            // }
+            
             updateMostRecentTweet();
         }
     }, [imAccount, upcomingTweet])
@@ -187,7 +202,7 @@ function Vault({ }: VaultProps) {
                         {mostRecentTweet && <>
                             {!mostRecentTweet.justPosted && <>
                                 <div className='post-hint'>
-                                    <div className='text'>You current tweet is mining and will expire in: {countdown.hours}h {countdown.mins}m</div>
+                                    <div className='text'>Your current tweet is mining and will expire in: {countdown.hours}h {countdown.mins}m</div>
                                     <div className='action-btn active' onClick={postTweet}>Post a New Tweet</div>
                                 </div>
                             </>}
