@@ -20,18 +20,18 @@ function Home({ }: HomeProps) {
     }, []);
 
     return <>
-        {location.pathname === '/' && <>
+        {/* {location.pathname === '/' && <>
             <Layout>
                 <HomePageHeader />
                 <Content>
                     <Outlet></Outlet>
                 </Content>
             </Layout>
-        </>}
+        </>} */}
         {location.pathname === '/auth' && <>
             <Outlet></Outlet>
         </>}
-        {location.pathname === '/vault' && <>
+        {location.pathname !== '/auth' && <>
             <Layout>
                 <HomePageHeader />
                 <Content>

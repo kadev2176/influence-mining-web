@@ -9,15 +9,6 @@ function Landing({ }: LandingProps) {
     const [scrollY, setScrollY] = useState<number>(0);
 
     useEffect(() => {
-        fetch('http://localhost:3002/api/something').then(res => {
-            console.log('no auth res', res);
-            return res.json();
-        }).then(resJson => {
-            console.log('res json', resJson);
-        })
-    }, [])
-
-    useEffect(() => {
         const handleScroll = () => {
             setScrollY(window.scrollY);
         }

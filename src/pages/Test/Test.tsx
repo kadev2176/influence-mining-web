@@ -1,10 +1,11 @@
-import { Button, notification } from 'antd';
-import React, { useEffect } from 'react';
+import { Button, Modal, notification } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import BillboardNftImage from '../../components/BillboardNftImage/BillboardNftImage';
 import MintBillboard from '../../components/MintBillboard/MintBillboard';
 import { PARAMI_AIRDROP } from '../../models/parami';
+import './Test.scss';
 // import { getQueryFields } from '../../services/mining.service';
 
 export interface TestProps { }
@@ -23,6 +24,8 @@ function Test({ }: TestProps) {
     }
 
     const navigate = useNavigate();
+
+    const [claimModal, setClaimModal] = useState<boolean>(false);
 
     // useEffect(() => {
     //     setTimeout(() => {
@@ -53,18 +56,17 @@ function Test({ }: TestProps) {
         }}>
             Disconnect
         </Button> */}
-        <div style={{
-            marginTop: '200px',
-            background: '#000'
-        }}>
+        <div className='test-container'>
             <div className='action-btn active' onClick={() => {
-                // navigate('https://www.twitter.com')
-                // window.location.href = 'https://www.twitter.com/home'
-                // redirect('/vault');
-                navigate('/vault');
-            }}>Try Twitter</div>
+                
+            }}>Claim</div>
             <br></br>
         </div>
+
+        {claimModal && <>
+            <Modal
+            ></Modal>
+        </>}
 
 
         {/* <MintBillboard></MintBillboard> */}

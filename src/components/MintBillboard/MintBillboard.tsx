@@ -113,20 +113,27 @@ function MintBillboard() {
     const billboards = BillboardOptions.map(billboard => {
         return <>
             <Col xl={12} lg={12} md={24} sm={24} xs={24} key={billboard.name}>
-                <div className='nft-card'>
-                    <div className='content-container'>
-                        <div className='billboard'>
-                            <BillboardNftImage imageUrl={imAccount?.twitterProfileImageUri ?? ''} level={billboard.level}></BillboardNftImage>
-                        </div>
+                <div className='nft-card-border'>
+                    <div className='nft-card'>
+                        <div className='content-container'>
+                            <div className='billboard'>
+                                <BillboardNftImage imageUrl={imAccount?.twitterProfileImageUri ?? ''} level={billboard.level}></BillboardNftImage>
+                            </div>
 
-                        <div className='info-container'>
-                            <div className='info'>
+                            <div className='info-container'>
+                                <div className='title'>
+                                    {billboard.name}
+                                </div>
                                 <div className='description'>
                                     {billboard.description}
                                 </div>
-                            </div>
-                            <div className='price'>
-                                <div className='price-title'>Price:</div>
+                                <div className='price'>
+
+                                    <div className='icon'>
+                                        <i className="fa-brands fa-ethereum"></i>
+                                    </div>
+                                    <div className='value'>{0.3}</div>
+                                    {/* <div className='price-title'>Price:</div>
                                 <div className='price-value'>
                                     {Number(prices[billboard.level]) > 0 && <>
                                         {formatAd3Amount(prices[billboard.level])} AD3
@@ -134,12 +141,16 @@ function MintBillboard() {
                                     {Number(prices[billboard.level]) === 0 && <>
                                         Free
                                     </>}
+                                </div> */}
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div className='btn-container'>
+                            <div className='btn-container'>
+                                <div className='mint-btn'>Mint</div>
+                            </div>
+                        </div>
+
+                        {/* <div className='btn-container'>
                         {hnft?.balance === 0 && <>
                             <div className='btn active' onClick={() => {
                                 console.log('mint:', billboard.level);
@@ -156,6 +167,7 @@ function MintBillboard() {
                                 }}>Upgrade</div>
                             </>}
                         </>}
+                    </div> */}
                     </div>
                 </div>
             </Col>
