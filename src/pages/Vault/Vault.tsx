@@ -184,6 +184,7 @@ function Vault({ }: VaultProps) {
                             </>}
                         </div>
                         <div className='unit'>$AD3</div>
+                        <div className='network-tag'>Test Network</div>
                     </div>
                 </div>
 

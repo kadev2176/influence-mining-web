@@ -53,11 +53,21 @@
         .balance {
           font-size: 2rem;
           font-weight: bold;
+          flex-grow: 1;
         }
 
         .unit {
           font-size: 2rem;
           font-weight: bold;
+        }
+
+        .network-tag {
+          color: $text-light-color;
+          font-size: 0.7rem;
+          padding: 2px 4px;
+          background: rgb(48, 48, 48);
+          border-radius: 8px;
+          margin-left: 4px;
         }
       }
     }
@@ -94,6 +104,7 @@
         flex-direction: column;
         align-items: center;
         margin-bottom: 20px;
+
         .text {
           margin-bottom: 20px;
         }
