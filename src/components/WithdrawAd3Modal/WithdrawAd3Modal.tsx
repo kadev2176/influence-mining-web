@@ -110,7 +110,6 @@ function WithdrawAd3Modal({ onCancel, onSuccess, withdrawTxId, withdrawableAmoun
                     </Col>
                 </Row>
             </>}
-
         </Modal>
     </>;
 };

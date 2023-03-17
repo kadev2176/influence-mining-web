@@ -38,6 +38,7 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                 rank: index > 0
                     ? `${index}`
                     : (rank >= 0 ? `${rank + 1}` : 'Unknown'),
+                tweetContent: account.tweetContent,
                 ...tweet,
                 evaluation: account.tweetEvaluation
             };

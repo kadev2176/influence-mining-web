@@ -9,6 +9,7 @@ import './Auth.scss';
 import { generateSignedMessage, getSigExpirationTime } from '../../utils/api.util';
 import { useImAccount } from '../../hooks/useImAccount';
 import { parseUrlParams } from '../../utils/window.util';
+import { isMobile } from 'react-device-detect';
 
 function Auth() {
     // const { open } = useWeb3Modal();
@@ -22,10 +23,10 @@ function Auth() {
     const [params] = useSearchParams();
 
     useEffect(() => {
-        const token = params.get('oauth_token');
-        const verifier = params.get('oauth_verifier');
-        if (token && verifier) {
-            createAccountOrLogin(token, verifier).then(res => {
+        const code = params.get('code');
+
+        if (code) {
+            createAccountOrLogin(code).then(res => {
                 if (res.success) {
                     notification.success({
                         message: 'Login Successful!'
@@ -80,7 +81,14 @@ function Auth() {
 
     const handleConnectTwitter = async () => {
         const oauthUrl = await getTwitterOauthUrl(window.origin);
+
         if (oauthUrl) {
+            if (isMobile) {
+                window.location.href = `${oauthUrl}`;
+                // window.open(oauthUrl);
+                return;
+            }
+
             // direct oauth
             window.location.href = oauthUrl;
         }

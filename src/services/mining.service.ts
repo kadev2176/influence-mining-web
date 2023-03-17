@@ -26,6 +26,7 @@ export type ImAccount = {
   hasDao: boolean;
   tweetStats: string;
   tweetId?: string;
+  tweetContent?: string;
   tweetEvaluation?: string;
   twitterId: string;
   twitterAccount: string;
@@ -114,6 +115,7 @@ export const queryAllImAccounts = async (query: string) => {
     return {
       ...account,
       tweetId: tweetStats.tweet_id,
+      tweetContent: tweetStats.tweet_content,
       tweetEvaluation: tweetStats.evaluation,
       twitterUsername: twitterAccount.username,
       twitterName: twitterAccount.name,
@@ -124,7 +126,7 @@ export const queryAllImAccounts = async (query: string) => {
 
 export const getTwitterOauthUrl = async (callbackUrl: string) => {
   try {
-    const resp = await fetch(`${PARAMI_AIRDROP}/request_oauth_token?callbackUrl=${window.origin}`);
+    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/twitter/login?state=gptminer_login`);
     const { oauthUrl } = await resp.json();
     return oauthUrl;
   } catch (e) {
@@ -134,10 +136,9 @@ export const getTwitterOauthUrl = async (callbackUrl: string) => {
 }
 
 // todo: add referer?
-export const createAccountOrLogin = async (oauthToken: string, oauthVerifier: string) => {
+export const createAccountOrLogin = async (ticket: string) => {
   const data = JSON.stringify({
-    oauth_token: oauthToken,
-    oauth_verifier: oauthVerifier
+    ticket
   });
 
   const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/accounts`, {

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LeaderBoard from '../../components/LeaderBoard/LeaderBoard';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useInterval } from '../../hooks/useInterval';
-import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, UpcomingTweetMiner, updateInfluence } from '../../services/mining.service';
+import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, UpcomingTweetMiner, updateInfluence, ImAccount } from '../../services/mining.service';
 import { fetchOembedTweet, OembedTweet } from '../../services/twitter.service';
 import { amountToFloatString } from '../../utils/format.util';
 import './Vault.scss';
@@ -60,7 +60,7 @@ function Vault({ }: VaultProps) {
 
     useInterval(() => {
         refresh()
-    }, 60 * 1000, false);
+    }, 10 * 1000, false);
 
     useEffect(() => {
         getAd3Balance().then(balance => {
@@ -110,14 +110,15 @@ function Vault({ }: VaultProps) {
 
     const updateUpcomingMiner = async () => {
         const tweet = await getUpcomingTweetMiner();
+        console.log('got upcoming tweet', tweet);
         setUpcomingTweet(tweet || null);
     }
 
-    useInterval(updateUpcomingMiner, 5000, true);
+    // useInterval(updateUpcomingMiner, 5000, true);
 
-    const updateMostRecentTweet = async () => {
+    const updateMostRecentTweet = async (imAccount: ImAccount) => {
 
-        const id = upcomingTweet?.tweetId ?? imAccount?.tweetId;
+        const id = imAccount?.tweetId;
         if (id) {
             const tweet = await fetchOembedTweet(id);
             if (!tweet) {
@@ -125,20 +126,22 @@ function Vault({ }: VaultProps) {
                 return;
             }
 
-            const createdTime = (dayjs as any).utc(upcomingTweet?.createdTime ?? '0');
-            const latestMidnight = (dayjs as any).utc().hour(0).minute(0).second(0).millisecond(0);
-            const midnightBefore = latestMidnight.subtract(1, 'day');
+            // const createdTime = (dayjs as any).utc(upcomingTweet?.createdTime ?? '0');
+            // const latestMidnight = (dayjs as any).utc().hour(0).minute(0).second(0).millisecond(0);
+            // const midnightBefore = latestMidnight.subtract(1, 'day');
             
-            if (midnightBefore.unix() > createdTime.unix()) {
-                setMostRecentTweet(null);
-                return;
-            }
+            // if (midnightBefore.unix() > createdTime.unix()) {
+            //     setMostRecentTweet(null);
+            //     return;
+            // }
 
             setMostRecentTweet({
                 ...tweet,
-                evaluation: (upcomingTweet?.tweetId === imAccount?.tweetId) ? imAccount?.tweetEvaluation ?? '' : '',
-                justPosted: createdTime.unix() > latestMidnight.unix(),
-                isMiner: !imAccount?.tweetId || upcomingTweet?.tweetId === imAccount?.tweetId
+                evaluation: imAccount?.tweetEvaluation ?? '',
+                // justPosted: createdTime.unix() > latestMidnight.unix(),
+                justPosted: true,
+                // isMiner: !imAccount?.tweetId || upcomingTweet?.tweetId === imAccount?.tweetId
+                isMiner: true
             });
         } else {
             setMostRecentTweet(null);
@@ -146,14 +149,10 @@ function Vault({ }: VaultProps) {
     }
 
     useEffect(() => {
-        if (imAccount && upcomingTweet !== undefined) {
-            // if (upcomingTweet?.id && upcomingTweet.id !== mostRecentTweet?.tweetId) {
-            //     refresh();
-            // }
-            
-            updateMostRecentTweet();
+        if (imAccount) {            
+            updateMostRecentTweet(imAccount);
         }
-    }, [imAccount, upcomingTweet])
+    }, [imAccount])
 
     // todo: subscribe to graphQL changes
     // const refreshInfluence = async () => {
@@ -165,6 +164,18 @@ function Vault({ }: VaultProps) {
 
     return <>
         <div className='vault-container'>
+            <div className='miner-title'>Miner</div>
+            <div className='miner-description'>Turn into a mining node by tweeting and use your social influence to earn revenue. Fans can buy NFTs of social influencers to earn revenue share. Advertisers can buy ad space with tokens.</div>
+
+            {/* <div className='card'>
+                <div className='post-reminder'>
+                    <div className='description'>Post a tweet with <span className='tag'>#GPTminer</span> and start earning</div>
+                    <div className='arrow-icon'></div>
+                    <div className='twit-btn'></div>
+                </div>
+            </div> */}
+
+
             <div className='user-section'>
                 <div className='mining-reward'>
                     <div className='label-row'>
@@ -271,7 +282,6 @@ function Vault({ }: VaultProps) {
             </div>
 
             {imAccount && <LeaderBoard imAccount={imAccount}></LeaderBoard>}
-
         </div>
     </>;
 };

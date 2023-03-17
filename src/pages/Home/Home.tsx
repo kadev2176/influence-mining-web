@@ -14,8 +14,13 @@ function Home({ }: HomeProps) {
 
     useEffect(() => {
         const params = parseUrlParams();
+        if (params.code) {
+            window.location.href = `${window.location.origin}/#/auth?code=${params.code}`;
+            return;
+        }
+        
         if (params.oauth_token && params.oauth_verifier) {
-            window.location.href = `${window.location.origin}/#/auth?oauth_token=${params.oauth_token}&oauth_verifier=${params.oauth_verifier}`
+            window.location.href = `${window.location.origin}/#/auth?oauth_token=${params.oauth_token}&oauth_verifier=${params.oauth_verifier}`;
         }
     }, []);
 

@@ -119,6 +119,20 @@
   }
 }
 
+.action-btn-primary {
+  color: #ffffff;
+  background: #1DA1F2;
+  border-radius: 1000px;
+  display: flex;
+  align-items: center;
+  padding: 7px 24px;
+  user-select: none;
+
+  &.active:hover {
+    cursor: pointer;
+  }
+}
+
 .action-btn {
   color: #fff;
   border: 1px solid;

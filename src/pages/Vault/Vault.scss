@@ -12,6 +12,33 @@
   flex-direction: column;
   align-items: center;
 
+  .miner-title {
+    font-size: 36px;
+    line-height: 42px;
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .miner-description {
+    font-size: 18px;
+    line-height: 21px;
+    opacity: 0.5;
+    margin-bottom: 60px;
+    text-align: left;
+  }
+
+  .card {
+    background: #1C1E25;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 20px;
+    padding: 24px;
+    width: 100%;
+  }
+
+  // .post-reminder {
+
+  // }
+
   .action-btn {
     padding: 6px 12px;
     min-width: 100px;

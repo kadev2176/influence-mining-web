@@ -1,4 +1,5 @@
 .header-container {
+  font-family: 'Gilroy';
   position: fixed;
   top: 0;
   display: flex;
@@ -6,64 +7,71 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 2%;
+  height: 100px;
+  padding: 0 60px;
   z-index: 99;
+  background: #020510;
+  border-bottom: 1px solid #3A3B41;
 
-  // .logo {
-  //   flex-grow: 1;
-  // }
-
-  // .menu {
-  //   color: #fff;
-
-  //   .menu-btn {
-  //     display: flex;
-  //     align-items: center;
-  //     font-size: 1rem;
-  //     font-weight: 500;
-
-  //     &:hover {
-  //       cursor: pointer;
-  //     }
-
-  //     .text {
-  //       margin-right: 10px;
-  //     }
-  //   }
-  // }
-
-  // .links-mobile {
-  //   color: #fff;
-  //   padding: 0 20px;
-
-  //   .links-dropdown-btn {
-  //     background: #ffffff21;
-  //     border-radius: 50%;
-  //     width: 24px;
-  //     height: 24px;
-  //     line-height: 24px;
-  //     text-align: center;
-  //   }
-  // }
-
-
-
-  .links {
-    color: #fff;
-    // padding: 0 40px;
-    flex-grow: 1;
+  .logo-container {
     display: flex;
+    align-items: center;
+    cursor: pointer;
 
-    .link {
-      padding: 5px;
-      font-size: 1rem;
-      font-weight: 500;
-      opacity: 0.8;
+    .logo {
+      height: 50px;
+    }
 
-      &:hover {
-        cursor: pointer;
-        opacity: 1;
-      }
+    .title {
+      color: #fff;
+      font-weight: bold;
+      font-size: 26px;
+      line-height: 30px;
+      margin-left: 16px;
+    }
+  }
+
+  .user-profile {
+    height: 50px;
+    background: #10121A;
+    border: 0.6px solid #1C1E25;
+    border-radius: 16px;
+    display: flex;
+    padding-left: 15px;
+    padding-right: 13px;
+    align-items: center;
+
+    &:hover {
+      background: #1C1E25;
+    }
+
+    .username {
+      color: #fff;
+      font-size: 14.5px;
+      line-height: 17px;
+      max-width: 130px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .user-avatar {
+      border-radius: 50%;
+      height: 24px;
+      width: 24px;
+      margin-left: 20px;
+    }
+  }
+
+  .launch-btn {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 160%;
+
+    .launch-btn-icon {
+      display: flex;
+      margin-right: 13px;
     }
   }
 
@@ -74,30 +82,6 @@
     justify-content: center;
     text-overflow: ellipsis;
     color: #fff;
-
-    .user-profile {
-      display: flex;
-      align-items: center;
-
-      &:hover {
-        cursor: pointer;
-      }
-
-      .pfp {
-        width: 32px;
-        height: 32px;
-        border-radius: 16px;
-      }
-
-      .user-name {
-        margin-left: 10px;
-        font-weight: 500;
-        max-width: 120px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
-    }
 
     .connect-btn {
       min-width: 100px;
@@ -128,9 +112,33 @@
 // }
 
 .user-profile-dropdown {
+  font-family: 'Gilroy';
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+
+  background: #10121A;
+  border: 0.6px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9px;
+
+  padding: 26px;
+  margin-top: 10px;
+  text-align: center;
+
+  .item {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    line-height: 14px;
+    user-select: none;
+
+    &:not(.disabled):hover {
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+    }
+
+    &+.item {
+      margin-top: 18px;
+    }
+  }
 
   .logout-btn {
     font-weight: 500;
