@@ -70,35 +70,23 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
             <div className='title'>
                 ROLLING 24H LEADERBOARD
             </div>
-            {/* <div className='description'>
-                <div className='info'>
-                    We use <span className='label'>ChatGPT</span> to evaluate your twitter mining influence, which considers factors such as twitter account rating, mining twitter content, interaction, likes and comments and other data.
-                    <a className='link'>Click here for details.</a>
-                </div>
-                <div className='sub-title'>Updated every 5 minutes</div>
-            </div> */}
 
             <div className='dashboard'>
-                <div className='row first'>
-                    <div className='stat'>
-                        <div className='label'>Whole Network Score</div>
-                        <div className='value'>{formatInfluenceScore(poolSummary?.totalInfluence ?? '0')}</div>
-                    </div>
+                <div className='stat-card'>
+                    <div className='label'>Whole Network Score</div>
+                    <div className='value'>{formatInfluenceScore(poolSummary?.totalInfluence ?? '0')}</div>
                 </div>
 
-                <div className='row'>
-                    <div className='stat'>
-                        <div className='label'>Reward per Block(24h)</div>
-                        <div className='value'>{Number(amountToFloatString(poolSummary?.currentDailyOutput ?? '0')).toLocaleString('en-US')} $AD3</div>
-                    </div>
+                <div className='stat-card'>
+                    <div className='label'>Reward per Block(24h)</div>
+                    <div className='value'>{Number(amountToFloatString(poolSummary?.currentDailyOutput ?? '0')).toLocaleString('en-US')} $AD3</div>
+                </div>
 
-                    <div className='stat'>
-                        <div className='label'>Next Halving</div>
-                        <div className='value'>{halveTime}</div>
-                    </div>
+                <div className='stat-card'>
+                    <div className='label'>Next Halving</div>
+                    <div className='value'>{halveTime}</div>
                 </div>
             </div>
-
 
             <div className='leaderboard-table-container'>
                 <table className='leaderboard-table'>
