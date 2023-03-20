@@ -2,9 +2,9 @@
 
 .vault-container {
   padding-top: 120px;
-  padding-left: 20%;
-  padding-right: 20%;
-  background-color: #000;
+  padding-left: 15%;
+  padding-right: 15%;
+  background-color: #020510;
   color: #fff;
   width: 100vw;
   min-height: 100vh;
@@ -25,6 +25,7 @@
     opacity: 0.5;
     margin-bottom: 60px;
     text-align: left;
+    width: 100%;
   }
 
   .card {
@@ -34,10 +35,6 @@
     padding: 24px;
     width: 100%;
   }
-
-  // .post-reminder {
-
-  // }
 
   .action-btn {
     padding: 6px 12px;

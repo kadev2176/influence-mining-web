@@ -1,3 +1,4 @@
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useInterval } from '../../hooks/useInterval';
 import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity, ImAccount } from '../../services/mining.service';
@@ -88,7 +89,28 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                 </div>
             </div>
 
-            <div className='leaderboard-table-container'>
+            <div className='leaderboard-tweets'>
+                <Row className='leaderboard-header'>
+                    <Col span={2}>Position</Col>
+                    <Col span={19}>User</Col>
+                    <Col span={1}>Boost</Col>
+                    <Col span={2}>Score</Col>
+                </Row>
+                {/* <div className='leaderboard-header'>
+                    <span>Position</span>
+                    <span>User</span>
+                    <span>Boost</span>
+                    <span>Score</span>
+                </div> */}
+                
+                {leaderboardRows && leaderboardRows.length > 0 && <>
+                    {leaderboardRows.map((tweet, index) => {
+                        return <LeaderBoardTweet tweet={tweet} isOwner={!index}></LeaderBoardTweet>
+                    })}
+                </>}
+            </div>
+
+            {/* <div className='leaderboard-table-container'>
                 <table className='leaderboard-table'>
                     <thead>
                         <tr>
@@ -104,43 +126,7 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                                 return <tr className={index ? '' : 'tr-user'} key={index}>
                                     <td>{row.rank}</td>
                                     <td>
-                                        <LeaderBoardTweet tweet={row}/>
-                                        {/* {row.tweetUrl && <>
-                                            <div className='tweet active' onClick={() => {
-                                                window.open(row.tweetUrl);
-                                            }}>
-                                                {!!row.avatar && <>
-                                                    <img src={row.avatar} className='avatar' referrerPolicy="no-referrer" onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        window.open(row.authorUrl);
-                                                    }}></img>
-                                                </>}
-                                                <div className='content'>
-                                                    <span className='author' onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        window.open(row.authorUrl);
-                                                    }}>@{row.authorName}: </span>
-                                                    <span className='text'>
-                                                        {trimText(row.tweetContent)}
-                                                    </span>
-                                                    {row.evaluation && <>
-                                                    <span>{row.evaluation}</span>
-                                                    </>}
-                                                </div>
-                                            </div>
-                                        </>}
-                                        {!row.tweetUrl && <>
-                                            <div className='tweet'>
-                                                {!!row.avatar && <>
-                                                    <img src={row.avatar} className='avatar' referrerPolicy="no-referrer"></img>
-                                                </>}
-                                                <div className='content'>
-                                                    No GPTMiner tweet at the moment.
-                                                </div>
-                                            </div>
-                                        </>} */}
+                                        <LeaderBoardTweet tweet={row} />
                                     </td>
                                     <td>1 x</td>
                                     <td>{formatInfluenceScore(row.influence)}</td>
@@ -149,7 +135,7 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                         </>}
                     </tbody>
                 </table>
-            </div>
+            </div> */}
         </div>
     </>;
 };

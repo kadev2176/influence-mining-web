@@ -1,9 +1,12 @@
+import { Col, Row } from 'antd';
 import React, { useState } from 'react';
 import { OembedTweet } from '../../services/twitter.service';
+import { formatInfluenceScore } from '../../utils/format.util';
 import './LeaderBoardTweet.scss';
 
 export interface LeaderBoardTweetProps {
-    tweet: OembedTweet & { evaluation: string; avatar: string }
+    tweet: OembedTweet & { evaluation: string; avatar: string; rank: string; influence: string },
+    isOwner: boolean
 }
 
 const maxTextLength = 70;
@@ -16,12 +19,71 @@ const trimText = (text: string) => {
     return text.slice(0, Math.floor(maxTextLength * text.length / len)) + '...';
 }
 
-function LeaderBoardTweet({ tweet }: LeaderBoardTweetProps) {
+function LeaderBoardTweet({ tweet, isOwner }: LeaderBoardTweetProps) {
     const [showEvaluation, setShowEvaluation] = useState<boolean>(false);
 
     return <>
         <div className='tweet-container'>
-            {tweet.tweetUrl && <>
+            {isOwner && <>
+                <div className='owner-tag'>me</div>
+            </>}
+
+            <Row className='content-row'>
+                <Col span={2}>
+                    <div className='position'>{tweet.rank}</div>
+                </Col>
+                <Col span={5}>
+                    <div className='user' onClick={() => {
+                        window.open(tweet.authorUrl);
+                    }}>
+                        {!!tweet.avatar && <>
+                            <img src={tweet.avatar} className='user-avatar' referrerPolicy="no-referrer"></img>
+                        </>}
+                        <div className='user-name'>@{tweet.authorName}</div>:
+                    </div>
+                </Col>
+                <Col span={10}>
+                    <div className='tweet-content' onClick={() => {
+                        window.open(tweet.tweetUrl);
+                    }}>
+                        {tweet.tweetContent}
+                    </div>
+                </Col>
+                <Col span={4}>
+                    {tweet.evaluation && <>
+                        <span className='evaluation-btn' onClick={() => {
+                            setShowEvaluation(!showEvaluation);
+                        }}>
+                            <span className='label'>GPT Evaluation</span>
+                            {!showEvaluation && <>
+                                <span className='icon'>
+                                    <i className="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </>}
+                            {showEvaluation && <>
+                                <span className='icon'>
+                                    <i className="fa-solid fa-chevron-up"></i>
+                                </span>
+                            </>}
+                        </span>
+                    </>}
+                </Col>
+                <Col span={1} className="col-center-align">
+                    <div className='boost'>1X</div>
+                </Col>
+                <Col span={2} className="col-center-align">
+                    <div className='score'>{formatInfluenceScore(tweet.influence)}</div>
+                </Col>
+            </Row>
+
+            {showEvaluation && <>
+                <div className='evaluation'>
+                    <span className='evaluation-tag'>GPT Evaluation:</span>{tweet.evaluation.slice(16)}
+                </div>
+            </>}
+
+
+            {/* {tweet.tweetUrl && <>
                 <div className='tweet active'>
                     {!!tweet.avatar && <>
                         <img src={tweet.avatar} className='avatar' referrerPolicy="no-referrer" onClick={(e) => {
@@ -65,8 +127,8 @@ function LeaderBoardTweet({ tweet }: LeaderBoardTweetProps) {
                 {showEvaluation && <>
                     <div className='evaluation'>{tweet.evaluation}</div>
                 </>}
-            </>}
-            {!tweet.tweetUrl && <>
+            </>} */}
+            {/* {!tweet.tweetUrl && <>
                 <div className='tweet'>
                     {!!tweet.avatar && <>
                         <img src={tweet.avatar} className='avatar' referrerPolicy="no-referrer"></img>
@@ -75,7 +137,7 @@ function LeaderBoardTweet({ tweet }: LeaderBoardTweetProps) {
                         No GPTMiner tweet at the moment.
                     </div>
                 </div>
-            </>}
+            </>} */}
         </div>
     </>;
 };

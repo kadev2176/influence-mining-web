@@ -1,73 +1,204 @@
 @import '../../common.scss';
 
 .tweet-container {
-  padding: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  background: #10121A;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  position: relative;
+  align-items: center;
+  margin-bottom: 20px;
 
-  .tweet {
-    display: flex;
-    text-align: initial;
-    opacity: 0.9;
+  .owner-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-weight: 400;
+    font-size: 20.5px;
+    line-height: 29px;
+    color: #1DA1F2;
+    background: rgba(29, 161, 242, 0.16);
+    padding: 0 8px;
+    border-radius: 0 0 10px 0;
+  }
 
-    &.active {
+  .content-row {
+    width: 100%;
+    margin: 10px 0;
+
+    .ant-col {
+      display: flex;
+      align-items: center;
+    }
+
+    .col-center-align {
+      justify-content: center;
+    }
+
+    .position {
+      font-size: 16px;
+      line-height: 19px;
+      text-align: center;
+      min-width: 70px;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      line-height: 28px;
+
       &:hover {
-        opacity: 1;
+        cursor: pointer;
+        text-decoration: underline;
       }
 
-      .avatar, .text {
-        &:hover {
-          cursor: pointer;
-        }
+      .user-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        margin-right: 8px;
       }
-    }
 
-    .avatar {
-      width: 20px;
-      height: 20px;
-      border-radius: 10px;
-      margin-right: 5px;
-    }
-
-    .content {
-      color: $text-light-color;
-      line-height: 20px;
-
-      .author {
+      .user-name {
         color: #fff;
+        max-width: 135px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+    }
 
-        &:hover {
-          text-shadow: 0.5px 0.5px 1px #ffffff97;
-          cursor: pointer;
-        }
+    .tweet-content {
+      font-size: 24px;
+      line-height: 28px;
+      max-width: 375px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      color: #FFFFFF;
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 0.7;
+        cursor: pointer;
       }
     }
 
     .evaluation-btn {
-      background: rgb(48, 48, 48);
-      padding: 2px 4px;
-      font-size: 12px;
-      border-radius: 5px;
-      margin-left: 4px;
-      white-space: nowrap;
+      color: #1DA1F2;
+      background: #CFF4FF;
+      border-radius: 9px;
+      font-size: 14px;
+      line-height: 16px;
+      padding: 7px 8.75px;
 
       &:hover {
         cursor: pointer;
-        background: rgb(57, 57, 57);
       }
 
-      .icon {
-        margin-left: 4px;
+      .label {
+        margin-right: 3px;
       }
+    }
+
+    .boost,
+    .score {
+      font-size: 16px;
+      line-height: 19px;
+      text-align: center;
+      font-weight: bold;
     }
   }
 
   .evaluation {
-    margin-top: 4px;
-    color: $text-light-color;
-    text-align: left;
-    border: 1px solid $text-light-color;
-    padding: 5px;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 21px;
+    padding: 15px;
+    margin-top: 15px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+
+    .evaluation-tag {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 30px;
+      padding: 1px 7px;
+      margin-right: 5px;
+    }
   }
+
+
+  // .tweet {
+  //   display: flex;
+  //   text-align: initial;
+  //   opacity: 0.9;
+
+  //   &.active {
+  //     &:hover {
+  //       opacity: 1;
+  //     }
+
+  //     .avatar,
+  //     .text {
+  //       &:hover {
+  //         cursor: pointer;
+  //       }
+  //     }
+  //   }
+
+  //   .avatar {
+  //     width: 20px;
+  //     height: 20px;
+  //     border-radius: 10px;
+  //     margin-right: 5px;
+  //   }
+
+  //   .content {
+  //     color: $text-light-color;
+  //     line-height: 20px;
+
+  //     .author {
+  //       color: #fff;
+
+  //       &:hover {
+  //         text-shadow: 0.5px 0.5px 1px #ffffff97;
+  //         cursor: pointer;
+  //       }
+  //     }
+  //   }
+
+  //   .evaluation-btn {
+  //     background: rgb(48, 48, 48);
+  //     padding: 2px 4px;
+  //     font-size: 12px;
+  //     border-radius: 5px;
+  //     margin-left: 4px;
+  //     white-space: nowrap;
+
+  //     &:hover {
+  //       cursor: pointer;
+  //       background: rgb(57, 57, 57);
+  //     }
+
+  //     .icon {
+  //       margin-left: 4px;
+  //     }
+  //   }
+  // }
+
+  // .evaluation {
+  //   margin-top: 4px;
+  //   color: $text-light-color;
+  //   text-align: left;
+  //   border: 1px solid $text-light-color;
+  //   padding: 5px;
+  //   border-radius: 8px;
+  // }
 }
 
 

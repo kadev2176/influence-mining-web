@@ -11,34 +11,6 @@
     font-weight: bold;
   }
 
-  // .description {
-  //   .info {
-  //     color: $text-light-color;
-  //     padding: 0px 20px;
-  //     text-align: center;
-
-  //     .label {
-  //       color: #fff;
-  //       font-weight: 500;
-  //     }
-
-  //     .link {
-  //       margin-left: 5px;
-  //       color: rgb(71, 161, 255);
-  //       text-decoration: underline;
-
-  //       &:hover {
-  //         color: #1677ff;
-  //       }
-  //     }
-  //   }
-
-  //   .sub-title {
-  //     text-align: center;
-  //     margin: 10px;
-  //   }
-  // }
-
   .dashboard {
     width: 100%;
     margin-top: 30px;
@@ -93,6 +65,20 @@
     //     }
     //   }
     // }
+  }
+
+  .leaderboard-tweets {
+    .leaderboard-header {
+      padding: 20px;
+      font-size: 20px;
+      line-height: 23px;
+      color: #FFFFFF;
+      opacity: 0.6;
+
+      .ant-col {
+        text-align: center;
+      }
+    }
   }
 
   .leaderboard-table-container {
