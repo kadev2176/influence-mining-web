@@ -180,6 +180,48 @@ function Vault({ }: VaultProps) {
                 }}>Twit</div>
             </div>
 
+            {mostRecentTweet && <>
+                <div className='section-card miner-tweet'>
+                    <div className='gpt-evaluation'>
+                        <div className='title'>
+                            <div className='text'>GPT Evaluation</div>
+                            <div className='tag'>Only the latest one is shown</div>
+                        </div>
+                        <div className='evaluation'>
+                            {mostRecentTweet.evaluation}
+                        </div>
+                    </div>
+                    <div className='tweet'>
+                        <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
+                            window.open(mostRecentTweet.authorUrl);
+                        }}></img>
+                        <div className='tweet-content'>
+                            <div className='user-row' onClick={() => {
+                                window.open(mostRecentTweet.authorUrl);
+                            }}>
+                                <span className='username'>{imAccount?.twitterName}</span>
+                                <span className='twitter-name'>@{imAccount?.twitterUsername}</span>
+                            </div>
+                            <div className='content-row' onClick={() => {
+                                window.open(mostRecentTweet.tweetUrl);
+                            }}>
+                                {mostRecentTweet.tweetContent}
+                            </div>
+                        </div>
+                        <div className='mining-indicator'>
+
+                        </div>
+
+                        <div className='corner-tag'>
+                            <div className='icon'>
+                                <i className="fa-solid fa-check"></i>
+                            </div>
+                            indexed
+                        </div>
+                    </div>
+                </div>
+            </>}
+
             <div className='user-section'>
                 <div className='mining-reward'>
                     <div className='label-row'>
@@ -203,9 +245,9 @@ function Vault({ }: VaultProps) {
                     </div>
                 </div>
 
-                <div className='tweet-status'>
+                {/* <div className='tweet-status'>
                     {mostRecentTweet !== undefined && <>
-                        {/* {!mostRecentTweet && <>
+                        {!mostRecentTweet && <>
                             <div className='no-tweet-info'>
                                 <div className='row'>You have no active GPT mining tweets.</div>
                                 <div className='row'>Post any tweet with {MinerTweetHashTag} to begin mining.</div>
@@ -213,7 +255,7 @@ function Vault({ }: VaultProps) {
                             <div className='button-container'>
                                 <div className='action-btn active' onClick={postTweet}>Start Mining</div>
                             </div>
-                        </>} */}
+                        </>}
 
                         {mostRecentTweet && <>
                             {!mostRecentTweet.justPosted && <>
@@ -282,7 +324,7 @@ function Vault({ }: VaultProps) {
                         </>}
                     </>}
 
-                </div>
+                </div> */}
             </div>
 
             {imAccount && <LeaderBoard imAccount={imAccount}></LeaderBoard>}

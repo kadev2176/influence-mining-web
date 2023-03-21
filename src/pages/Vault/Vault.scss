@@ -46,8 +46,135 @@
     .post-info {
       font-size: 28px;
       line-height: 33px;
+
       .hashtag {
         color: #1DA1F2;
+      }
+    }
+  }
+
+  .miner-tweet {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+
+    .gpt-evaluation {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 36px;
+
+      .title {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 18px;
+
+        .text {
+          font-size: 20px;
+          line-height: 23px;
+          font-weight: bold;
+          color: #FFFFFF;
+          opacity: 0.6;
+        }
+
+        .tag {
+          padding: 3px 5px;
+          margin-left: 20px;
+          background: rgba(255, 255, 255, 0.18);
+          border-radius: 30px;
+          font-size: 14px;
+          line-height: 16px;
+          color: #FFFFFF;
+          opacity: 0.6;
+        }
+      }
+
+      .evaluation {
+        font-size: 18px;
+        line-height: 21px;
+      }
+    }
+
+    .tweet {
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      padding: 14px;
+      overflow: hidden;
+
+      .avatar {
+        width: 62px;
+        height: 62px;
+        border-radius: 50%;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .tweet-content {
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+        max-width: 80%;
+        height: 100%;
+
+        .user-row {
+          margin-bottom: 5px;
+
+          &:hover {
+            cursor: pointer;
+          }
+
+          .username {
+            font-size: 20px;
+            line-height: 23px;
+            color: #fff;
+            margin-right: 12px;
+          }
+
+          .twitter-name {
+            font-size: 20px;
+            line-height: 23px;
+            opacity: 0.5;
+          }
+        }
+
+        .content-row {
+          font-weight: 400;
+          font-size: 20px;
+          line-height: 28px;
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+
+      .mining-indicator {}
+
+      .corner-tag {
+        position: absolute;
+        padding: 5px 10px;
+        top: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 0px 5px 0px 5px;
+        font-weight: 400;
+        // font-size: 8px;
+        line-height: 11px;
+        white-space: nowrap;
+        display: flex;
+        
+        .icon {
+          margin-right: 4px;
+        }
       }
     }
   }
