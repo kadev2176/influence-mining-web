@@ -43,11 +43,16 @@ function LeaderBoardTweet({ tweet, isOwner }: LeaderBoardTweetProps) {
                     </div>
                 </Col>
                 <Col span={10}>
-                    <div className='tweet-content' onClick={() => {
-                        window.open(tweet.tweetUrl);
-                    }}>
-                        {tweet.tweetContent}
-                    </div>
+                    {!!tweet.tweetContent && <>
+                        <div className='tweet-content' onClick={() => {
+                            window.open(tweet.tweetUrl);
+                        }}>
+                            {tweet.tweetContent}
+                        </div>
+                    </>}
+                    {!tweet.tweetContent && <>
+                        <div className='tweet-content disabled'>No GPTMiner tweet at the moment.</div>
+                    </>}
                 </Col>
                 <Col span={4}>
                     {tweet.evaluation && <>

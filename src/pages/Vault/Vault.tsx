@@ -12,6 +12,7 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import { isMobile } from 'react-device-detect';
 import dayjs from 'dayjs'
 import { useCountdown } from '../../hooks/useCountdown';
+import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -47,6 +48,8 @@ function Vault({ }: VaultProps) {
 
     const [profitStep, setProfitStep] = useState<string>('0');
     const [decimals, setDecimals] = useState<number>(2);
+
+    const [tweetGeneratorModal, setTweetGeneratorModal] = useState<boolean>(false);
 
     useEffect(() => {
         document.title = 'GPT Miner | Vault';
@@ -129,7 +132,7 @@ function Vault({ }: VaultProps) {
             // const createdTime = (dayjs as any).utc(upcomingTweet?.createdTime ?? '0');
             // const latestMidnight = (dayjs as any).utc().hour(0).minute(0).second(0).millisecond(0);
             // const midnightBefore = latestMidnight.subtract(1, 'day');
-            
+
             // if (midnightBefore.unix() > createdTime.unix()) {
             //     setMostRecentTweet(null);
             //     return;
@@ -149,7 +152,7 @@ function Vault({ }: VaultProps) {
     }
 
     useEffect(() => {
-        if (imAccount) {            
+        if (imAccount) {
             updateMostRecentTweet(imAccount);
         }
     }, [imAccount])
@@ -165,16 +168,17 @@ function Vault({ }: VaultProps) {
     return <>
         <div className='vault-container'>
             <div className='miner-title'>Miner</div>
-            <div className='miner-description'>Turn into a mining node by tweeting and use your social influence to earn revenue. Fans can buy NFTs of social influencers to earn revenue share. Advertisers can buy ad space with tokens.</div>
+            <div className='miner-description'>
+                Become a mining node by leveraging your social influence to earn revenue.
+                Followers can buy NFTs of social influencers to earn revenue share. Advertisers can buy ad space with tokens.
+            </div>
 
-            {/* <div className='card'>
-                <div className='post-reminder'>
-                    <div className='description'>Post a tweet with <span className='tag'>#GPTminer</span> and start earning</div>
-                    <div className='arrow-icon'></div>
-                    <div className='twit-btn'></div>
-                </div>
-            </div> */}
-
+            <div className='section-card post-tweet'>
+                <div className='post-info'>Post a tweet with <span className='hashtag'>{MinerTweetHashTag}</span> and start earning</div>
+                <div className='twit-btn action-btn-primary active' onClick={() => {
+                    setTweetGeneratorModal(true);
+                }}>Twit</div>
+            </div>
 
             <div className='user-section'>
                 <div className='mining-reward'>
@@ -201,7 +205,7 @@ function Vault({ }: VaultProps) {
 
                 <div className='tweet-status'>
                     {mostRecentTweet !== undefined && <>
-                        {!mostRecentTweet && <>
+                        {/* {!mostRecentTweet && <>
                             <div className='no-tweet-info'>
                                 <div className='row'>You have no active GPT mining tweets.</div>
                                 <div className='row'>Post any tweet with {MinerTweetHashTag} to begin mining.</div>
@@ -209,7 +213,7 @@ function Vault({ }: VaultProps) {
                             <div className='button-container'>
                                 <div className='action-btn active' onClick={postTweet}>Start Mining</div>
                             </div>
-                        </>}
+                        </>} */}
 
                         {mostRecentTweet && <>
                             {!mostRecentTweet.justPosted && <>
@@ -283,6 +287,10 @@ function Vault({ }: VaultProps) {
 
             {imAccount && <LeaderBoard imAccount={imAccount}></LeaderBoard>}
         </div>
+
+        {tweetGeneratorModal && <>
+            <TweetGeneratorModal onCancel={() => { setTweetGeneratorModal(false) }}></TweetGeneratorModal>
+        </>}
     </>;
 };
 

@@ -28,12 +28,28 @@
     width: 100%;
   }
 
-  .card {
+  .section-card {
     background: #1C1E25;
     border: 1px solid rgba(255, 255, 255, 0.13);
     border-radius: 20px;
-    padding: 24px;
     width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .post-tweet {
+    padding: 18px 24px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    .post-info {
+      font-size: 28px;
+      line-height: 33px;
+      .hashtag {
+        color: #1DA1F2;
+      }
+    }
   }
 
   .action-btn {

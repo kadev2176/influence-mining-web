@@ -40,6 +40,7 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                     ? `${index}`
                     : (rank >= 0 ? `${rank + 1}` : 'Unknown'),
                 tweetContent: account.tweetContent,
+                authorName: account.twitterName,
                 ...tweet,
                 evaluation: account.tweetEvaluation
             };
@@ -96,12 +97,6 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                     <Col span={1}>Boost</Col>
                     <Col span={2}>Score</Col>
                 </Row>
-                {/* <div className='leaderboard-header'>
-                    <span>Position</span>
-                    <span>User</span>
-                    <span>Boost</span>
-                    <span>Score</span>
-                </div> */}
                 
                 {leaderboardRows && leaderboardRows.length > 0 && <>
                     {leaderboardRows.map((tweet, index) => {
@@ -109,33 +104,6 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                     })}
                 </>}
             </div>
-
-            {/* <div className='leaderboard-table-container'>
-                <table className='leaderboard-table'>
-                    <thead>
-                        <tr>
-                            <th>Position</th>
-                            <th>User</th>
-                            <th>Boost</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {leaderboardRows && leaderboardRows.length > 0 && <>
-                            {leaderboardRows.map((row, index) => {
-                                return <tr className={index ? '' : 'tr-user'} key={index}>
-                                    <td>{row.rank}</td>
-                                    <td>
-                                        <LeaderBoardTweet tweet={row} />
-                                    </td>
-                                    <td>1 x</td>
-                                    <td>{formatInfluenceScore(row.influence)}</td>
-                                </tr>
-                            })}
-                        </>}
-                    </tbody>
-                </table>
-            </div> */}
         </div>
     </>;
 };

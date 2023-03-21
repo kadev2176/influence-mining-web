@@ -1,4 +1,8 @@
 import fetchJsonp from "fetch-jsonp";
+import { PARAMI_AIRDROP } from "../models/parami";
+import { fetchWithCredentials, fetchWithSig } from "../utils/api.util";
+
+const DEFAULT_TWEET = 'Become a mining node by leveraging your social influence to earn revenue. #GPTMiner';
 
 export interface OembedTweet {
   tweetId: string;
@@ -18,7 +22,7 @@ export const fetchOembedTweet = async (tweetId: string) => {
     return null;
   }
   const tweetJson = await resp.json();
-  
+
   const parser = new DOMParser();
   const doc = parser.parseFromString(tweetJson.html, 'text/html');
   const tweetContent = doc.querySelector('blockquote p')?.textContent;
@@ -30,4 +34,22 @@ export const fetchOembedTweet = async (tweetId: string) => {
     tweetContent,
     tweetId
   } as OembedTweet;
+}
+
+export const generateTweetContent = async () => {
+  try {
+    const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/tweets`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    if (!resp) {
+      return DEFAULT_TWEET;
+    }
+    const tweet = await resp.json();
+    return tweet.substring(1, tweet.length - 1);
+  } catch (e) {
+    return DEFAULT_TWEET;
+  }
 }
