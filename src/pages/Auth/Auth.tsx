@@ -12,12 +12,6 @@ import { parseUrlParams } from '../../utils/window.util';
 import { isMobile } from 'react-device-detect';
 
 function Auth() {
-    // const { open } = useWeb3Modal();
-    // const [searchParams, setSearchParams] = useSearchParams();
-    // const { address, isConnected } = useAccount();
-    // const { chain } = useNetwork();
-    // const { data: signer } = useSigner();
-    // const { data: ensName } = useEnsName({ address });
     const navigate = useNavigate();
     const { imAccount } = useImAccount();
     const [params] = useSearchParams();
@@ -80,7 +74,7 @@ function Auth() {
     // }, [userSignature])
 
     const handleConnectTwitter = async () => {
-        const oauthUrl = await getTwitterOauthUrl(window.origin);
+        const oauthUrl = await getTwitterOauthUrl();
 
         if (oauthUrl) {
             if (isMobile) {

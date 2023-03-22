@@ -10,7 +10,8 @@
   height: 100px;
   padding: 0 60px;
   z-index: 99;
-  background: #020510;
+  background: rgba(2, 5, 16, 0.5);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid #3A3B41;
 
   .logo-container {

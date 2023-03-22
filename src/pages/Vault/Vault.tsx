@@ -13,6 +13,7 @@ import { isMobile } from 'react-device-detect';
 import dayjs from 'dayjs'
 import { useCountdown } from '../../hooks/useCountdown';
 import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
+import SigninModal from '../../components/SigninModal/SigninModal';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -20,15 +21,6 @@ dayjs.extend(utc);
 export interface VaultProps { }
 
 const MinerTweetHashTag = '#GPTMiner';
-
-const postTweet = () => {
-    if (isMobile) {
-        window.open(`twitter://post?message=${encodeURIComponent(MinerTweetHashTag)}`);
-        return;
-    }
-
-    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(MinerTweetHashTag)}`);
-}
 
 interface MostRecentTweet extends OembedTweet {
     evaluation: string;
@@ -50,6 +42,7 @@ function Vault({ }: VaultProps) {
     const [decimals, setDecimals] = useState<number>(2);
 
     const [tweetGeneratorModal, setTweetGeneratorModal] = useState<boolean>(false);
+    const [signinModal, setSigninModal] = useState<boolean>(false);
 
     useEffect(() => {
         document.title = 'GPT Miner | Vault';
@@ -57,7 +50,8 @@ function Vault({ }: VaultProps) {
 
     useEffect(() => {
         if (!loading && !imAccount) {
-            navigate('/auth');
+            // navigate('/auth');
+            setSigninModal(true);
         }
     }, [imAccount, loading])
 
@@ -67,7 +61,7 @@ function Vault({ }: VaultProps) {
 
     useEffect(() => {
         getAd3Balance().then(balance => {
-            console.log('got ad3 balance', balance);
+            // console.log('got ad3 balance', balance);
             if (balance) {
                 setTotalBalance(amountToFloatString(BigInt(balance.balance) + BigInt(balance.earned)));
             }
@@ -116,8 +110,6 @@ function Vault({ }: VaultProps) {
         console.log('got upcoming tweet', tweet);
         setUpcomingTweet(tweet || null);
     }
-
-    // useInterval(updateUpcomingMiner, 5000, true);
 
     const updateMostRecentTweet = async (imAccount: ImAccount) => {
 
@@ -169,15 +161,14 @@ function Vault({ }: VaultProps) {
         <div className='vault-container'>
             <div className='miner-title'>Miner</div>
             <div className='miner-description'>
-                Become a mining node by leveraging your social influence to earn revenue.
-                Followers can buy NFTs of social influencers to earn revenue share. Advertisers can buy ad space with tokens.
+                GPT evaluates your Tweet (attaching #GPTMiner) based on Originality, Creativity, Practicality, Personality & Discussability and generates a SCORE based on which, you will be earning rewards.
             </div>
 
             <div className='section-card post-tweet'>
-                <div className='post-info'>Post a tweet with <span className='hashtag'>{MinerTweetHashTag}</span> and start earning</div>
+                <div className='post-info'>Tweet with <span className='hashtag'>{MinerTweetHashTag}</span> to start mining!</div>
                 <div className='twit-btn action-btn-primary active' onClick={() => {
                     setTweetGeneratorModal(true);
-                }}>Twit</div>
+                }}>Tweet</div>
             </div>
 
             {mostRecentTweet && <>
@@ -244,87 +235,6 @@ function Vault({ }: VaultProps) {
                         <div className='network-tag'>Test Network</div>
                     </div>
                 </div>
-
-                {/* <div className='tweet-status'>
-                    {mostRecentTweet !== undefined && <>
-                        {!mostRecentTweet && <>
-                            <div className='no-tweet-info'>
-                                <div className='row'>You have no active GPT mining tweets.</div>
-                                <div className='row'>Post any tweet with {MinerTweetHashTag} to begin mining.</div>
-                            </div>
-                            <div className='button-container'>
-                                <div className='action-btn active' onClick={postTweet}>Start Mining</div>
-                            </div>
-                        </>}
-
-                        {mostRecentTweet && <>
-                            {!mostRecentTweet.justPosted && <>
-                                <div className='post-hint'>
-                                    <div className='text'>Your current tweet is mining and will expire in: {countdown.hours}h {countdown.mins}m</div>
-                                    <div className='action-btn active' onClick={postTweet}>Post a New Tweet</div>
-                                </div>
-                            </>}
-
-                            <div className='tweet-label'>Most Recent Tweet:</div>
-
-                            <div className='tweet-row'>
-                                <div className='miner-tweet'>
-                                    <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
-                                        window.open(mostRecentTweet.authorUrl);
-                                    }}></img>
-                                    <div className='tweet-content'>
-                                        <div className='author' onClick={() => {
-                                            window.open(mostRecentTweet.authorUrl);
-                                        }}>@{mostRecentTweet.authorName}</div>
-                                        <div className='content' onClick={() => {
-                                            window.open(mostRecentTweet.tweetUrl);
-                                        }}>{mostRecentTweet.tweetContent}</div>
-                                    </div>
-                                </div>
-
-                                <div className='status'>
-                                    <div className='tag'>
-                                        {!!mostRecentTweet.evaluation && <>
-                                            <CheckCircleOutlined />
-                                            <span className='text'>GPT Evaluated</span>
-                                        </>}
-
-                                        {!mostRecentTweet.evaluation && <>
-                                            Pending
-                                        </>}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className={`gpt-row`}>
-                                <div className={`gpt-evaluation`}>
-                                    {!!mostRecentTweet.evaluation && <>
-                                        <div className='title'>GPT Evaluation:</div>
-                                        <div className='content'>
-                                            {mostRecentTweet.evaluation}
-                                        </div>
-                                    </>}
-
-                                    {!mostRecentTweet.evaluation && <>
-                                        <div className='content'>
-                                            {mostRecentTweet.isMiner && <>
-                                                Your tweet has been submitted and is being evaluated by ChatGPT. The influence score will be calculated in a minute.
-                                            </>}
-
-                                            {!mostRecentTweet.isMiner && <>
-                                                Your tweet has been submitted and is being evaluated by ChatGPT. The final influence score will be calculated in:
-                                                <span className='count-down'>
-                                                    {countdown.hours}h {countdown.mins}m
-                                                </span>
-                                            </>}
-                                        </div>
-                                    </>}
-                                </div>
-                            </div>
-                        </>}
-                    </>}
-
-                </div> */}
             </div>
 
             {imAccount && <LeaderBoard imAccount={imAccount}></LeaderBoard>}
@@ -332,6 +242,10 @@ function Vault({ }: VaultProps) {
 
         {tweetGeneratorModal && <>
             <TweetGeneratorModal onCancel={() => { setTweetGeneratorModal(false) }}></TweetGeneratorModal>
+        </>}
+
+        {signinModal && <>
+            <SigninModal></SigninModal>
         </>}
     </>;
 };

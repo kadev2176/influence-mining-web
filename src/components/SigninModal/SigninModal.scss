@@ -1,0 +1,39 @@
+.signin-modal {
+  .ant-modal-content {
+    background: #10121A;
+    border-radius: 21px;
+    padding: 16px;
+  }
+
+  .header {
+    text-align: center;
+    font-size: 24px;
+    line-height: 28px;
+    margin-bottom: 31px;
+  }
+
+  .modal-footer {
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: center;
+
+    .action-btn-primary {
+      width: 256px;
+      border-radius: 32px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 13px 19px;
+      gap: 9px;
+      
+      font-size: 24px;
+      line-height: 28px;
+
+      .icon {
+        font-size: 20px;
+        margin-right: 14px;
+      }
+    }
+  }
+}

@@ -124,7 +124,7 @@ export const queryAllImAccounts = async (query: string) => {
   });
 }
 
-export const getTwitterOauthUrl = async (callbackUrl: string) => {
+export const getTwitterOauthUrl = async () => {
   try {
     const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/twitter/login?state=gptminer_login`);
     const { oauthUrl } = await resp.json();
