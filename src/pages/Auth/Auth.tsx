@@ -25,7 +25,7 @@ function Auth() {
                     notification.success({
                         message: 'Login Successful!'
                     })
-                    navigate('/vault');
+                    navigate('/miner');
                     return;
                 }
 
@@ -48,30 +48,9 @@ function Auth() {
 
     useEffect(() => {
         if (imAccount) {
-            navigate('/vault');
+            navigate('/miner');
         }
     }, [imAccount]);
-    // const [userSignature, setUserSignature] = useState<string>();
-
-    // useEffect(() => {
-    //     if (isConnected) {
-    //         const sessionExpirationTime = window.localStorage.getItem('sessionExpirationTime');
-    //         const sig = window.localStorage.getItem('sessionSig');
-    //         if (sessionExpirationTime && sig && Number(sessionExpirationTime) > Date.now()) {
-    //             setUserSignature(sig);
-    //         }
-    //     }
-    // }, [isConnected])
-
-    // useEffect(() => {
-    //     if (userSignature) {
-    //         getMyIMAccount(address!, chain!.id).then(imAccount => {
-    //             if (imAccount) {
-    //                 navigate('/vault');
-    //             }
-    //         })
-    //     }
-    // }, [userSignature])
 
     const handleConnectTwitter = async () => {
         const oauthUrl = await getTwitterOauthUrl();
@@ -97,42 +76,6 @@ function Auth() {
 
     //     setUserSignature(sig);
     // }
-
-    // useEffect(() => {
-    //     if (oauthToken && oauthVerifier) {
-    //         window.removeEventListener('storage', storageHandler);
-    //         window.localStorage.removeItem('oauth_token');
-    //         window.localStorage.removeItem('oauth_verifier');
-
-    //         createAccountOrLogin(oauthToken, oauthVerifier).then(res => {
-    //             if (res.success) {
-    //                 notification.success({
-    //                     message: 'Login Success!'
-    //                 })
-    //                 navigate('/vault');
-    //                 return;
-    //             }
-
-    //             notification.warning({
-    //                 message: res.message
-    //             })
-    //         })
-
-    //         // bindAccount(address!, chain!.id, oauthToken, oauthVerifier, window.localStorage.getItem('referer') ?? '').then(res => {
-    //         //     if (res.success) {
-    //         //         notification.success({
-    //         //             message: 'Bind Success!'
-    //         //         })
-    //         //         navigate('/vault');
-    //         //         return;
-    //         //     }
-
-    //         //     notification.warning({
-    //         //         message: res.message
-    //         //     })
-    //         // })
-    //     }
-    // }, [oauthToken, oauthVerifier])
 
     return <>
         <div className='auth-container'>

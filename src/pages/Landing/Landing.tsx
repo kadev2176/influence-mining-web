@@ -25,29 +25,34 @@ function Landing({ }: LandingProps) {
 
         <div className='content-container'>
             <div className='title-section'>
-                <h1 className='title'>GPT Miner</h1>
+                <div className='title'>GPT Miner</div>
                 <div className='description'>
-                    <h4>Just be U<span className='superscript'>AI</span></h4>
-                    <h4>The World's First 'Social Influence' Mining Initiative Converging AI with Web3</h4>
+                    <div>Just be U<span className='superscript'>AI</span></div>
+                    <div>The World's First 'Social Influence' Mining Initiative Converging AI with Web3</div>
                 </div>
 
-                <div>
-                    <div className='action-btn active' onClick={() => {
-                        window.open('https://k1ken8ha0bo.typeform.com/to/bCPaD46i');
-                    }}>Apply for Beta Access & Whitelist</div>
+
+                <div className='action-btn-primary active' onClick={() => {
+                    window.open('https://k1ken8ha0bo.typeform.com/to/bCPaD46i');
+                }}>
+                    <div className='btn-icon'>
+                        <i className="fa-solid fa-arrow-right"></i>
+                    </div>
+                    Apply for Beta Access & Whitelist
                 </div>
             </div>
 
             <div className='origin-section'>
                 <h4 className='title'>A Concept Co-developed by Human & AI</h4>
-                <div className='action-btn active' onClick={() => {
+                <div className='action-btn-primary active' onClick={() => {
                     window.open('https://parami.gitbook.io/gpt-miner/welcome-to-gpt-miner/origination');
-                }}>ORIGIN</div>
+                }}>
+                    <div className='btn-icon'>
+                        <i className="fa-solid fa-arrow-right"></i>
+                    </div>
+                    Origin
+                </div>
             </div>
-
-            {/* <div className='type-form-link'>
-                <div className='action-btn active'>Apply for Early Access</div>
-            </div> */}
         </div>
 
     </>;

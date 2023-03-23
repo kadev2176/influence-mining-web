@@ -1,30 +1,25 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useImAccount } from '../../hooks/useImAccount';
 import { useInterval } from '../../hooks/useInterval';
 import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity, ImAccount } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
 import { amountToFloatString, formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
-import LeaderBoardTweet from '../LeaderBoardTweet/LeaderBoardTweet';
+import LeaderBoardTweet from '../../components/LeaderBoardTweet/LeaderBoardTweet';
 import './LeaderBoard.scss';
 
 export interface LeaderBoardProps {
-    imAccount: ImAccount
 }
 
-// const maxTextLength = 70;
-
-// const trimText = (text: string) => {
-//     const len = text.replace(/[^\x00-\xff]/g, "01").length;
-//     if (len < maxTextLength) {
-//         return text;
-//     }
-//     return text.slice(0, Math.floor(maxTextLength * text.length / len)) + '...';
-// }
-
-function LeaderBoard({ imAccount }: LeaderBoardProps) {
+function LeaderBoard({ }: LeaderBoardProps) {
     const [poolSummary, setPoolSummary] = useState<PoolSummary>();
     const [leaderboardRows, setLeaderBoardRows] = useState<any[]>();
     const [halveTime, setHalveTime] = useState<string>('-');
+    const { imAccount } = useImAccount();
+
+    useEffect(() => {
+        document.title = 'GPT Miner | Leaderboard';
+    }, []);
 
     const fetchLeaderBoard = async (imAccount: ImAccount) => {
         const leaders = await getLeaderBoardImAccounts();
@@ -49,7 +44,9 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
     }
 
     useEffect(() => {
-        fetchLeaderBoard(imAccount);
+        if (imAccount) {
+            fetchLeaderBoard(imAccount);
+        }
     }, [imAccount])
 
     useEffect(() => {
@@ -97,7 +94,7 @@ function LeaderBoard({ imAccount }: LeaderBoardProps) {
                     <Col span={1}>Boost</Col>
                     <Col span={2}>Score</Col>
                 </Row>
-                
+
                 {leaderboardRows && leaderboardRows.length > 0 && <>
                     {leaderboardRows.map((tweet, index) => {
                         return <LeaderBoardTweet tweet={tweet} isOwner={!index}></LeaderBoardTweet>

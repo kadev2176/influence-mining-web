@@ -1,24 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import CountUp from 'react-countup';
-import { useNavigate } from 'react-router-dom';
-import LeaderBoard from '../../components/LeaderBoard/LeaderBoard';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useInterval } from '../../hooks/useInterval';
-import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, UpcomingTweetMiner, updateInfluence, ImAccount } from '../../services/mining.service';
+import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, UpcomingTweetMiner, updateInfluence, ImAccount, getLeaderBoardImAccounts } from '../../services/mining.service';
 import { fetchOembedTweet, OembedTweet } from '../../services/twitter.service';
-import { amountToFloatString } from '../../utils/format.util';
-import './Vault.scss';
-import { CheckCircleOutlined } from '@ant-design/icons';
-import { isMobile } from 'react-device-detect';
+import { amountToFloatString, formatTwitterImageUrl } from '../../utils/format.util';
+import './Miner.scss';
 import dayjs from 'dayjs'
-import { useCountdown } from '../../hooks/useCountdown';
 import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
 import SigninModal from '../../components/SigninModal/SigninModal';
+import LeaderBoardTweet, { LeaderTweet } from '../../components/LeaderBoardTweet/LeaderBoardTweet';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
-
-export interface VaultProps { }
 
 const MinerTweetHashTag = '#GPTMiner';
 
@@ -28,14 +22,11 @@ interface MostRecentTweet extends OembedTweet {
     isMiner: boolean;
 }
 
-function Vault({ }: VaultProps) {
+function Miner() {
     const [totalBalance, setTotalBalance] = useState<string>();
-    const [upcomingTweet, setUpcomingTweet] = useState<UpcomingTweetMiner | null>();
     const [mostRecentTweet, setMostRecentTweet] = useState<MostRecentTweet | null>();
     const { imAccount, refresh, loading } = useImAccount();
-    const countdown = useCountdown();
 
-    const navigate = useNavigate();
     const [ad3Activity, setAd3Activity] = useState<Ad3Activity>();
 
     const [profitStep, setProfitStep] = useState<string>('0');
@@ -43,14 +34,15 @@ function Vault({ }: VaultProps) {
 
     const [tweetGeneratorModal, setTweetGeneratorModal] = useState<boolean>(false);
     const [signinModal, setSigninModal] = useState<boolean>(false);
+    const [leaderTweets, setLeaderTweets] = useState<LeaderTweet[]>();
+    const [selectedTweet, setSelectedTweet] = useState<LeaderTweet>();
 
     useEffect(() => {
-        document.title = 'GPT Miner | Vault';
+        document.title = 'GPT Miner | Miner';
     }, []);
 
     useEffect(() => {
         if (!loading && !imAccount) {
-            // navigate('/auth');
             setSigninModal(true);
         }
     }, [imAccount, loading])
@@ -61,7 +53,6 @@ function Vault({ }: VaultProps) {
 
     useEffect(() => {
         getAd3Balance().then(balance => {
-            // console.log('got ad3 balance', balance);
             if (balance) {
                 setTotalBalance(amountToFloatString(BigInt(balance.balance) + BigInt(balance.earned)));
             }
@@ -105,14 +96,7 @@ function Vault({ }: VaultProps) {
 
     useInterval(addBalance, 2000);
 
-    const updateUpcomingMiner = async () => {
-        const tweet = await getUpcomingTweetMiner();
-        console.log('got upcoming tweet', tweet);
-        setUpcomingTweet(tweet || null);
-    }
-
     const updateMostRecentTweet = async (imAccount: ImAccount) => {
-
         const id = imAccount?.tweetId;
         if (id) {
             const tweet = await fetchOembedTweet(id);
@@ -121,21 +105,10 @@ function Vault({ }: VaultProps) {
                 return;
             }
 
-            // const createdTime = (dayjs as any).utc(upcomingTweet?.createdTime ?? '0');
-            // const latestMidnight = (dayjs as any).utc().hour(0).minute(0).second(0).millisecond(0);
-            // const midnightBefore = latestMidnight.subtract(1, 'day');
-
-            // if (midnightBefore.unix() > createdTime.unix()) {
-            //     setMostRecentTweet(null);
-            //     return;
-            // }
-
             setMostRecentTweet({
                 ...tweet,
                 evaluation: imAccount?.tweetEvaluation ?? '',
-                // justPosted: createdTime.unix() > latestMidnight.unix(),
                 justPosted: true,
-                // isMiner: !imAccount?.tweetId || upcomingTweet?.tweetId === imAccount?.tweetId
                 isMiner: true
             });
         } else {
@@ -149,17 +122,31 @@ function Vault({ }: VaultProps) {
         }
     }, [imAccount])
 
-    // todo: subscribe to graphQL changes
-    // const refreshInfluence = async () => {
-    //     console.log('updating influence, once per minute...');
-    //     updateInfluence().then((_) => {
-    //         refresh();
-    //     })
-    // }
+    const fetchLeaderTweets = async () => {
+        const leaders = await getLeaderBoardImAccounts(5);
+        const leaderTweets = await Promise.all((leaders ?? []).map(async (leaderAccount, index) => {
+            const tweet = leaderAccount?.tweetId ? await fetchOembedTweet(leaderAccount.tweetId) : {};
+            return {
+                avatar: formatTwitterImageUrl(leaderAccount?.twitterProfileImageUri),
+                influence: leaderAccount?.influence,
+                rank: `${index + 1}`,
+                tweetContent: leaderAccount.tweetContent,
+                authorName: leaderAccount.twitterName,
+                authorUrl: `https://twitter.com/${leaderAccount.twitterUsername}`,
+                ...tweet,
+                evaluation: leaderAccount.tweetEvaluation ?? ''
+            }
+        }));
+        setLeaderTweets(leaderTweets);
+    }
+
+    useEffect(() => {
+        fetchLeaderTweets()
+    }, [])
 
     return <>
         <div className='vault-container'>
-            <div className='miner-title'>Miner</div>
+            <div className='miner-title'>Solo Mining</div>
             <div className='miner-description'>
                 GPT evaluates your Tweet (attaching #GPTMiner) based on Originality, Creativity, Practicality, Personality & Discussability and generates a SCORE based on which, you will be earning rewards.
             </div>
@@ -213,6 +200,41 @@ function Vault({ }: VaultProps) {
                 </div>
             </>}
 
+            <div className='miner-title'>Group Mining</div>
+            <div className='miner-description'>
+                Comment under tweets (attaching #GPTMiner) to boost both yours and the original tweet's SCORE. More quality interaction in a thread means more earnings for everyone engaged.
+            </div>
+
+            <div className='section-card select-tweet'>
+                <div className='header'>
+                    <div className='title'>Select a tweet to reply</div>
+                    <div className={`action-btn-primary reply-btn ${selectedTweet ? 'active' : 'disabled'}`}
+                        onClick={() => {
+                            setTweetGeneratorModal(true);
+                        }}
+                    >
+                        Reply
+                    </div>
+                </div>
+                <div className='tweets'>
+                    {leaderTweets && <>
+                        {leaderTweets.map(tweet => {
+                            return <>
+                                <LeaderBoardTweet
+                                    tweet={tweet}
+                                    isOwner={tweet.authorName === imAccount?.twitterName}
+                                    selectable={true}
+                                    selected={selectedTweet?.tweetId === tweet.tweetId}
+                                    onSelect={(t) => {
+                                        setSelectedTweet(t);
+                                    }}
+                                ></LeaderBoardTweet>
+                            </>
+                        })}
+                    </>}
+                </div>
+            </div>
+
             <div className='user-section'>
                 <div className='mining-reward'>
                     <div className='label-row'>
@@ -236,8 +258,6 @@ function Vault({ }: VaultProps) {
                     </div>
                 </div>
             </div>
-
-            {imAccount && <LeaderBoard imAccount={imAccount}></LeaderBoard>}
         </div>
 
         {tweetGeneratorModal && <>
@@ -250,4 +270,4 @@ function Vault({ }: VaultProps) {
     </>;
 };
 
-export default Vault;
+export default Miner;

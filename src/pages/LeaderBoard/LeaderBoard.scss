@@ -3,7 +3,9 @@
 .leaderboard-container {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 100vw;
+  max-width: 956px;
+  min-height: 100vh;
 
   .title {
     font-size: 36px;

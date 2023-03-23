@@ -1,12 +1,9 @@
 @import '../../common.scss';
 
 .vault-container {
-  padding-top: 120px;
-  padding-left: 15%;
-  padding-right: 15%;
-  background-color: #020510;
   color: #fff;
   width: 100vw;
+  max-width: 956px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -17,19 +14,20 @@
     line-height: 42px;
     font-weight: bold;
     width: 100%;
+    margin-bottom: 20px;
   }
 
   .miner-description {
     font-size: 18px;
     line-height: 21px;
     opacity: 0.5;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
     text-align: left;
     width: 100%;
   }
 
   .section-card {
-    background: #1C1E25;
+    background: #10121A;
     border: 1px solid rgba(255, 255, 255, 0.13);
     border-radius: 20px;
     width: 100%;
@@ -182,6 +180,29 @@
         .icon {
           margin-right: 4px;
         }
+      }
+    }
+  }
+
+  .select-tweet {
+    display: flex;
+    flex-direction: column;
+    padding: 18px 24px;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      .title {
+        font-size: 28px;
+        line-height: 33px;
+      }
+
+      .reply-btn {
+        padding: 13px 16px;
+        font-size: 14px;
+        line-height: 16px;
       }
     }
   }
@@ -410,11 +431,6 @@
         }
       }
     }
-  }
-
-  .divider {
-    width: 100%;
-    border-top: 1px solid $text-light-color;
   }
 }
 

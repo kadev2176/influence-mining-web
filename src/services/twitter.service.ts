@@ -48,7 +48,7 @@ export const generateTweetContent = async () => {
       return DEFAULT_TWEET;
     }
     const tweet = await resp.json();
-    return tweet.substring(1, tweet.length - 1);
+    return tweet;
   } catch (e) {
     return DEFAULT_TWEET;
   }

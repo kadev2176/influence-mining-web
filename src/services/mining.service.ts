@@ -376,8 +376,8 @@ export const getMyIMAccount = async () => {
   return accounts[0];
 }
 
-export const getLeaderBoardImAccounts = async () => {
-  const query = `orderBy: INFLUENCE_DESC, first: 20`;
+export const getLeaderBoardImAccounts = async (count: number = 20) => {
+  const query = `orderBy: INFLUENCE_DESC, first: ${count}`;
   return queryAllImAccounts(query);
 }
 

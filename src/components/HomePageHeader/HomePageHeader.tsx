@@ -6,6 +6,21 @@ import { Dropdown } from 'antd';
 
 export interface HomePageHeaderProps { }
 
+const links = [
+    {
+        label: 'Miner',
+        route: '/miner'
+    },
+    {
+        label: 'Dashboard',
+        route: '/dashboard'
+    },
+    {
+        label: 'Leaderboard',
+        route: '/leaderboard'
+    }
+]
+
 function HomePageHeader({ }: HomePageHeaderProps) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -25,7 +40,20 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                 <span className='title'>GPTMiner</span>
             </div>
 
-            {location.pathname === '/vault' && <>
+            {location.pathname !== '/' && <>
+                <div className='links'>
+                    {links.map(link => {
+                        return <>
+                            <div className={`link ${location.pathname === link.route ? 'active' : ''}`}
+                                key={link.route}
+                                onClick={() => {
+                                    navigate(link.route);
+                                }}
+                            >{link.label}</div>
+                        </>
+                    })}
+                </div>
+
                 <Dropdown dropdownRender={() => {
                     return <>
                         <div className='user-profile-dropdown'>
@@ -35,7 +63,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                                 window.localStorage.removeItem('authcookiebytwitter');
                                 window.localStorage.removeItem('expiretime');
                                 window.localStorage.removeItem('userid');
-                                navigate('/auth');
+                                navigate('/');
                             }}>Sign out</div>
                         </div>
                     </>
@@ -51,9 +79,9 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                 </Dropdown>
             </>}
 
-            {location.pathname !== '/vault' && <>
+            {location.pathname === '/' && <>
                 <div className='launch-btn action-btn-primary active' onClick={() => {
-                    navigate('/auth');
+                    navigate('/miner');
                 }}>
                     <div className='launch-btn-icon'>
                         <i className="fa-solid fa-arrow-right"></i>

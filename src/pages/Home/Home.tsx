@@ -22,7 +22,7 @@ function Home({ }: HomeProps) {
                     notification.success({
                         message: 'Login Successful!'
                     })
-                    navigate('/vault');
+                    navigate('/miner');
                     return;
                 }
 
@@ -44,21 +44,9 @@ function Home({ }: HomeProps) {
     }, []);
 
     return <>
-        {/* {location.pathname === '/auth' && <>
-            <Outlet></Outlet>
-        </>}
-        {location.pathname !== '/auth' && <>
-            <Layout>
-                <HomePageHeader />
-                <Content>
-                    <Outlet></Outlet>
-                </Content>
-            </Layout>
-        </>} */}
-
         <Layout>
             <HomePageHeader />
-            <Content>
+            <Content className='layout-content-container'>
                 <Outlet></Outlet>
             </Content>
         </Layout>

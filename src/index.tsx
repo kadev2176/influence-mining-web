@@ -27,8 +27,9 @@ import Boost from './pages/Boost/Boost';
 import Ad3Mining from './pages/Ad3Mining/Ad3Mining';
 import DaoBattle from './pages/DaoBattle/DaoBattle';
 import TreasureHunt from './pages/TreasureHunt/TreasureHunt';
-import Vault from './pages/Vault/Vault';
+import Miner from './pages/Miner/Miner';
 import Landing from './pages/Landing/Landing';
+import LeaderBoard from './pages/LeaderBoard/LeaderBoard';
 
 declare global {
   interface Window {
@@ -70,8 +71,10 @@ root.render(
           <Routes>
             <Route path='/' element={<Home />}>
               <Route path="/" element={<Landing />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/vault" element={<Vault />} />
+              <Route path="/miner" element={<Miner />} />
+              <Route path="/dashboard" element={<Miner />} />
+              <Route path="/leaderboard" element={<LeaderBoard />} />
+              
               <Route path="/test" element={<Test />} />
               <Route path="/billboard" element={<MintBillboard />} />
               <Route path='*' element={<Navigate to='/' />} />
