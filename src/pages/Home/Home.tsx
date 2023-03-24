@@ -47,7 +47,7 @@ function Home({ }: HomeProps) {
     return <>
         <Layout>
             <HomePageHeader />
-            {/* <MyNFT></MyNFT> */}
+            <MyNFT></MyNFT>
             <Content className='layout-content-container'>
                 <Outlet></Outlet>
             </Content>

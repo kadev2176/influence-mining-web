@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { notification } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { useHNFT } from '../../hooks/useHNFT';
+import { useImAccount } from '../../hooks/useImAccount';
 import ConnectWalletModal from '../ConnectWalletModal/ConnectWalletModal';
 import './MyNFT.scss';
 
@@ -10,6 +12,13 @@ function MyNFT({ }: MyNFTProps) {
     const { isConnected } = useAccount();
     const [connectWalletModal, setConnectWalletModal] = useState<boolean>();
     const hnft = useHNFT();
+    const { imAccount } = useImAccount();
+
+    useEffect(() => {
+        if (isConnected) {
+            setConnectWalletModal(false);
+        }
+    }, [isConnected])
 
     return <>
         <div className='my-nft-container'>
@@ -24,14 +33,18 @@ function MyNFT({ }: MyNFTProps) {
             {isConnected && <>
                 {!hnft.balance && <>
                     <div className='no-hnft' onClick={() => {
-                        // open mint hnft modal
+                        notification.info({
+                            message: 'Coming Soon'
+                        })
                     }}>
                         Mint My HNFT
                     </div>
                 </>}
 
-                {hnft.balance && <>
-
+                {!!hnft.balance && imAccount && <>
+                    <div className='nft-container'>
+                        <img className='avatar' src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer"></img>
+                    </div>
                 </>}
             </>}
         </div>
