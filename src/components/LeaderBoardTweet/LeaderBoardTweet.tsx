@@ -57,7 +57,7 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
                         <div className='user-name'>@{tweet.authorName}</div>:
                     </div>
                 </Col>
-                <Col span={tweet.tweetContent ? 10 : 14}>
+                <Col span={tweet.evaluation ? 10 : 14}>
                     {!!tweet.tweetContent && <>
                         <div className='tweet-content' onClick={(e) => {
                             e.preventDefault();
@@ -71,7 +71,7 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
                         <div className='tweet-content disabled'>No GPTMiner tweet at the moment.</div>
                     </>}
                 </Col>
-                <Col span={tweet.tweetContent ? 4 : 0}>
+                <Col span={tweet.evaluation ? 4 : 0}>
                     {tweet.evaluation && <>
                         <span className='evaluation-btn' onClick={(e) => {
                             e.preventDefault();

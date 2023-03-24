@@ -30,6 +30,7 @@ import TreasureHunt from './pages/TreasureHunt/TreasureHunt';
 import Miner from './pages/Miner/Miner';
 import Landing from './pages/Landing/Landing';
 import LeaderBoard from './pages/LeaderBoard/LeaderBoard';
+import Dashboard from './pages/Dashboard/Dashboard';
 
 declare global {
   interface Window {
@@ -72,7 +73,7 @@ root.render(
             <Route path='/' element={<Home />}>
               <Route path="/" element={<Landing />} />
               <Route path="/miner" element={<Miner />} />
-              <Route path="/dashboard" element={<Miner />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               
               <Route path="/test" element={<Test />} />

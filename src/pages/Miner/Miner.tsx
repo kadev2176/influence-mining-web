@@ -23,14 +23,8 @@ interface MostRecentTweet extends OembedTweet {
 }
 
 function Miner() {
-    const [totalBalance, setTotalBalance] = useState<string>();
     const [mostRecentTweet, setMostRecentTweet] = useState<MostRecentTweet | null>();
     const { imAccount, refresh, loading } = useImAccount();
-
-    const [ad3Activity, setAd3Activity] = useState<Ad3Activity>();
-
-    const [profitStep, setProfitStep] = useState<string>('0');
-    const [decimals, setDecimals] = useState<number>(2);
 
     const [tweetGeneratorModal, setTweetGeneratorModal] = useState<boolean>(false);
     const [signinModal, setSigninModal] = useState<boolean>(false);
@@ -50,51 +44,6 @@ function Miner() {
     useInterval(() => {
         refresh()
     }, 10 * 1000, false);
-
-    useEffect(() => {
-        getAd3Balance().then(balance => {
-            if (balance) {
-                setTotalBalance(amountToFloatString(BigInt(balance.balance) + BigInt(balance.earned)));
-            }
-        })
-
-        getAD3Activity().then(ad3Activity => {
-            if (ad3Activity) {
-                setAd3Activity(ad3Activity);
-            }
-        })
-    }, [])
-
-    useEffect(() => {
-        // todo: change calculation
-        if (ad3Activity && imAccount) {
-            if (Number(ad3Activity.miningBalance) === 0) {
-                return;
-            }
-
-            const outputPerSecond = BigInt(ad3Activity.dailyOutput) / BigInt(86400);
-            const profitPerSecond = outputPerSecond * BigInt(imAccount.influence) / BigInt(ad3Activity.miningBalance);
-            const step = profitPerSecond * BigInt(2);
-
-            if (Number(step) > 0) {
-                const decimals = Math.min(18, Math.max(18 - step.toString().length + 2, 2));
-                console.log('got decimals', decimals);
-                setDecimals(decimals);
-                setProfitStep(amountToFloatString(step));
-            }
-
-            console.log('ad3Activity', ad3Activity);
-            console.log('profit step (2 sec)', step);
-        }
-    }, [ad3Activity, imAccount])
-
-    const addBalance = () => {
-        if (totalBalance && profitStep) {
-            setTotalBalance((Number(totalBalance) + Number(profitStep)).toString());
-        }
-    }
-
-    useInterval(addBalance, 2000);
 
     const updateMostRecentTweet = async (imAccount: ImAccount) => {
         const id = imAccount?.tweetId;
@@ -232,30 +181,6 @@ function Miner() {
                             </>
                         })}
                     </>}
-                </div>
-            </div>
-
-            <div className='user-section'>
-                <div className='mining-reward'>
-                    <div className='label-row'>
-                        <div className='label'>My Mining Rewards</div>
-                        <div className='action-btn disabled'>Claim</div>
-                    </div>
-
-                    <div className='reward-row'>
-                        <div className='balance'>
-                            {totalBalance !== undefined && <>
-                                {(Number(totalBalance) + Number(profitStep)).toString() === '0' && <>
-                                    0.00
-                                </>}
-                                {(Number(totalBalance) + Number(profitStep)).toString() !== '0' && <>
-                                    <CountUp end={Number(totalBalance) + Number(profitStep)} start={Number(totalBalance)} decimals={decimals} delay={0} duration={1}></CountUp>
-                                </>}
-                            </>}
-                        </div>
-                        <div className='unit'>$AD3</div>
-                        <div className='network-tag'>Test Network</div>
-                    </div>
                 </div>
             </div>
         </div>
