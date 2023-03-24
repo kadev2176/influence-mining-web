@@ -69,11 +69,12 @@ function Miner() {
         if (imAccount) {
             updateMostRecentTweet(imAccount);
         }
-    }, [imAccount])
+    }, [imAccount]);
 
     const fetchLeaderTweets = async () => {
-        const leaders = await getLeaderBoardImAccounts(5);
-        const leaderTweets = await Promise.all((leaders ?? []).map(async (leaderAccount, index) => {
+        const leaders = await getLeaderBoardImAccounts(10);
+
+        const leaderTweets = await Promise.all((leaders ?? []).filter(leader => leader.tweetId === leader.conversationId).slice(0, 5).map(async (leaderAccount, index) => {
             const tweet = leaderAccount?.tweetId ? await fetchOembedTweet(leaderAccount.tweetId) : {};
             return {
                 avatar: formatTwitterImageUrl(leaderAccount?.twitterProfileImageUri),
@@ -103,6 +104,7 @@ function Miner() {
             <div className='section-card post-tweet'>
                 <div className='post-info'>Tweet with <span className='hashtag'>{MinerTweetHashTag}</span> to start mining!</div>
                 <div className='twit-btn action-btn-primary active' onClick={() => {
+                    setSelectedTweet(undefined);
                     setTweetGeneratorModal(true);
                 }}>Tweet</div>
             </div>
@@ -186,7 +188,7 @@ function Miner() {
         </div>
 
         {tweetGeneratorModal && <>
-            <TweetGeneratorModal onCancel={() => { setTweetGeneratorModal(false) }}></TweetGeneratorModal>
+            <TweetGeneratorModal onCancel={() => { setTweetGeneratorModal(false) }} tweet={selectedTweet}></TweetGeneratorModal>
         </>}
 
         {signinModal && <>

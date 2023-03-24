@@ -26,6 +26,7 @@ export type ImAccount = {
   hasDao: boolean;
   tweetStats: string;
   tweetId?: string;
+  conversationId?: string;
   tweetContent?: string;
   tweetEvaluation?: string;
   twitterId: string;
@@ -115,6 +116,7 @@ export const queryAllImAccounts = async (query: string) => {
     return {
       ...account,
       tweetId: tweetStats.tweet_id,
+      conversationId: tweetStats.conversation_id,
       tweetContent: tweetStats.tweet_content,
       tweetEvaluation: tweetStats.evaluation,
       twitterUsername: twitterAccount.username,
@@ -376,8 +378,10 @@ export const getMyIMAccount = async () => {
   return accounts[0];
 }
 
-export const getLeaderBoardImAccounts = async (count: number = 20) => {
+export const getLeaderBoardImAccounts = async (count: number = 20, noReply: boolean = false) => {
   const query = `orderBy: INFLUENCE_DESC, first: ${count}`;
+  // const query = `orderBy: INFLUENCE_DESC, first: ${count}${noReply ? ",filter: { tweetStats: { condition: EQUAL, value: \"{\"tweet_id\": ${JSON_EXTRACT(tweetStats, '$.conversation_id')} }\" } }" : ''}`;
+  // const query = `orderBy: INFLUENCE_DESC, first: ${count}` + ",filter: { tweetStats: { condition: EQUAL, value: \"${JSON_EXTRACT(tweetStats, '$.tweet_id')}=${JSON_EXTRACT(tweetStats, '$.conversation_id')}\" } }";
   return queryAllImAccounts(query);
 }
 

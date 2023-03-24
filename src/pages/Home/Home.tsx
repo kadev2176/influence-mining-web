@@ -5,6 +5,7 @@ import HomePageHeader from '../../components/HomePageHeader/HomePageHeader';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { parseUrlParams } from '../../utils/window.util';
 import { createAccountOrLogin } from '../../services/mining.service';
+import MyNFT from '../../components/MyNFT/MyNFT';
 
 const { Content } = Layout;
 
@@ -46,6 +47,7 @@ function Home({ }: HomeProps) {
     return <>
         <Layout>
             <HomePageHeader />
+            {/* <MyNFT></MyNFT> */}
             <Content className='layout-content-container'>
                 <Outlet></Outlet>
             </Content>

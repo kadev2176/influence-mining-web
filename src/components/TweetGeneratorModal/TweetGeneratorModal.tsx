@@ -3,13 +3,15 @@ import TextArea from 'antd/es/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { generateTweetContent } from '../../services/twitter.service';
+import { LeaderTweet } from '../LeaderBoardTweet/LeaderBoardTweet';
 import './TweetGeneratorModal.scss';
 
 export interface TweetGeneratorModalProps {
     onCancel: () => void;
+    tweet?: LeaderTweet
 }
 
-function TweetGeneratorModal({ onCancel }: TweetGeneratorModalProps) {
+function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
     const [tweetContent, setTweetContent] = useState<string>('');
 
     useEffect(() => {
@@ -20,11 +22,11 @@ function TweetGeneratorModal({ onCancel }: TweetGeneratorModalProps) {
 
     const postTweet = () => {
         if (isMobile) {
-            window.open(`twitter://post?message=${encodeURIComponent(tweetContent)}`);
+            window.open(`twitter://post?message=${encodeURIComponent(tweetContent)}${tweet ? `&in_reply_to=${tweet.tweetId}` : ''}}`);
             return;
         }
     
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetContent)}`);
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetContent)}${tweet ? `&in_reply_to=${tweet.tweetId}` : ''}`);
     }
 
     return <>
