@@ -283,13 +283,18 @@ export const getPoolSummary = async () => {
   return summary as PoolSummary;
 }
 
-export const generateWithdrawSignature = async (address: string, chainId: number, amount: string) => {
-  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/ad3/withdrawals?chain_id=${chainId}&amount=${amount}`, address, {
+export const generateWithdrawSignature = async (amount: string) => {
+  const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/ad3/withdrawals?amount=${amount}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
   });
+  
+  if (!resp) {
+    return;
+  }
+  
   const sig = await resp.json();
   return sig as WithdrawAd3Signature;
 }

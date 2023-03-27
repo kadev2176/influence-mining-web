@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
+import ClaimAd3Modal from '../../components/ClaimAd3Modal/ClaimAd3Modal';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useInterval } from '../../hooks/useInterval';
 import { Ad3Activity, getAD3Activity, getAd3Balance } from '../../services/mining.service';
@@ -14,6 +15,7 @@ function Dashboard({ }: DashboardProps) {
     const { imAccount } = useImAccount();
     const [profitStep, setProfitStep] = useState<string>('0');
     const [decimals, setDecimals] = useState<number>(2);
+    const [claimModal, setClaimModal] = useState<boolean>(false);
 
     useEffect(() => {
         getAd3Balance().then(balance => {
@@ -85,10 +87,18 @@ function Dashboard({ }: DashboardProps) {
                 </div>
             </div>
 
-            <div className='action-btn-primary claim-btn'>
+            <div className='action-btn-primary active claim-btn' onClick={() => {
+                setClaimModal(true)
+            }}>
                 Claim
             </div>
         </div>
+
+        {claimModal && <>
+            <ClaimAd3Modal onCancel={() => {
+                setClaimModal(false)
+            }}></ClaimAd3Modal>
+        </>}
     </>;
 };
 

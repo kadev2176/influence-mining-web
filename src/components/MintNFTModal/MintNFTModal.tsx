@@ -1,7 +1,8 @@
-import { Modal, Tooltip } from 'antd';
+import { Modal, notification, Tooltip } from 'antd';
 import React from 'react';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useMintBillboard } from '../../hooks/useMintBillboard';
+import { HNFT_CONFIG } from '../../models/parami';
 import BillboardNftImage from '../BillboardNftImage/BillboardNftImage';
 import Confetti from '../Confetti/Confetti';
 import './MintNFTModal.scss';
@@ -9,29 +10,6 @@ import './MintNFTModal.scss';
 export interface MintNFTModalProps {
     onCancel: () => void
 }
-
-const nftOptions = [
-    {
-        level: 0,
-        name: 'Common Billboard',
-    },
-    {
-        level: 1,
-        name: 'Uncommon Billboard',
-    },
-    {
-        level: 2,
-        name: 'Rare Billboard',
-    },
-    {
-        level: 3,
-        name: 'Epic Billboard',
-    },
-    {
-        level: 4,
-        name: 'Legendary Billboard',
-    }
-];
 
 function MintNFTModal({ onCancel }: MintNFTModalProps) {
     const { imAccount } = useImAccount();
@@ -66,7 +44,7 @@ function MintNFTModal({ onCancel }: MintNFTModalProps) {
                 <div className='content'>
                     {imAccount && !mintSuccess && <>
                         <div className='nfts'>
-                            {nftOptions.map((nftOption, index) => {
+                            {HNFT_CONFIG.map((nftOption, index) => {
                                 return <>
                                     <div
                                         className={`nft`}
@@ -76,18 +54,23 @@ function MintNFTModal({ onCancel }: MintNFTModalProps) {
                                         }}
                                     >
                                         <div className='nft-image-container'>
-                                            <BillboardNftImage 
-                                            imageUrl={imAccount?.twitterProfileImageUri} 
-                                            level={nftOption.level} 
-                                            active
-                                            selected={nftOption.level === selectedNft?.level}
+                                            <BillboardNftImage
+                                                imageUrl={imAccount?.twitterProfileImageUri}
+                                                level={nftOption.level}
+                                                active
+                                                selected={nftOption.level === selectedNft?.level}
                                             ></BillboardNftImage>
                                         </div>
                                         <div className='price'>
-                                            <span className='icon'>
-                                                <i className="fa-brands fa-ethereum"></i>
-                                            </span>
-                                            0.3
+                                            {nftOption.price !== '0' && <>
+                                                <span className='icon'>
+                                                    <i className="fa-brands fa-ethereum"></i>
+                                                </span>
+                                                {nftOption.price}
+                                            </>}
+                                            {nftOption.price === '0' && <>
+                                                free
+                                            </>}
                                         </div>
                                         <div className='name'>{nftOption.name}</div>
                                     </div>
@@ -115,13 +98,16 @@ function MintNFTModal({ onCancel }: MintNFTModalProps) {
                 <div className='footer'>
                     <div className='divider'></div>
                     <div className='action-btn-primary active' onClick={() => {
-                        if (mintSuccess) {
-                            onCancel();
-                            return;
-                        }
-                        if (selectedNft && mint) {
-                            mint()
-                        }
+                        notification.info({
+                            message: 'Coming soon',
+                        })
+                        // if (mintSuccess) {
+                        //     onCancel();
+                        //     return;
+                        // }
+                        // if (selectedNft && mint) {
+                        //     mint()
+                        // }
                     }}>{mintSuccess ? 'Done' : 'Mint'}</div>
                 </div>
             </div>

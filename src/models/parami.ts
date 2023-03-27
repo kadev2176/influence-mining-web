@@ -26,7 +26,7 @@ export enum POST_MESSAGE {
   IM_POOL_CREATED = 'ParamiWallet::IMPoolCreated'
 }
 
-export const BillboardLevel2Name: {[level: string]: string} = {
+export const BillboardLevel2Name: { [level: string]: string } = {
   '0': 'Novel',
   '1': 'Rare',
   '2': 'Premium',
@@ -34,10 +34,43 @@ export const BillboardLevel2Name: {[level: string]: string} = {
   '4': 'Legendary'
 }
 
-export const BillboardLevel2MiningPower: {[level: string]: number} = {
+export const BillboardLevel2MiningPower: { [level: string]: number } = {
   '0': 20,
   '1': 50,
   '2': 100,
   '3': 200,
   '4': 400
 }
+
+export const HNFT_CONFIG = [
+  {
+    level: 0,
+    name: 'Common Billboard',
+    boost: 'X2',
+    price: '0'
+  },
+  {
+    level: 1,
+    name: 'Uncommon Billboard',
+    boost: 'X5',
+    price: '0.3'
+  },
+  {
+    level: 2,
+    name: 'Rare Billboard',
+    boost: 'X10',
+    price: '1.2'
+  },
+  {
+    level: 3,
+    name: 'Epic Billboard',
+    boost: 'X20',
+    price: '4.8'
+  },
+  {
+    level: 4,
+    name: 'Legendary Billboard',
+    boost: 'X40',
+    price: '19.2'
+  }
+];

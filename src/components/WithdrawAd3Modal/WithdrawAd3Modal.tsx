@@ -37,8 +37,8 @@ function WithdrawAd3Modal({ onCancel, onSuccess, withdrawTxId, withdrawableAmoun
     const handleWithdraw = async () => {
         setLoading(true);
         try {
-            const sig = await generateWithdrawSignature(address!, chain!.id, inputFloatStringToAmount(amount, 18));
-            setWithdrawSig(sig);
+            // const sig = await generateWithdrawSignature(address!, chain!.id, inputFloatStringToAmount(amount, 18));
+            // setWithdrawSig(sig);
         } catch (e) {
             setLoading(false);
         }

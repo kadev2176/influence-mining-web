@@ -1,4 +1,5 @@
 import React from 'react';
+import { HNFT_CONFIG } from '../../models/parami';
 import { generateSvg } from '../../utils/svg.util';
 import './BillboardNftImage.scss';
 
@@ -17,7 +18,7 @@ function BillboardNftImage({ imageUrl, level = 0, active, selected }: BillboardN
         <div className={`nft-image ${active ? 'active' : ''} ${selected ? 'selected' : ''}`}>
             <div className='boost-tag'>
                 <span className='icon'><i className="fa-solid fa-rocket"></i></span>
-                2X
+                {HNFT_CONFIG[level].boost}
             </div>
 
             <div className='svg-container' dangerouslySetInnerHTML={{ __html: svg }} />
