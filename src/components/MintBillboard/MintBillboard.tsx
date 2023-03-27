@@ -128,7 +128,6 @@ function MintBillboard() {
                                     {billboard.description}
                                 </div>
                                 <div className='price'>
-
                                     <div className='icon'>
                                         <i className="fa-brands fa-ethereum"></i>
                                     </div>

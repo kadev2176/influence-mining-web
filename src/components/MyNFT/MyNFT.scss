@@ -7,7 +7,8 @@
   left: calc(50% + 502px);
   top: 264px;
 
-  .no-connect, .no-hnft {
+  .no-connect,
+  .no-hnft {
     width: 100%;
     height: 100%;
     border: 1px dashed rgba(255, 255, 255, 0.34);
@@ -29,12 +30,17 @@
 
   .nft-container {
     border: 2px solid #FFFFFF;
-    border-radius: 16px;
-    overflow: hidden;
+    border-radius: 23px;
 
-    .avatar {
-      width: 100%;
-      height: 100%;
+    .boost-tag {
+      border-radius: 20px 0 15px 0;
     }
+  }
+
+  .action-btn-primary {
+    margin-top: 12px;
+    padding: 8px;
+    font-size: 10px;
+    line-height: 12px;
   }
 }

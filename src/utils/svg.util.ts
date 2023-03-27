@@ -1,12 +1,12 @@
 
 
-const svgStart = '<svg viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" version="1.1" id="billboard">';
+const svgStart = '<svg viewBox="100 100 1000 1000" xmlns="http://www.w3.org/2000/svg" version="1.1" id="billboard">';
 
 const svgEnd = '</svg>';
 
 const circleViewClipPath = `
 <clipPath id="circleView">
-    <circle cx="600" cy="600" r="300" fill="#FFFFFF" />
+    <circle cx="600" cy="600" r="350" fill="#FFFFFF" />
 </clipPath>
 `;
 
@@ -24,13 +24,12 @@ const drawCircle = (level: number) => {
   return `<g stroke="${baseColors[level]}" fill="${baseColors[level]}">
   ${level === 3 ? '<circle cx="600" cy="600" r="480" stroke-width="10" fill="none" stroke-dasharray="230 20"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 600 600" to="360 600 600" begin="0" dur="30s" repeatCount="indefinite" /></circle>' : ''}
   <circle cx="600" cy="600" r="454" stroke-width="15" fill="none" />
-  '<circle cx="600" cy="600" r="430" stroke-width="4" fill="none"/>'
   
-  '<circle cx="600" cy="600" r="410" stroke-width="4" fill="none"/>'
-  '<circle cx="600" cy="600" r="400" stroke-width="12" fill="none" stroke-dasharray="2 58">'
+  '<circle cx="600" cy="600" r="410" stroke-width="10" fill="none"/>'
+  '<circle cx="600" cy="600" r="400" stroke-width="14" fill="none" stroke-dasharray="6 60">'
     '<animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 600 600" to="360 600 600" begin="0" dur="60s" repeatCount="indefinite"/>'
   "</circle>"
-  '<circle cx="600" cy="600" r="355" stroke-width="4" fill="none"/>'
+  '<circle cx="600" cy="600" r="370" stroke-width="6" fill="none"/>'
 </g>`;
 }
 
@@ -208,14 +207,14 @@ export const generateSvg = (imageUrl: string, level: number = 0) => {
     </defs>
     
     ${level=== 2 ? background_light : background_black}
-    ${frames[level]}
+    ${true ? frames[level] : ''}
     ${drawCircle(level)}
     
     <image
-      x="300"
-      y="300"
-      width="600"
-      height="600"
+      x="250"
+      y="250"
+      width="700"
+      height="700"
       xlink:href="${imageUrl}"
       clip-path="url(#circleView)"
     />

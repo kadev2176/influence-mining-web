@@ -27,7 +27,7 @@ function ConnectWalletModal({ onCancel }: ConnectWalletModalProps) {
             title=""
             onCancel={() => { onCancel() }}
             footer={null}
-            width={950}
+            width={956}
             centered
         >
             <div className='connect-wallet-container'>

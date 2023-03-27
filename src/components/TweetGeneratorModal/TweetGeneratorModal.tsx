@@ -36,7 +36,7 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
             title=""
             onCancel={() => { onCancel() }}
             footer={null}
-            width={950}
+            width={956}
         >
             <div className='generator-container'>
                 <div className='label'>GPT generated</div>
