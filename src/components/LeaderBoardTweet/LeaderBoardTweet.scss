@@ -152,6 +152,11 @@
   .tweet-container {
     padding: 16px;
 
+    .owner-tag {
+      scale: 0.8;
+      transform-origin: top left;
+    }
+
     .content-row {
       margin: 0;
 
@@ -161,6 +166,9 @@
 
       .position {
         min-width: unset;
+        .small {
+          font-size: 12px;
+        }
       }
 
       .user-avatar {

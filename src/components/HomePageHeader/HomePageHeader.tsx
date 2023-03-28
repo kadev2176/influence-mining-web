@@ -106,7 +106,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                     </>
                 })}
 
-                <Dropdown dropdownRender={() => {
+                <Dropdown placement={'topLeft'} dropdownRender={() => {
                     return <>
                         <div className='user-profile-dropdown'>
                             <div className='item' onClick={openWhitepaper}>Whitepaper</div>

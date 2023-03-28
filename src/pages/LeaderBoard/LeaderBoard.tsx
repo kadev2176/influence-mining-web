@@ -67,7 +67,7 @@ function LeaderBoard({ }: LeaderBoardProps) {
     return <>
         <div className='leaderboard-container'>
             <div className='title'>
-                ROLLING 24H LEADERBOARD
+                Leaderboard
             </div>
 
             <div className='dashboard'>

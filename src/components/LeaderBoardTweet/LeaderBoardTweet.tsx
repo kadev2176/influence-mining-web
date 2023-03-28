@@ -45,7 +45,9 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
             {!isMobile && <>
                 <Row className='content-row'>
                     <Col span={2}>
-                        <div className='position'>{tweet.rank}</div>
+                        <div className='position'>
+                            {tweet.rank}
+                        </div>
                     </Col>
                     <Col span={5}>
                         <div className='user' onClick={(e) => {
@@ -106,7 +108,14 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
             {isMobile && <>
                 <Row className='content-row'>
                     <Col span={2}>
-                        <div className='position'>{tweet.rank}</div>
+                        <div className='position'>
+                            {tweet.rank === 'Unknown' && <>
+                                <span className='small'>N/A</span>
+                            </>}
+                            {tweet.rank !== 'Unknown' && <>
+                                {tweet.rank}
+                            </>}
+                        </div>
                     </Col>
                     <Col span={3}>
                         {!!tweet.avatar && <>
