@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useImAccount } from '../../hooks/useImAccount';
 import './HomePageHeader.scss';
-import { BrowserView, isMobile, MobileView } from 'react-device-detect';
+import { isMobile } from 'react-device-detect';
 import { Dropdown } from 'antd';
 
 export interface HomePageHeaderProps { }

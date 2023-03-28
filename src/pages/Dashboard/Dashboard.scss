@@ -51,3 +51,41 @@
     padding: 13px;
   }
 }
+
+@media only screen and (max-width: 991px) {
+  .dashboard-container {
+    padding: 0 16px;
+    min-height: 50vh;
+
+    .heading {
+      font-size: 32px;
+      line-height: 38px;
+    }
+
+    .heading-description {
+      font-size: 14px;
+      line-height: 16px;
+      margin-bottom: 35px;
+    }
+
+    .mining-rewards {
+      padding: 16px;
+
+      .card-title-row {
+        .title {
+          font-size: 14px;
+          line-height: 16px;
+        }
+
+        .tag {
+          scale: 0.8;
+        }
+      }
+
+      .reward-row {
+        font-size: 20px;
+        line-height: 23px;
+      }
+    }
+  }
+}
