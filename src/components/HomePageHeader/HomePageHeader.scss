@@ -157,3 +157,50 @@
     }
   }
 }
+
+.mobile-menu {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  height: 70px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 99;
+  background-color: #020510;
+  border-top: 1px solid #3A3B41;
+
+  .link {
+    font-size: 14px;
+    line-height: 16px;
+    opacity: 0.6;
+
+    &.active {
+      opacity: 0.8;
+    }
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+
+    .user-avatar {
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+    }
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .user-profile-dropdown {
+    margin-top: 0;
+    margin-bottom: 30px;
+
+    .item {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  }
+}

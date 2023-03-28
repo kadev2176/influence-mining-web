@@ -8,6 +8,7 @@ import { createAccountOrLogin } from '../../services/mining.service';
 import MyNFT from '../../components/MyNFT/MyNFT';
 import { Footer } from 'antd/es/layout/layout';
 import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
+import { isMobile } from 'react-device-detect';
 
 const { Content } = Layout;
 
@@ -57,12 +58,24 @@ function Home({ }: HomeProps) {
             <Footer className='layout-footer'>
                 <div className='footer-content'>
                     <div className='info'>Powered by GPT-3.5</div>
-                    <div className='tweet-hint'>
-                        Post a tweet with <span className='tag'>#GPTMiner</span> and start earning
+
+                    {!isMobile && <>
+                        <div className='tweet-hint'>
+                            Post a tweet with <span className='tag'>#GPTMiner</span> and start earning
+                            <div className='action-btn-primary active' onClick={() => {
+                                setGenerateTweetModal(true);
+                            }}>Tweet</div>
+                        </div>
+                    </>}
+
+                    {isMobile && <>
+                        <div className='tweet-hint'>
+                            Post a tweet with <span className='tag'>#GPTMiner</span> and start earning
+                        </div>
                         <div className='action-btn-primary active' onClick={() => {
                             setGenerateTweetModal(true);
                         }}>Tweet</div>
-                    </div>
+                    </>}
                 </div>
             </Footer>
         </Layout>

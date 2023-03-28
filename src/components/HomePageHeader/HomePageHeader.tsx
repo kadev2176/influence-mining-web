@@ -92,6 +92,42 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                 </div>
             </>}
         </div>
+
+        {isMobile && <>
+            <div className='mobile-menu'>
+                {links.map(link => {
+                    return <>
+                        <div className={`link ${location.pathname === link.route ? 'active' : ''}`}
+                            key={link.route}
+                            onClick={() => {
+                                navigate(link.route);
+                            }}
+                        >{link.label}</div>
+                    </>
+                })}
+
+                <Dropdown dropdownRender={() => {
+                    return <>
+                        <div className='user-profile-dropdown'>
+                            <div className='item' onClick={openWhitepaper}>Whitepaper</div>
+                            <div className='item disabled'>Whitelist</div>
+                            <div className='item' onClick={() => {
+                                window.localStorage.removeItem('authcookiebytwitter');
+                                window.localStorage.removeItem('expiretime');
+                                window.localStorage.removeItem('userid');
+                                navigate('/');
+                            }}>Sign out</div>
+                        </div>
+                    </>
+                }}>
+                    <div className='user-profile'>
+                        {imAccount && <>
+                            <img className='user-avatar' src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer"></img>
+                        </>}
+                    </div>
+                </Dropdown>
+            </div>
+        </>}
     </>;
 };
 
