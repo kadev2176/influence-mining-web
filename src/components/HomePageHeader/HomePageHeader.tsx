@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useImAccount } from '../../hooks/useImAccount';
 import './HomePageHeader.scss';
-import { BrowserView, MobileView } from 'react-device-detect';
+import { BrowserView, isMobile, MobileView } from 'react-device-detect';
 import { Dropdown } from 'antd';
 
 export interface HomePageHeaderProps { }
@@ -32,7 +32,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
     const { imAccount } = useImAccount();
 
     return <>
-        <div className='header-container'>
+        <div className={`header-container ${isMobile ? 'mobile' : ''}`}>
             <div className='logo-container' onClick={() => {
                 navigate('/');
             }}>
@@ -41,42 +41,44 @@ function HomePageHeader({ }: HomePageHeaderProps) {
             </div>
 
             {location.pathname !== '/' && <>
-                <div className='links'>
-                    {links.map(link => {
-                        return <>
-                            <div className={`link ${location.pathname === link.route ? 'active' : ''}`}
-                                key={link.route}
-                                onClick={() => {
-                                    navigate(link.route);
-                                }}
-                            >{link.label}</div>
-                        </>
-                    })}
-                </div>
-
-                <Dropdown dropdownRender={() => {
-                    return <>
-                        <div className='user-profile-dropdown'>
-                            <div className='item' onClick={openWhitepaper}>Whitepaper</div>
-                            <div className='item disabled'>Whitelist</div>
-                            <div className='item' onClick={() => {
-                                window.localStorage.removeItem('authcookiebytwitter');
-                                window.localStorage.removeItem('expiretime');
-                                window.localStorage.removeItem('userid');
-                                navigate('/');
-                            }}>Sign out</div>
-                        </div>
-                    </>
-                }}>
-                    <div className='user-profile'>
-                        {imAccount && <>
-                            <div className='username'>
-                                {`${imAccount.twitterName}`}
-                            </div>
-                            <img className='user-avatar' src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer"></img>
-                        </>}
+                {!isMobile && <>
+                    <div className='links'>
+                        {links.map(link => {
+                            return <>
+                                <div className={`link ${location.pathname === link.route ? 'active' : ''}`}
+                                    key={link.route}
+                                    onClick={() => {
+                                        navigate(link.route);
+                                    }}
+                                >{link.label}</div>
+                            </>
+                        })}
                     </div>
-                </Dropdown>
+
+                    <Dropdown dropdownRender={() => {
+                        return <>
+                            <div className='user-profile-dropdown'>
+                                <div className='item' onClick={openWhitepaper}>Whitepaper</div>
+                                <div className='item disabled'>Whitelist</div>
+                                <div className='item' onClick={() => {
+                                    window.localStorage.removeItem('authcookiebytwitter');
+                                    window.localStorage.removeItem('expiretime');
+                                    window.localStorage.removeItem('userid');
+                                    navigate('/');
+                                }}>Sign out</div>
+                            </div>
+                        </>
+                    }}>
+                        <div className='user-profile'>
+                            {imAccount && <>
+                                <div className='username'>
+                                    {`${imAccount.twitterName}`}
+                                </div>
+                                <img className='user-avatar' src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer"></img>
+                            </>}
+                        </div>
+                    </Dropdown>
+                </>}
             </>}
 
             {location.pathname === '/' && <>
@@ -89,8 +91,6 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                     Launch App
                 </div>
             </>}
-
-
         </div>
     </>;
 };

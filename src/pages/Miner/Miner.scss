@@ -27,7 +27,7 @@
   }
 
   .post-tweet {
-    padding: 18px 24px;
+    // padding: 18px 24px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -53,7 +53,7 @@
   .miner-tweet {
     display: flex;
     flex-direction: column;
-    padding: 24px;
+    // padding: 24px;
 
     .gpt-evaluation {
       display: flex;
@@ -198,280 +198,111 @@
       }
     }
   }
-
-  .action-btn {
-    padding: 6px 12px;
-    min-width: 100px;
-    display: flex;
-    height: fit-content;
-    align-items: center;
-  }
-
-  .user-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 50px;
-    width: 100%;
-
-    .mining-reward {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 30px;
-
-      .label-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .label {
-          font-size: 1rem;
-          font-weight: bold;
-        }
-      }
-
-      .reward-row {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 20px;
-        align-items: center;
-
-        .balance {
-          font-size: 2rem;
-          font-weight: bold;
-          flex-grow: 1;
-        }
-
-        .unit {
-          font-size: 2rem;
-          font-weight: bold;
-        }
-
-        .network-tag {
-          color: $text-light-color;
-          font-size: 0.7rem;
-          padding: 2px 4px;
-          background: rgb(48, 48, 48);
-          border-radius: 8px;
-          margin-left: 4px;
-        }
-      }
-    }
-
-    .tweet-status {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-
-      .no-tweet-info {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-size: 0.9rem;
-        font-weight: 500;
-
-        .row {
-          margin-bottom: 30px;
-        }
-      }
-
-      .button-container {
-        display: flex;
-        justify-content: center;
-      }
-
-      .tweet-label {
-        margin-bottom: 20px;
-      }
-
-      .post-hint {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 20px;
-
-        .text {
-          margin-bottom: 20px;
-        }
-
-        .action-btn {
-          font-size: 1rem;
-        }
-      }
-
-      .tweet-row {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-
-        .miner-tweet {
-          display: flex;
-          margin-bottom: 5px;
-
-          .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 20px;
-            margin-right: 20px;
-
-            &:hover {
-              cursor: pointer;
-            }
-          }
-
-          .tweet-content {
-            display: flex;
-            flex-direction: column;
-
-            .author {
-              width: fit-content;
-              border-bottom: 1px solid;
-              padding-bottom: 1px;
-              font-weight: 500;
-              margin-bottom: 4px;
-            }
-
-            .author,
-            .content {
-              &:hover {
-                text-shadow: 1px 1px 1px #ffffff8b;
-                cursor: pointer;
-              }
-            }
-          }
-        }
-
-        .status {
-          // font-size: 1.5rem;
-          align-items: center;
-          display: flex;
-          margin-left: 20px;
-
-          .tag {
-            display: flex;
-            padding: 4px 8px;
-            background: rgb(48, 48, 48);
-            border-radius: 10px;
-
-            .text {
-              margin-left: 5px;
-              white-space: nowrap;
-            }
-          }
-        }
-      }
-
-      // .tweet-submit-status {
-      //   display: flex;
-      //   align-items: center;
-      //   margin-bottom: 20px;
-
-      //   .mark {
-      //     font-size: 1.5rem;
-      //     margin-right: 10px;
-      //   }
-
-      //   .info {
-      //     color: $text-light-color;
-      //   }
-      // }
-
-      // .score-status {
-      //   display: flex;
-      //   justify-content: space-between;
-      //   align-items: center;
-      //   font-size: 1.1rem;
-
-      //   .info {
-      //     color: $text-light-color;
-      //   }
-
-      //   .value {
-      //     font-weight: 600;
-      //   }
-      // }
-
-      .gpt-row {
-        overflow: hidden;
-        // transition: max-height 0.5s ease-in-out;
-        // max-height: 300px;
-
-        // &.hide {
-        //   max-height: 0px;
-        // }
-
-        .gpt-evaluation {
-          padding: 20px;
-          border-radius: 15px;
-          border: 1px solid #848484;
-
-          .title {
-            font-weight: 500;
-            margin-bottom: 5px;
-          }
-
-          .content {
-            color: #a2a2a2;
-
-            .count-down {
-              margin-left: 5px;
-              color: #fff;
-            }
-          }
-        }
-      }
-    }
-  }
 }
 
 @media only screen and (max-width: 991px) {
   .vault-container {
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 80px;
+    padding: 0 16px;
 
-    .action-btn {
-      min-width: 60px;
+    .miner-title {
+      font-size: 32px;
+      line-height: 38px;
     }
 
-    .user-section {
-      padding-bottom: 30px;
+    .miner-description {
+      font-size: 14px;
+      line-height: 16px;
+      margin-bottom: 35px;
+    }
 
-      .mining-reward {
-        .reward-row {
-          margin-top: 10px;
+    .post-tweet {
+      flex-direction: column;
 
-          .balance,
-          .unit {
-            font-size: 1.2rem;
+      .post-info {
+        font-size: 16px;
+        line-height: 19px;
+        margin-bottom: 27px;
+        width: 100%;
+        text-align: left;
+      }
+
+      .twit-btn {
+        width: 100%;
+      }
+    }
+
+    .miner-tweet {
+      .gpt-evaluation {
+        margin-bottom: 16px;
+
+        .title {
+          margin-bottom: 13px;
+
+          .text {
+            font-size: 14px;
+            line-height: 16px;
+            font-weight: unset;
+            margin-right: 4px;
           }
+
+          .tag {
+            margin: 0;
+            scale: 0.7;
+            transform-origin: left;
+          }
+        }
+
+        .evaluation {
+          font-size: 14px;
+          line-height: 16px;
         }
       }
 
-      .tweet-status {
-        .miner-tweet {
-          .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
-            margin-right: 10px;
+      .tweet {
+        .tweet-content {
+          margin-left: 14px;
+          max-width: 70%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          .user-row {
+
+            .username,
+            .twitter-name {
+              font-size: 14px;
+              line-height: 16px;
+              font-weight: unset;
+            }
+          }
+
+          .content-row {
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 22px;
           }
         }
 
-        .score-status {
-          font-size: 1rem;
+        .corner-tag {
+          font-weight: 400;
+          font-size: 8px;
+          line-height: 11px;
+          scale: 0.8;
+          transform-origin: top right;
+        }
+      }
+    }
 
-          .info {
-            color: $text-light-color;
-          }
+    .select-tweet {
+      padding: 0;
+      width: 100%;
 
-          .value {
-            white-space: nowrap;
-            font-weight: 500;
-            margin-left: 20px;
-          }
+      .header {
+        align-items: center;
+        .title {
+          font-weight: unset;
+          font-size: 20px;
+          line-height: 23px;
         }
       }
     }

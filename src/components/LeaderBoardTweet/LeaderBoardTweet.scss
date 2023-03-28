@@ -145,84 +145,46 @@
       margin-right: 5px;
     }
   }
-
-
-  // .tweet {
-  //   display: flex;
-  //   text-align: initial;
-  //   opacity: 0.9;
-
-  //   &.active {
-  //     &:hover {
-  //       opacity: 1;
-  //     }
-
-  //     .avatar,
-  //     .text {
-  //       &:hover {
-  //         cursor: pointer;
-  //       }
-  //     }
-  //   }
-
-  //   .avatar {
-  //     width: 20px;
-  //     height: 20px;
-  //     border-radius: 10px;
-  //     margin-right: 5px;
-  //   }
-
-  //   .content {
-  //     color: $text-light-color;
-  //     line-height: 20px;
-
-  //     .author {
-  //       color: #fff;
-
-  //       &:hover {
-  //         text-shadow: 0.5px 0.5px 1px #ffffff97;
-  //         cursor: pointer;
-  //       }
-  //     }
-  //   }
-
-  //   .evaluation-btn {
-  //     background: rgb(48, 48, 48);
-  //     padding: 2px 4px;
-  //     font-size: 12px;
-  //     border-radius: 5px;
-  //     margin-left: 4px;
-  //     white-space: nowrap;
-
-  //     &:hover {
-  //       cursor: pointer;
-  //       background: rgb(57, 57, 57);
-  //     }
-
-  //     .icon {
-  //       margin-left: 4px;
-  //     }
-  //   }
-  // }
-
-  // .evaluation {
-  //   margin-top: 4px;
-  //   color: $text-light-color;
-  //   text-align: left;
-  //   border: 1px solid $text-light-color;
-  //   padding: 5px;
-  //   border-radius: 8px;
-  // }
 }
 
 
 @media only screen and (max-width: 991px) {
   .tweet-container {
-    min-width: 60vw;
-    padding: 5px;
+    padding: 16px;
 
-    .tweet {
-      opacity: 1;
+    .content-row {
+      margin: 0;
+
+      & + .content-row {
+        margin-top: 16px;
+      }
+
+      .position {
+        min-width: unset;
+      }
+
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 14px;
+      }
+
+      .user-tweet {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .user-name {
+          font-size: 14px;
+          line-height: 16px;
+        }
+
+        .tweet-content {
+          font-size: 14px;
+          line-height: 16px;
+          max-width: 100%;
+        }
+      }
     }
   }
 }

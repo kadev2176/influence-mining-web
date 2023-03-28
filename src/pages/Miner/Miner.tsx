@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
 import SigninModal from '../../components/SigninModal/SigninModal';
 import LeaderBoardTweet, { LeaderTweet } from '../../components/LeaderBoardTweet/LeaderBoardTweet';
+import { isMobile } from 'react-device-detect';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -157,7 +158,7 @@ function Miner() {
                 Comment under tweets (attaching #GPTMiner) to boost both yours and the original tweet's SCORE. More quality interaction in a thread means more earnings for everyone engaged.
             </div>
 
-            <div className='section-card select-tweet'>
+            <div className={`select-tweet ${isMobile ? '' : 'section-card'}`}>
                 <div className='header'>
                     <div className='title'>Select a tweet to reply</div>
                     <div className={`action-btn-primary reply-btn ${selectedTweet ? 'active' : 'disabled'}`}

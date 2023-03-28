@@ -139,4 +139,11 @@
   border-radius: 20px;
   width: 100%;
   margin-bottom: 20px;
+  padding: 18px 24px;
+}
+
+@media only screen and (max-width: 991px) {
+  .section-card {
+    padding: 16px 16px;
+  }
 }

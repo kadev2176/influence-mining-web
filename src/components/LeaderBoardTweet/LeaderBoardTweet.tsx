@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { OembedTweet } from '../../services/twitter.service';
 import { formatInfluenceScore } from '../../utils/format.util';
 import './LeaderBoardTweet.scss';
@@ -41,64 +42,122 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
                 <div className='owner-tag'>me</div>
             </>}
 
-            <Row className='content-row'>
-                <Col span={2}>
-                    <div className='position'>{tweet.rank}</div>
-                </Col>
-                <Col span={5}>
-                    <div className='user' onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        window.open(tweet.authorUrl);
-                    }}>
+            {!isMobile && <>
+                <Row className='content-row'>
+                    <Col span={2}>
+                        <div className='position'>{tweet.rank}</div>
+                    </Col>
+                    <Col span={5}>
+                        <div className='user' onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            window.open(tweet.authorUrl);
+                        }}>
+                            {!!tweet.avatar && <>
+                                <img src={tweet.avatar} className='user-avatar' referrerPolicy="no-referrer"></img>
+                            </>}
+                            <div className='user-name'>@{tweet.authorName}</div>:
+                        </div>
+                    </Col>
+                    <Col span={tweet.evaluation ? 10 : 14}>
+                        {!!tweet.tweetContent && <>
+                            <div className='tweet-content' onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open(tweet.tweetUrl);
+                            }}>
+                                {tweet.tweetContent}
+                            </div>
+                        </>}
+                        {!tweet.tweetContent && <>
+                            <div className='tweet-content disabled'>No GPTMiner tweet at the moment.</div>
+                        </>}
+                    </Col>
+                    <Col span={tweet.evaluation ? 4 : 0}>
+                        {tweet.evaluation && <>
+                            <span className='evaluation-btn' onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowEvaluation(!showEvaluation);
+                            }}>
+                                <span className='label'>GPT Evaluation</span>
+                                {!showEvaluation && <>
+                                    <span className='icon'>
+                                        <i className="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </>}
+                                {showEvaluation && <>
+                                    <span className='icon'>
+                                        <i className="fa-solid fa-chevron-up"></i>
+                                    </span>
+                                </>}
+                            </span>
+                        </>}
+                    </Col>
+                    <Col span={1} className="col-center-align">
+                        <div className='boost'>1X</div>
+                    </Col>
+                    <Col span={2} className="col-center-align">
+                        <div className='score'>{formatInfluenceScore(tweet.influence)}</div>
+                    </Col>
+                </Row>
+            </>}
+
+            {isMobile && <>
+                <Row className='content-row'>
+                    <Col span={2}>
+                        <div className='position'>{tweet.rank}</div>
+                    </Col>
+                    <Col span={3}>
                         {!!tweet.avatar && <>
                             <img src={tweet.avatar} className='user-avatar' referrerPolicy="no-referrer"></img>
                         </>}
-                        <div className='user-name'>@{tweet.authorName}</div>:
-                    </div>
-                </Col>
-                <Col span={tweet.evaluation ? 10 : 14}>
-                    {!!tweet.tweetContent && <>
-                        <div className='tweet-content' onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            window.open(tweet.tweetUrl);
-                        }}>
-                            {tweet.tweetContent}
+                    </Col>
+                    <Col span={19}>
+                        <div className='user-tweet'>
+                            <div className='user-name'>@{tweet.authorName}:</div>
+                            {!!tweet.tweetContent && <>
+                                <div className='tweet-content' onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    window.open(tweet.tweetUrl);
+                                }}>
+                                    {tweet.tweetContent}
+                                </div>
+                            </>}
+                            {!tweet.tweetContent && <>
+                                <div className='tweet-content disabled'>No GPTMiner tweet at the moment.</div>
+                            </>}
                         </div>
-                    </>}
-                    {!tweet.tweetContent && <>
-                        <div className='tweet-content disabled'>No GPTMiner tweet at the moment.</div>
-                    </>}
-                </Col>
-                <Col span={tweet.evaluation ? 4 : 0}>
-                    {tweet.evaluation && <>
-                        <span className='evaluation-btn' onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setShowEvaluation(!showEvaluation);
-                        }}>
-                            <span className='label'>GPT Evaluation</span>
-                            {!showEvaluation && <>
-                                <span className='icon'>
-                                    <i className="fa-solid fa-chevron-down"></i>
-                                </span>
-                            </>}
-                            {showEvaluation && <>
-                                <span className='icon'>
-                                    <i className="fa-solid fa-chevron-up"></i>
-                                </span>
-                            </>}
-                        </span>
-                    </>}
-                </Col>
-                <Col span={1} className="col-center-align">
-                    <div className='boost'>1X</div>
-                </Col>
-                <Col span={2} className="col-center-align">
-                    <div className='score'>{formatInfluenceScore(tweet.influence)}</div>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+                {!!tweet.evaluation && <>
+                    <Row className='content-row'>
+                        <Col span={2}>
+                            {/* empty */}
+                        </Col>
+                        <Col span={22}>
+                            <span className='evaluation-btn' onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowEvaluation(!showEvaluation);
+                            }}>
+                                <span className='label'>GPT Evaluation</span>
+                                {!showEvaluation && <>
+                                    <span className='icon'>
+                                        <i className="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </>}
+                                {showEvaluation && <>
+                                    <span className='icon'>
+                                        <i className="fa-solid fa-chevron-up"></i>
+                                    </span>
+                                </>}
+                            </span>
+                        </Col>
+                    </Row>
+                </>}
+            </>}
 
             {showEvaluation && <>
                 <div className='evaluation'>

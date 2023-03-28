@@ -14,6 +14,22 @@
   backdrop-filter: blur(10px);
   border-bottom: 1px solid #3A3B41;
 
+  &.mobile {
+    padding: 0 16px;
+
+    .logo-container {
+      .logo {
+        height: 32px;
+      }
+
+      .title {
+        font-size: 16px;
+        line-height: 19px;
+        margin-left: 9px;
+      }
+    }
+  }
+
   .logo-container {
     display: flex;
     align-items: center;
@@ -42,7 +58,7 @@
       font-size: 20px;
       line-height: 23px;
 
-      & + .link {
+      &+.link {
         margin-left: 26px;
       }
 
