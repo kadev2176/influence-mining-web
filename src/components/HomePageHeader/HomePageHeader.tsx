@@ -93,7 +93,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
             </>}
         </div>
 
-        {isMobile && <>
+        {isMobile && location.pathname !== '/' && <>
             <div className='mobile-menu'>
                 {links.map(link => {
                     return <>
