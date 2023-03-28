@@ -72,7 +72,8 @@ function Miner() {
     }, [imAccount]);
 
     const fetchLeaderTweets = async () => {
-        const leaders = await getLeaderBoardImAccounts(10);
+        const leaders = await getLeaderBoardImAccounts(30);
+        console.log('got leaders', leaders);
 
         const leaderTweets = await Promise.all((leaders ?? []).filter(leader => leader.tweetId === leader.conversationId).slice(0, 5).map(async (leaderAccount, index) => {
             const tweet = leaderAccount?.tweetId ? await fetchOembedTweet(leaderAccount.tweetId) : {};
@@ -161,7 +162,9 @@ function Miner() {
                     <div className='title'>Select a tweet to reply</div>
                     <div className={`action-btn-primary reply-btn ${selectedTweet ? 'active' : 'disabled'}`}
                         onClick={() => {
-                            setTweetGeneratorModal(true);
+                            if (selectedTweet) {
+                                setTweetGeneratorModal(true);
+                            }
                         }}
                     >
                         Reply
