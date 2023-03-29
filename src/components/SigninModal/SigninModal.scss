@@ -26,7 +26,7 @@
       align-items: center;
       padding: 13px 19px;
       gap: 9px;
-      
+
       font-size: 24px;
       line-height: 28px;
 
@@ -34,6 +34,29 @@
         font-size: 20px;
         margin-right: 14px;
       }
+    }
+  }
+}
+
+.drawer-title {
+  font-size: 24px;
+  line-height: 28px;
+  width: 100%;
+  text-align: center;
+}
+
+.drawer-btn-container {
+  margin: 30px 0;
+
+  .action-btn-primary {
+    font-size: 24px;
+    line-height: 28px;
+    padding: 14.5px 0;
+
+    .icon {
+      display: flex;
+      font-size: 20px;
+      margin-right: 14px;
     }
   }
 }

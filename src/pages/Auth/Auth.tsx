@@ -87,37 +87,6 @@ function Auth() {
                 <div className='connect-btn action-btn active' onClick={handleConnectTwitter}>
                     Login with Twitter
                 </div>
-                {/* {!isConnected && <>
-                    <div className='connect-btn action-btn active' onClick={async () => {
-                        open();
-                    }}>
-                        Connect Wallet
-                    </div>
-
-                    <div className='connect-btn action-btn disabled'>Connect Twitter</div>
-                </>}
-
-                {isConnected && <>
-                    <div className='connect-btn action-btn disabled'>
-                        Wallet Connected{ensName ? ` as ${ensName}` : ''}
-                    </div>
-
-                    {!userSignature && <>
-                        <div className='connect-btn action-btn active' onClick={() => {
-                            signMessage();
-                        }}>
-                            Sign Message
-                        </div>
-
-                        <div className='connect-btn action-btn disabled'>Connect Twitter</div>
-                    </>}
-
-                    {userSignature && <>
-                        <div className='connect-btn action-btn active' onClick={handleConnectTwitter}>
-                            Connect Twitter
-                        </div>
-                    </>}
-                </>} */}
             </div>
         </div>
     </>;
