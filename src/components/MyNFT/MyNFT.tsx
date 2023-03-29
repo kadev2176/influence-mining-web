@@ -1,5 +1,6 @@
 import { notification } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { isMobile } from 'react-device-detect';
 import { useAccount } from 'wagmi';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useImAccount } from '../../hooks/useImAccount';
@@ -29,7 +30,9 @@ function MyNFT({ }: MyNFTProps) {
                 <div className='no-connect' onClick={() => {
                     setConnectWalletModal(true);
                 }}>
-                    Connect wallet to view NFT
+                    <span className='text'>
+                        {isMobile ? 'Connect Wallet' : 'Connect wallet to view NFT'}
+                    </span>
                 </div>
             </>}
 
@@ -40,20 +43,24 @@ function MyNFT({ }: MyNFTProps) {
                             message: 'Coming Soon'
                         })
                     }}>
-                        Mint My HNFT
+                        <span className='text'>
+                            {isMobile ? 'Mint HNFT' : 'Mint My HNFT'}
+                        </span>
                     </div>
                 </>}
 
                 {!!hnft.balance && imAccount && <>
                     <div className='nft-container'>
-                        <BillboardNftImage imageUrl={imAccount.twitterProfileImageUri} level={Number(hnft.level)}></BillboardNftImage>
+                        <BillboardNftImage imageUrl={imAccount.twitterProfileImageUri} level={Number(hnft.level)} showTag={!isMobile}></BillboardNftImage>
                     </div>
 
-                    <div className='action-btn-primary active' onClick={() => {
-                        notification.info({
-                            message: 'Coming Soon'
-                        })
-                    }}>Upgrade HNFT</div>
+                    {!isMobile && <>
+                        <div className='action-btn-primary active' onClick={() => {
+                            notification.info({
+                                message: 'Coming Soon'
+                            })
+                        }}>Upgrade HNFT</div>
+                    </>}
                 </>}
             </>}
         </div>

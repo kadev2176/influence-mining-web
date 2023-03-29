@@ -47,3 +47,11 @@
     height: 100%;
   }
 }
+
+@media only screen and (max-width: 991px) {
+  .nft-image {
+    &.selected {
+      box-shadow: 0px 0px 0px 1px #1DA1F2 !important;
+    }
+  }
+}

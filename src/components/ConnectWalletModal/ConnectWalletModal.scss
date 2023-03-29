@@ -61,3 +61,42 @@
     }
   }
 }
+
+.connect-wallet-drawer {
+  .title {
+    font-size: 24px;
+    line-height: 28px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .connect-btns {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+    .connect-btn {
+      border: 1px solid #2F3138;
+      border-radius: 20px;
+      width: 100%;
+      font-size: 20px;
+      line-height: 179.8%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px;
+
+      &+.connect-btn {
+        margin-top: 26px;
+      }
+
+      .logo {
+        width: 30px;
+        height: 30px;
+        margin-right: 32px;
+      }
+    }
+  }
+}

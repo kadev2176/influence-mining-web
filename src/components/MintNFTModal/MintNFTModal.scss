@@ -132,3 +132,73 @@
     }
   }
 }
+
+.mint-nft-drawer {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-size: 20px;
+    line-height: 23px;
+    margin-bottom: 15px;
+  }
+
+  .sub-title {
+    font-size: 14px;
+    line-height: 16px;
+    opacity: 0.6;
+    margin-bottom: 20px;
+  }
+
+  .nfts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-height: 65vh;
+    overflow: scroll;
+
+    .nft {
+      width: 48%;
+      margin: 1px;
+
+      .nft-image-container {
+        margin-bottom: 3px;
+      }
+
+      .price {
+        display: flex;
+        font-size: 17.5px;
+        line-height: 21px;
+        font-weight: bold;
+        margin-bottom: 2px;
+
+        .icon {
+          margin-right: 9px;
+        }
+      }
+
+      .name {
+        font-size: 14px;
+        line-height: 16px;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .btn-container {
+    margin-top: 27px;
+    margin-bottom: 11px;
+
+    .action-btn-primary {
+      font-size: 14px;
+      line-height: 16px;
+      padding: 13px 0;
+
+      .icon {
+        display: flex;
+        font-size: 14px;
+        line-height: 16px;
+      }
+    }
+  }
+}

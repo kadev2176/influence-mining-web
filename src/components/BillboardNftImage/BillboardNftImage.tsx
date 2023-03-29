@@ -8,18 +8,21 @@ export interface BillboardNftImageProps {
     level?: number;
     active?: boolean;
     selected?: boolean;
+    showTag?: boolean;
 }
 
-function BillboardNftImage({ imageUrl, level = 0, active, selected }: BillboardNftImageProps) {
+function BillboardNftImage({ imageUrl, level = 0, active, selected, showTag = true }: BillboardNftImageProps) {
     // todo: default image url
     const svg = generateSvg(imageUrl, level);
 
     return <>
         <div className={`nft-image ${active ? 'active' : ''} ${selected ? 'selected' : ''}`}>
-            <div className='boost-tag'>
-                <span className='icon'><i className="fa-solid fa-rocket"></i></span>
-                {HNFT_CONFIG[level].boost}
-            </div>
+            {showTag && <>
+                <div className='boost-tag'>
+                    <span className='icon'><i className="fa-solid fa-rocket"></i></span>
+                    {HNFT_CONFIG[level].boost}
+                </div>
+            </>}
 
             <div className='svg-container' dangerouslySetInnerHTML={{ __html: svg }} />
         </div>
