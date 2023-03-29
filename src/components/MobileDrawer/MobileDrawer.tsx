@@ -5,18 +5,21 @@ import './MobileDrawer.scss';
 
 export interface MobileDrawerProps {
     closable?: boolean,
-    children: React.ReactNode
+    children: React.ReactNode,
+    onClose?: () => void
 }
 
-function MobileDrawer({ children, closable = true }: MobileDrawerProps) {
+function MobileDrawer({ children, closable = true, onClose }: MobileDrawerProps) {
     return <>
         <Drawer
             className='mobile-drawer'
             title={null}
             placement={'bottom'}
-            closable={closable}
+            closable={false}
+            maskClosable={closable}
             height={'fit-content'}
             open
+            onClose={() => { onClose && onClose() }}
         >
             {children}
         </Drawer>

@@ -59,3 +59,50 @@
     }
   }
 }
+
+.tweet-generator-drawer {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-size: 20px;
+    line-height: 23px;
+    opacity: 0.6;
+    margin-bottom: 14px;
+  }
+
+  .editor {
+    textarea {
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 21px;
+      background: none;
+      padding: 16px;
+      resize: none;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      height: 170px;
+
+      &::placeholder {
+        color: #FFFFFF;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .btn-container {
+    margin: 74px 0;
+
+    .action-btn-primary {
+      font-size: 24px;
+      line-height: 28px;
+      padding: 14.5px;
+
+      .icon {
+        font-size: 18px;
+        margin-right: 14px;
+        display: flex;
+      }
+    }
+  }
+}
