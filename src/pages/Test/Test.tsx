@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
 import BillboardNftImage from '../../components/BillboardNftImage/BillboardNftImage';
+import ConnectWalletModal from '../../components/ConnectWalletModal/ConnectWalletModal';
 import MintBillboard from '../../components/MintBillboard/MintBillboard';
+import SigninModal from '../../components/SigninModal/SigninModal';
 import { PARAMI_AIRDROP } from '../../models/parami';
 import './Test.scss';
 // import { getQueryFields } from '../../services/mining.service';
@@ -25,7 +27,8 @@ function Test({ }: TestProps) {
 
     const navigate = useNavigate();
 
-    const [claimModal, setClaimModal] = useState<boolean>(false);
+    // const [claimModal, setClaimModal] = useState<boolean>(false);
+    const [signinModal, setSigninModal] = useState<boolean>(false);
 
     // useEffect(() => {
     //     setTimeout(() => {
@@ -58,17 +61,14 @@ function Test({ }: TestProps) {
         </Button> */}
         <div className='test-container'>
             <div className='action-btn active' onClick={() => {
-                
-            }}>Claim</div>
+                setSigninModal(true)
+            }}>connect wallet</div>
             <br></br>
         </div>
 
-        {claimModal && <>
-            <Modal
-            ></Modal>
+        {signinModal && <>
+            <ConnectWalletModal onCancel={() => setSigninModal(false)}></ConnectWalletModal>
         </>}
-
-
         {/* <MintBillboard></MintBillboard> */}
     </>;
 };

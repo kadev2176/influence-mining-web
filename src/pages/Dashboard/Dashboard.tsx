@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import ClaimAd3Modal from '../../components/ClaimAd3Modal/ClaimAd3Modal';

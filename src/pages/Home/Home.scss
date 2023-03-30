@@ -100,8 +100,22 @@
 }
 
 .ant-notification-notice {
-  background: #171717 !important;
-  border: 2px solid #474747 !important;
+  background: #10121A !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  border-radius: 15px !important;
+  padding: 25px;
+
+  .ant-notification-notice-with-icon {
+    display: flex;
+    align-items: center;
+
+    .ant-notification-notice-message {
+      margin-bottom: 0;
+      font-weight: 600;
+      font-size: 20px;
+      line-height: 28px;
+    }
+  }
 
   .ant-notification-notice-icon,
   .ant-notification-notice-description,
@@ -110,7 +124,14 @@
   }
 
   .ant-notification-notice-close {
-    color: #696969;
+    color: #ffffff;
+    font-size: 17px;
+    top: 28px;
+
+    &:hover {
+      color: #ffffff;
+      opacity: 0.6;
+    }
   }
 }
 
@@ -144,7 +165,7 @@
   .layout-content-container {
     padding-bottom: 50px;
   }
-  
+
   .section-card {
     padding: 16px 16px;
   }
@@ -157,9 +178,11 @@
       flex-direction: column;
       align-items: flex-start;
       padding-bottom: 80px;
+
       .info {
         margin-bottom: 9px;
       }
+
       .tweet-hint {
         margin-bottom: 10px;
       }

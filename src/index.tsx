@@ -67,7 +67,7 @@ root.render(
               <Route path="/leaderboard" element={<LeaderBoard />} />
 
               <Route path="/test" element={<Test />} />
-              <Route path="/billboard" element={<MintBillboard />} />
+              {/* <Route path="/billboard" element={<MintBillboard />} /> */}
               <Route path='*' element={<Navigate to='/' />} />
             </Route>
           </Routes>
