@@ -1,0 +1,108 @@
+.tweet-generator {
+  .ant-modal-content {
+    background: #10121A;
+    border-radius: 21px;
+    padding: 20px;
+    border: 1px solid #1C1E25;
+
+    .ant-modal-close {
+      color: #fff;
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .generator-container {
+    .label {
+      font-size: 20px;
+      line-height: 23px;
+      color: #FFFFFF;
+      opacity: 0.6;
+      margin-bottom: 14px;
+    }
+
+    .editor {
+      margin-bottom: 25px;
+
+      textarea {
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 21px;
+        background: none;
+        padding: 20px;
+        resize: none;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 28px;
+        height: 170px;
+
+        &::placeholder {
+          color: #FFFFFF;
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    .action-btn-primary {
+      font-size: 24px;
+      line-height: 28px;
+      padding: 13px;
+
+      .icon {
+        font-size: 18px;
+        margin-right: 14px;
+      }
+    }
+  }
+}
+
+.tweet-generator-drawer {
+  display: flex;
+  flex-direction: column;
+
+  .title {
+    font-size: 20px;
+    line-height: 23px;
+    opacity: 0.6;
+    margin-bottom: 14px;
+  }
+
+  .editor {
+    textarea {
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 21px;
+      background: none;
+      padding: 16px;
+      resize: none;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 20px;
+      height: 170px;
+
+      &::placeholder {
+        color: #FFFFFF;
+        opacity: 0.6;
+      }
+    }
+  }
+
+  .btn-container {
+    margin: 74px 0;
+
+    .action-btn-primary {
+      font-size: 24px;
+      line-height: 28px;
+      padding: 14.5px;
+
+      .icon {
+        font-size: 18px;
+        margin-right: 14px;
+        display: flex;
+      }
+    }
+  }
+}

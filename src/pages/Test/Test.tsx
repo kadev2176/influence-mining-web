@@ -1,8 +1,12 @@
-import { Button, notification } from 'antd';
-import React, { useEffect } from 'react';
+import { Button, Modal, notification } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { redirect, useNavigate } from 'react-router-dom';
 import { useAccount, useConnect, useDisconnect, useSignMessage } from 'wagmi';
+import BillboardNftImage from '../../components/BillboardNftImage/BillboardNftImage';
 import MintBillboard from '../../components/MintBillboard/MintBillboard';
 import { PARAMI_AIRDROP } from '../../models/parami';
+import './Test.scss';
+// import { getQueryFields } from '../../services/mining.service';
 
 export interface TestProps { }
 
@@ -19,6 +23,10 @@ function Test({ }: TestProps) {
         // window.addEventListener('storage', storageHandler);
     }
 
+    const navigate = useNavigate();
+
+    const [claimModal, setClaimModal] = useState<boolean>(false);
+
     // useEffect(() => {
     //     setTimeout(() => {
     //         notification.info({
@@ -28,21 +36,40 @@ function Test({ }: TestProps) {
     //     }, 1000)
     // }, [])
 
-    useEffect(() => {
-        if (userSignature) {
-            notification.success({ message: userSignature })
-        }
-    }, [userSignature])
+    // useEffect(() => {
+    //     if (userSignature) {
+    //         notification.success({ message: userSignature })
+    //     }
+    // }, [userSignature])
+
+    // useEffect(() => {
+    //     getQueryFields();
+    // }, [])
 
     return <>
-        <Button onClick={() => {
+        {/* <div style={{ width: '400px', height: '400px' }}>
+            <BillboardNftImage imageUrl='https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU.jpg'></BillboardNftImage>
+        </div> */}
+
+        {/* <Button onClick={() => {
             disconnect()
         }}>
             Disconnect
-        </Button>
-        <br></br>
+        </Button> */}
+        <div className='test-container'>
+            <div className='action-btn active' onClick={() => {
+                
+            }}>Claim</div>
+            <br></br>
+        </div>
 
-        <MintBillboard></MintBillboard>
+        {claimModal && <>
+            <Modal
+            ></Modal>
+        </>}
+
+
+        {/* <MintBillboard></MintBillboard> */}
     </>;
 };
 

@@ -1,5 +1,6 @@
-import { Col, Row, Typography } from 'antd';
+import { Button, Col, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAccount, useNetwork } from 'wagmi';
 import { Balance, getAd3Balance } from '../../services/mining.service';
 import { formatAd3Amount } from '../../utils/format.util';
@@ -11,13 +12,14 @@ const { Title } = Typography;
 export interface AD3BalanceProps { }
 
 function AD3Balance({ }: AD3BalanceProps) {
+    const navigate = useNavigate();
     const { address } = useAccount();
     const { chain } = useNetwork();
     const [balance, setBalance] = useState<Balance>();
     const [withdrawModal, setWithdrawModal] = useState<boolean>(false);
 
     const fetchBalance = async (address: string, chainId: number) => {
-        const balance = await getAd3Balance(address, chainId);
+        const balance = await getAd3Balance();
         setBalance(balance);
     }
 
@@ -39,9 +41,11 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <img src='/logo-round-core.svg'></img>
                                     Total
                                 </div>
-                                <div className='value'>
+                                <div className='value' onClick={() => {
+                                    navigate('/ad3Tx')
+                                }}>
                                     <div className='balance'>
-                                        {formatAd3Amount(balance.total)}
+                                        {/* {formatAd3Amount(balance.total)} */}
                                     </div>
                                     <div className='unit'>$AD3</div>
                                 </div>
@@ -54,14 +58,14 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <span className='text'>Withdrawable Balance</span>
                                 </Col>
                                 <Col className='value'>
-                                    <div className='balance'>{formatAd3Amount(balance.withdrawable)}</div>
+                                    {/* <div className='balance'>{formatAd3Amount(balance.withdrawable)}</div> */}
                                     <div className='unit'>$AD3</div>
                                 </Col>
                                 <Col className='action'>
                                     <div>
-                                        <div className='action-btn active' onClick={() => {
+                                        <Button type='primary' onClick={() => {
                                             setWithdrawModal(true);
-                                        }}>Withdraw</div>
+                                        }}>Withdraw</Button>
                                     </div>
                                 </Col>
                             </Row>
@@ -71,7 +75,7 @@ function AD3Balance({ }: AD3BalanceProps) {
                                     <span className='text'>Locked Balance</span>
                                 </Col>
                                 <Col className='value'>
-                                    <div className='balance'>{formatAd3Amount(balance.locked)}</div>
+                                    {/* <div className='balance'>{formatAd3Amount(balance.locked)}</div> */}
                                     <div className='unit'>$AD3</div>
                                 </Col>
                             </Row>
@@ -82,7 +86,7 @@ function AD3Balance({ }: AD3BalanceProps) {
         </div>
 
         {withdrawModal && <>
-            <WithdrawAd3Modal
+            {/* <WithdrawAd3Modal
                 onCancel={() => {
                     setWithdrawModal(false);
                 }}
@@ -91,7 +95,7 @@ function AD3Balance({ }: AD3BalanceProps) {
                     fetchBalance(address!, chain!.id);
                 }}
                 withdrawableAmount={balance?.withdrawable}
-            ></WithdrawAd3Modal>
+            ></WithdrawAd3Modal> */}
         </>}
     </>;
 };

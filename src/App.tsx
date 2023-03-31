@@ -1,52 +1,95 @@
 import React, { useEffect } from 'react';
 import './App.scss';
 import { Layout, Menu } from 'antd';
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { Link, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { getInfluence } from './services/mining.service';
-import { parseUrlParams } from './utils/url.util';
+import { parseUrlParams } from './utils/window.util';
+import { getMyIMAccount } from './services/mining.service';
 
 const { Header, Content, Sider } = Layout;
 
 const menuItems = [
   {
     key: 'profile',
-    name: 'Profile',
+    name: 'My Vault',
     path: '/profile',
     icon: <>
-      <i className="fa-solid fa-user"></i>
+      <i className="fa-solid fa-coins"></i>
     </>,
     label: <>
-      <Link to={'/profile'}>Profile</Link>
-    </>
-  },
-  {
-    key: 'ad3Tx',
-    name: 'Transactions',
-    path: '/ad3Tx',
-    icon: <><i className="fa-solid fa-money-check-dollar"></i></>,
-    label: <>
-      <Link to={'/ad3Tx'}>Transactions</Link>
-    </>
-  },
-  {
-    key: 'influenceTx',
-    name: 'Influence',
-    path: '/influenceTx',
-    icon: <><i className="fa-solid fa-tower-broadcast"></i></>,
-    label: <>
-      <Link to={'/influenceTx'}>Influence</Link>
+      <Link to={'/profile'}>My Vault</Link>
     </>
   },
   {
     key: 'market',
-    name: 'Market',
+    name: 'NFT',
     path: '/market',
     icon: <><i className="fa-solid fa-store"></i></>,
     label: <>
-      <Link to={'/market'}>Market</Link>
+      <Link to={'/market'}>NFT</Link>
     </>
-  }
+  },
+  {
+    key: 'boost',
+    name: 'Daily Boost',
+    path: '/boost',
+    icon: <><i className="fa-solid fa-trophy"></i></>,
+    label: <>
+      <Link to={'/boost'}>Daily Boost</Link>
+    </>
+  },
+  {
+    key: 'sit',
+    name: 'Your SIT',
+    path: '/sit',
+    icon: <><i className="fa-solid fa-circle-nodes"></i></>,
+    label: <>
+      <Link to={'/sit'}>Your SIT</Link>
+    </>
+  },
+  {
+    key: 'mining',
+    name: 'Mining',
+    path: '/mining',
+    icon: <><i className="fa-solid fa-hand-holding-dollar"></i></>,
+    label: 'Mining',
+    children: [
+      {
+        key: 'ad3Mining',
+        label: <><Link to={'/mining/ad3'}>AD3</Link></>
+      },
+      {
+        key: 'influenceMining',
+        label: <><Link to={'/mining/influence'}>SIT</Link></>
+      },
+    ]
+  },
+  {
+    key: 'war',
+    name: 'Battles',
+    path: '/battles',
+    icon: <><i className="fa-solid fa-flag"></i></>,
+    label: 'Battles',
+    children: [
+      {
+        key: 'billboard-battles',
+        label: <><Link to={'/battles/billboard'}>Billboards</Link></>
+      },
+      {
+        key: 'dao-battles',
+        label: <><Link to={'/battles/dao'}>DAO</Link></>
+      },
+    ]
+  },
+  {
+    key: 'treasure',
+    name: 'Treasure Hunt',
+    path: '/treasure',
+    icon: <><i className="fa-solid fa-gem"></i></>,
+    label: <>
+      <Link to={'/treasure'}>Treasure Hunt</Link>
+    </>
+  },
 ];
 
 function App() {
@@ -80,9 +123,11 @@ function App() {
 
   useEffect(() => {
     if (address && chain?.id) {
-      getInfluence(address!, chain.id).then(influence => {
-        if (!influence?.updatedTime) {
+      getMyIMAccount().then(imAccount => {
+        if (!imAccount?.updatedTime) {
           navigate('/auth');
+        } else if (location.pathname === '/') {
+          navigate('/profile');
         }
       })
     }
@@ -146,8 +191,6 @@ function App() {
       </>}
 
     </>
-
-
   );
 }
 

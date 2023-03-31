@@ -61,3 +61,17 @@ export const amountToFloatString = (value: string | bigint, decimals: number = 1
 	return intPart + '.' + floatPart;
 }
 
+export const deleteComma = (value: string) => {
+	return value?.replace(/,/g, '');
+};
+
+export const formatTwitterImageUrl = (url?: string) => {
+	if (!url) {
+		return '';
+	}
+	return url.replace('_normal', '');
+}
+
+export const formatInfluenceScore = (value: string | bigint) => {
+	return Number(amountToFloatString(value, 2)).toLocaleString('en-US');
+}

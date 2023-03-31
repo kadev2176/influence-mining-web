@@ -10,7 +10,7 @@ export const useUpgradeBillboard = (tokenId?: string, level?: number) => {
     args: [tokenId, level]
   });
 
-  const { data, isLoading: writeLoading, write: upgradeBillboardLevel, isError } = useContractWrite(config);
+  const { data, isLoading: writeLoading, write: upgradeBillboardLevel, isError, error } = useContractWrite(config);
   const { isLoading: waitTxLoading, isSuccess: upgradeSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
@@ -19,6 +19,7 @@ export const useUpgradeBillboard = (tokenId?: string, level?: number) => {
     upgradeBillboardLevel,
     isLoading: writeLoading || waitTxLoading,
     isSuccess: upgradeSuccess,
-    isError
+    isError,
+    error: error
   }
 }

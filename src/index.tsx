@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import {
   EthereumClient,
   modalConnectors,
@@ -9,27 +8,35 @@ import {
 } from "@web3modal/ethereum";
 import { Web3Modal } from "@web3modal/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { arbitrum, mainnet, polygon, goerli } from "wagmi/chains";
-import { Routes, Route, HashRouter } from "react-router-dom";
-import Profile from './pages/Profile/Profile';
-import Ad3Transactions from './pages/Ad3Transactions/Ad3Transactions';
-import InfluenceTransactions from './pages/InfluenceTransactions/InfluenceTransactions';
-import Auth from './pages/Auth/Auth';
+import { goerli } from "wagmi/chains";
+import { Routes, Route, HashRouter, Navigate } from "react-router-dom";
 import { ConfigProvider } from 'antd';
 import Home from './pages/Home/Home';
 import Test from './pages/Test/Test';
 import MintBillboard from './components/MintBillboard/MintBillboard';
-import BidWar from './pages/BidWar/BidWar';
+import { ApiPromise } from '@polkadot/api';
+import Miner from './pages/Miner/Miner';
+import Landing from './pages/Landing/Landing';
+import LeaderBoard from './pages/LeaderBoard/LeaderBoard';
+import Dashboard from './pages/Dashboard/Dashboard';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
-const chains = [arbitrum, mainnet, polygon, goerli];
+declare global {
+  interface Window {
+    apiWs: ApiPromise;
+  }
+}
+
+const chains = [goerli];
 
 // Wagmi client
 const { provider } = configureChains(chains, [
   walletConnectProvider({ projectId: "2e586b0807500a0da3a4f7b66418295e" }),
 ]);
+
 const wagmiClient = createClient({
   autoConnect: true,
-  connectors: modalConnectors({ appName: "InfluenceMining", chains }),
+  connectors: [new MetaMaskConnector({ chains }), ...modalConnectors({ appName: "InfluenceMining", chains })],
   provider,
 });
 
@@ -40,7 +47,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  <>
     <WagmiConfig client={wagmiClient}>
       <ConfigProvider
         theme={{
@@ -53,16 +60,15 @@ root.render(
       >
         <HashRouter>
           <Routes>
-            <Route path='/home' element={<Home/>}></Route>
-            
-            <Route path="/" element={<App />}>
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/market" element={<MintBillboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/ad3Tx" element={<Ad3Transactions />} />
-              <Route path="/influenceTx" element={<InfluenceTransactions />} />
-              <Route path="/war" element={<BidWar />} />
+            <Route path='/' element={<Home />}>
+              <Route path="/" element={<Landing />} />
+              <Route path="/miner" element={<Miner />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/leaderboard" element={<LeaderBoard />} />
+
               <Route path="/test" element={<Test />} />
+              <Route path="/billboard" element={<MintBillboard />} />
+              <Route path='*' element={<Navigate to='/' />} />
             </Route>
           </Routes>
         </HashRouter>
@@ -72,6 +78,8 @@ root.render(
     <Web3Modal
       projectId="2e586b0807500a0da3a4f7b66418295e"
       ethereumClient={ethereumClient}
+      themeMode="dark"
+      themeZIndex={1001}
     />
-  </React.StrictMode>
+  </>
 );

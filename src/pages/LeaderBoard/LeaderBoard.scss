@@ -1,0 +1,131 @@
+@import '../../common.scss';
+
+.leaderboard-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  max-width: 956px;
+  min-height: 100vh;
+
+  .title {
+    font-size: 36px;
+    line-height: 42px;
+    font-weight: bold;
+  }
+
+  .dashboard {
+    width: 100%;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+
+    .stat-card {
+      width: 306px;
+      height: 125px;
+      background: #10121A;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 50px;
+
+      .label {
+        font-size: 20px;
+        line-height: 23px;
+        opacity: 0.6;
+        margin-bottom: 18px;
+      }
+
+      .value {
+        color: #1DA1F2;
+        font-size: 28px;
+        line-height: 33px;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .leaderboard-tweets {
+    .leaderboard-header {
+      padding: 20px;
+      font-size: 20px;
+      line-height: 23px;
+      color: #FFFFFF;
+      opacity: 0.6;
+
+      .ant-col {
+        text-align: center;
+      }
+    }
+  }
+
+  .leaderboard-table-container {
+    margin-bottom: 50px;
+
+    .leaderboard-table {
+      border-collapse: collapse;
+      text-align: center;
+
+      tr {
+        height: 80px;
+
+        &.tr-user {
+          background: rgb(23, 23, 23);
+        }
+      }
+
+      th,
+      td {
+        border: 1px solid rgb(48, 48, 48);
+        min-width: 100px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .leaderboard-container {
+    padding: 0 16px;
+
+    .title {
+      font-size: 32px;
+      line-height: 38px;
+      margin-bottom: 35px;
+    }
+
+    .dashboard {
+      flex-direction: column;
+      margin: 0;
+      margin-bottom: 20px;
+
+      .stat-card {
+        width: 100%;
+        padding: 20px;
+        height: fit-content;
+
+        & + .stat-card {
+          margin-top: 19px;
+        }
+
+        .label {
+          font-size: 14px;
+          line-height: 16px;
+          font-weight: unset;
+        }
+
+        .value {
+          font-size: 20px;
+          line-height: 23px;
+        }
+      }
+    }
+
+    .leaderboard-tweets {
+      .leaderboard-header {
+        display: none;
+      }
+    }
+  }
+}
