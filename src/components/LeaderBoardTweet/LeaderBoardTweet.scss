@@ -157,15 +157,20 @@
       transform-origin: top left;
     }
 
+    .evaluation+.content-row {
+      margin-top: 16px;
+    }
+
     .content-row {
       margin: 0;
 
-      & + .content-row {
+      &+.content-row {
         margin-top: 16px;
       }
 
       .position {
         min-width: unset;
+
         .small {
           font-size: 12px;
         }

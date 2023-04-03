@@ -161,6 +161,10 @@
   padding: 18px 24px;
 }
 
+.tooltip-text {
+  opacity: 0.5;
+}
+
 @media only screen and (max-width: 991px) {
   .layout-content-container {
     padding-bottom: 50px;

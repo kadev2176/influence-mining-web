@@ -36,7 +36,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
             <div className='logo-container' onClick={() => {
                 navigate('/');
             }}>
-                <img className='logo' src='/logo_white_round.png'></img>
+                <img className='logo' src='/logo_trans.png'></img>
                 <span className='title'>GPTMiner</span>
             </div>
 

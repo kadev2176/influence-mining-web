@@ -103,6 +103,11 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
                         <div className='score'>{formatInfluenceScore(tweet.influence)}</div>
                     </Col>
                 </Row>
+                {showEvaluation && <>
+                    <div className='evaluation'>
+                        <span className='evaluation-tag'>GPT Evaluation:</span>{tweet.evaluation.slice(16)}
+                    </div>
+                </>}
             </>}
 
             {isMobile && <>
@@ -165,13 +170,23 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
                             </span>
                         </Col>
                     </Row>
+                    {showEvaluation && <>
+                        <div className='evaluation'>
+                            <span className='evaluation-tag'>GPT Evaluation:</span>{tweet.evaluation.slice(16)}
+                        </div>
+                    </>}
                 </>}
-            </>}
-
-            {showEvaluation && <>
-                <div className='evaluation'>
-                    <span className='evaluation-tag'>GPT Evaluation:</span>{tweet.evaluation.slice(16)}
-                </div>
+                <Row className='content-row'>
+                    <Col span={2}>
+                        <div className='boost'>1X</div>
+                    </Col>
+                    <Col span={20}>
+                        {/* empty */}
+                    </Col>
+                    <Col span={2}>
+                        <div className='score'>{formatInfluenceScore(tweet.influence)}</div>
+                    </Col>
+                </Row>
             </>}
         </div>
     </>;

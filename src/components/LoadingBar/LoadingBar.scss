@@ -1,0 +1,74 @@
+.loading-bar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+
+    .logo {
+      width: 37px;
+      height: 37px;
+      margin-right: 10px;
+    }
+
+    .title {
+      font-size: 26px;
+      line-height: 30px;
+      font-weight: bold;
+    }
+  }
+
+  .loading {
+    width: 225px;
+    height: 7px;
+    border-radius: 7px;
+    background: #575757;
+    position: relative;
+    overflow: hidden;
+
+    .loading-bar {
+      position: absolute;
+      border-radius: 10px;
+      top: 0;
+      right: 100%;
+      bottom: 0;
+      left: 0;
+      background: #fff;
+      width: 0;
+      animation: borealisBar 2s linear infinite;
+    }
+  }
+}
+
+@keyframes borealisBar {
+  0% {
+    left: 0%;
+    right: 100%;
+    width: 0%;
+  }
+
+  10% {
+    left: 0%;
+    right: 75%;
+    width: 30%;
+  }
+
+  90% {
+    right: 0%;
+    left: 75%;
+    width: 30%;
+  }
+
+  100% {
+    left: 100%;
+    right: 0%;
+    width: 0%;
+  }
+}

@@ -34,11 +34,11 @@ function MintNFTModal({ onCancel }: MintNFTModalProps) {
                     <div className='header'>
                         <div className='title-row'>
                             <div className='title'>Mint My HNFT</div>
-                            <Tooltip title="prompt text">
+                            {/* <Tooltip title="NFT is the unique identifier of your DID. After casting successfully, you can directly withdraw coins to your NFT address">
                                 <span className='icon'>
                                     <i className="fa-regular fa-circle-question"></i>
                                 </span>
-                            </Tooltip>
+                            </Tooltip> */}
                         </div>
                         <div className='sub-title'>
                             This NFT supports hyperlinks, and you can define the link content yourself

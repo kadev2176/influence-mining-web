@@ -4,6 +4,8 @@ import { fetchWithCredentials, fetchWithSig } from "../utils/api.util";
 
 const DEFAULT_TWEET = 'Become a mining node by leveraging your social influence to earn revenue. #GPTMiner';
 
+const DEFAULT_SPONSORED_TAGS = ['#MirrorWorld'];
+
 export interface OembedTweet {
   tweetId: string;
   authorName: string;
@@ -36,9 +38,9 @@ export const fetchOembedTweet = async (tweetId: string) => {
   } as OembedTweet;
 }
 
-export const generateTweetContent = async () => {
+export const generateReplyTweetContent = async (replyTweetId: string) => {
   try {
-    const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/tweets`, {
+    const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/tweets/${replyTweetId}/reply`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json'
@@ -52,4 +54,36 @@ export const generateTweetContent = async () => {
   } catch (e) {
     return DEFAULT_TWEET;
   }
+}
+
+export const generateTweetContent = async (tag?: string) => {
+  try {
+    const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/tweets${tag ? `?hashtag=${encodeURIComponent(tag)}` : ''}`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    if (!resp) {
+      return DEFAULT_TWEET;
+    }
+    const tweet = await resp.json();
+    return tweet;
+  } catch (e) {
+    return DEFAULT_TWEET;
+  }
+}
+
+export const getSponsoredTags = async () => {
+  return DEFAULT_SPONSORED_TAGS;
+  // try {
+  //   const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/sponsoredtags`);
+  //   if (!resp) {
+  //     return DEFAULT_SPONSORED_TAGS;
+  //   }
+  //   const tags = await resp.json();
+  //   return tags;
+  // } catch (e) {
+  //   return DEFAULT_SPONSORED_TAGS;
+  // }
 }
