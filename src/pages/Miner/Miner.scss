@@ -101,15 +101,21 @@
       padding: 14px;
       overflow: hidden;
 
-      .avatar {
-        width: 62px;
-        height: 62px;
-        border-radius: 50%;
+      .avatar-container {
+        display: flex;
 
-        &:hover {
-          cursor: pointer;
+        .avatar {
+          width: 62px;
+          height: 62px;
+          border-radius: 50%;
+
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
+
+
 
       .tweet-content {
         display: flex;
@@ -260,6 +266,13 @@
       }
 
       .tweet {
+        .avatar-container {
+          .avatar {
+            width: 42px;
+            height: 42px;
+          }
+        }
+        
         .tweet-content {
           margin-left: 14px;
           max-width: 70%;

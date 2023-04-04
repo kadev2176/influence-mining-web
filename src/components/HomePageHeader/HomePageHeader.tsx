@@ -3,6 +3,7 @@ import { useImAccount } from '../../hooks/useImAccount';
 import './HomePageHeader.scss';
 import { isMobile } from 'react-device-detect';
 import { Dropdown } from 'antd';
+import UserAvatar from '../UserAvatar/UserAvatar';
 
 export interface HomePageHeaderProps { }
 
@@ -74,7 +75,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                                 <div className='username'>
                                     {`${imAccount.twitterName}`}
                                 </div>
-                                <img className='user-avatar' src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer"></img>
+                                <UserAvatar className='user-avatar' src={imAccount.twitterProfileImageUri}></UserAvatar>
                             </>}
                         </div>
                     </Dropdown>
@@ -122,7 +123,7 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                 }}>
                     <div className='user-profile'>
                         {imAccount && <>
-                            <img className='user-avatar' src={imAccount.twitterProfileImageUri} referrerPolicy="no-referrer"></img>
+                            <UserAvatar className='user-avatar' src={imAccount.twitterProfileImageUri}></UserAvatar>
                         </>}
                     </div>
                 </Dropdown>

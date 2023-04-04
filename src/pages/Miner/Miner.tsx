@@ -10,6 +10,7 @@ import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGener
 import SigninModal from '../../components/SigninModal/SigninModal';
 import LeaderBoardTweet, { LeaderTweet } from '../../components/LeaderBoardTweet/LeaderBoardTweet';
 import { isMobile } from 'react-device-detect';
+import UserAvatar from '../../components/UserAvatar/UserAvatar';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -122,9 +123,11 @@ function Miner() {
                         </div>
                     </div>
                     <div className='tweet'>
-                        <img className='avatar' src={imAccount?.twitterProfileImageUri} referrerPolicy="no-referrer" onClick={() => {
+                        <div className='avatar-container' onClick={() => {
                             window.open(mostRecentTweet.authorUrl);
-                        }}></img>
+                        }}>
+                            <UserAvatar className='avatar' src={imAccount?.twitterProfileImageUri}></UserAvatar>
+                        </div>
                         <div className='tweet-content'>
                             <div className='user-row' onClick={() => {
                                 window.open(mostRecentTweet.authorUrl);

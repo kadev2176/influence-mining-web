@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { OembedTweet } from '../../services/twitter.service';
 import { formatInfluenceScore } from '../../utils/format.util';
+import UserAvatar from '../UserAvatar/UserAvatar';
 import './LeaderBoardTweet.scss';
 
 export interface LeaderTweet extends Partial<OembedTweet> {
@@ -56,7 +57,7 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
                             window.open(tweet.authorUrl);
                         }}>
                             {!!tweet.avatar && <>
-                                <img src={tweet.avatar} className='user-avatar' referrerPolicy="no-referrer"></img>
+                                <UserAvatar src={tweet.avatar} className='user-avatar'></UserAvatar>
                             </>}
                             <div className='user-name'>@{tweet.authorName}</div>:
                         </div>
@@ -124,7 +125,7 @@ function LeaderBoardTweet({ tweet, isOwner, selectable = false, onSelect, select
                     </Col>
                     <Col span={3}>
                         {!!tweet.avatar && <>
-                            <img src={tweet.avatar} className='user-avatar' referrerPolicy="no-referrer"></img>
+                            <UserAvatar src={tweet.avatar} className='user-avatar'></UserAvatar>
                         </>}
                     </Col>
                     <Col span={19}>
