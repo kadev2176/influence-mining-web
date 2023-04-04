@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import CountUp from 'react-countup';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useInterval } from '../../hooks/useInterval';
-import { Ad3Activity, getAD3Activity, getAd3Balance, getUpcomingTweetMiner, UpcomingTweetMiner, updateInfluence, ImAccount, getLeaderBoardImAccounts } from '../../services/mining.service';
+import { ImAccount, getLeaderBoardImAccounts } from '../../services/mining.service';
 import { fetchOembedTweet, OembedTweet } from '../../services/twitter.service';
-import { amountToFloatString, formatTwitterImageUrl } from '../../utils/format.util';
+import { formatTwitterImageUrl } from '../../utils/format.util';
 import './Miner.scss';
 import dayjs from 'dayjs'
 import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
@@ -140,7 +139,6 @@ function Miner() {
                             </div>
                         </div>
                         <div className='mining-indicator'>
-
                         </div>
 
                         <div className='corner-tag'>
@@ -179,7 +177,7 @@ function Miner() {
                                     tweet={tweet}
                                     isOwner={tweet.authorName === imAccount?.twitterName}
                                     selectable={true}
-                                    selected={selectedTweet?.tweetId === tweet.tweetId}
+                                    selected={selectedTweet?.tweetId === tweet.tweetId && !!tweet.tweetId}
                                     onSelect={(t) => {
                                         setSelectedTweet(t);
                                     }}

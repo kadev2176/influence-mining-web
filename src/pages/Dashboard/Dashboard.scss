@@ -6,6 +6,12 @@
   flex-direction: column;
   align-items: center;
 
+  .heading {
+    font-family: Gilroy-Bold;
+    font-size: 36px;
+    line-height: 42px;
+  }
+
   .mining-rewards {
     padding: 34px 24px;
 
@@ -39,7 +45,7 @@
 
       font-size: 28px;
       line-height: 33px;
-      font-weight: bold;
+      font-family: Gilroy-Bold;
       color: #1DA1F2;
     }
   }

@@ -4,7 +4,7 @@ import { fetchWithCredentials, fetchWithSig } from "../utils/api.util";
 
 const DEFAULT_TWEET = 'Become a mining node by leveraging your social influence to earn revenue. #GPTMiner';
 
-const DEFAULT_SPONSORED_TAGS = ['#MirrorWorld'];
+const DEFAULT_SPONSORED_TAGS = ['MirrorWorld'];
 
 export interface OembedTweet {
   tweetId: string;

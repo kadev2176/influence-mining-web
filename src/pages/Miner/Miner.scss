@@ -10,9 +10,9 @@
   align-items: center;
 
   .miner-title {
+    font-family: Gilroy-Bold;
     font-size: 36px;
     line-height: 42px;
-    font-weight: bold;
     width: 100%;
     margin-bottom: 20px;
   }
@@ -69,7 +69,7 @@
         .text {
           font-size: 20px;
           line-height: 23px;
-          font-weight: bold;
+          font-family: Gilroy-Bold;
           color: #FFFFFF;
           opacity: 0.6;
         }
@@ -207,6 +207,7 @@
     .miner-title {
       font-size: 32px;
       line-height: 38px;
+      font-family: Gilroy-Bold;
     }
 
     .miner-description {
@@ -299,6 +300,7 @@
 
       .header {
         align-items: center;
+
         .title {
           font-weight: unset;
           font-size: 20px;

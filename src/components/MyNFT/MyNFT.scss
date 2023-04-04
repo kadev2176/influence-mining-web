@@ -7,6 +7,10 @@
   left: calc(50% + 502px);
   top: 264px;
 
+  &.high-position {
+    top: 213px;
+  }
+
   .no-connect,
   .no-hnft {
     width: 100%;

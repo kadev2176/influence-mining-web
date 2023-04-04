@@ -7,12 +7,6 @@
   }
 }
 
-// @property --rotate {
-//   syntax: "<angle>";
-//   initial-value: 132deg;
-//   inherits: false;
-// }
-
 @media only screen and (max-width: 991px) {
   .nft-card {
     max-width: 300px;
@@ -27,11 +21,6 @@
   border-radius: 20px;
   width: fit-content;
   margin: 40px;
-
-  // &:hover {
-  //   cursor: pointer;
-  //   box-shadow: 0 0 30px 5px #5ddcffa0;
-  // }
 
   .nft-card {
     padding: 20px;
@@ -51,7 +40,7 @@
 
         .title {
           font-size: 1.4rem;
-          font-weight: bold;
+          font-family: Gilroy-Bold;
           margin-top: 20px;
           margin-bottom: 20px;
           text-transform: uppercase;
@@ -97,85 +86,3 @@
     }
   }
 }
-
-
-// .nft-card {
-//   background: #ffffff3c;
-//   padding: 20px;
-//   border-radius: 20px;
-//   margin-bottom: 20px;
-//   color: #ffffff;
-
-//   .content-container {
-//     display: flex;
-//     flex-direction: column;
-
-//     .billboard {
-//       display: flex;
-//       justify-content: center;
-//     }
-
-//     .info-container {
-//       display: flex;
-//       flex-direction: column;
-//       justify-content: space-between;
-//       flex: 1 1 0%;
-//       margin-top: 20px;
-
-//       .info {
-//         // .name {
-//         //   font-size: 30px;
-//         //   font-weight: 700;
-//         // }
-//         margin-bottom: 10px;
-
-//         .description {
-//           font-size: 14px;
-//         }
-//       }
-
-//       .price {
-//         display: flex;
-//         align-items: flex-end;
-
-//         .price-title {
-//           color: #c8c8c8b9;
-//           margin-right: 10px;
-//         }
-
-//         .price-value {
-//           font-size: 20px;
-//           font-weight: 600;
-//         }
-//       }
-//     }
-//   }
-
-//   .btn-container {
-//     margin-top: 20px;
-//     max-width: 200px;
-
-//     .btn {
-//       height: 34px;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-//       border-radius: 100px;
-//       border: none;
-//       background: linear-gradient(135deg, #A0204C 0%, #A0204C 10%, #FF6C00 100%);
-//       color: rgb(255, 255, 255);
-//       opacity: 0.8;
-//       font-weight: 700;
-//       user-select: none;
-
-//       &.disabled {
-//         opacity: 0.4;
-//       }
-
-//       &.active:hover {
-//         opacity: 1;
-//         cursor: pointer;
-//       }
-//     }
-//   }
-// }

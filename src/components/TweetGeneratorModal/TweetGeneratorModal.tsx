@@ -57,7 +57,7 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
         {!isReply && <>
             <div className='label'>
                 Sponsored Topics
-                <Tooltip title="Adding sponsored Hashtag and tweet relevant content will grant you EXTRA mining rewards">
+                <Tooltip title={<span className='tooltip-text'>Adding sponsored Hashtag and tweet relevant content will grant you EXTRA mining rewards</span>}>
                     <span className='icon'>
                         <i className="fa-regular fa-circle-question"></i>
                     </span>
@@ -72,7 +72,7 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
                                 setSelectedTag(tag);
                             }}
                         >
-                            {tag}
+                            #{tag}
                             <img className='gift-icon' src='/assets/images/gift.png'></img>
                         </div>
                     </>

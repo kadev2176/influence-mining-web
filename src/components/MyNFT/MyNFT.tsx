@@ -28,7 +28,7 @@ function MyNFT({ }: MyNFTProps) {
 
     return <>
         {location.pathname !== '/' && <>
-            <div className='my-nft-container'>
+            <div className={`my-nft-container ${location.pathname === '/leaderboard' ? 'high-position' : ''}`}>
                 {!isConnected && <>
                     <div className='no-connect' onClick={() => {
                         setConnectWalletModal(true);

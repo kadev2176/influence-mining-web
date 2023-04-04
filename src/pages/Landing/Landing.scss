@@ -10,9 +10,9 @@
     align-items: center;
 
     .title {
+      font-family: Gilroy-Bold;
       font-size: 102px;
       line-height: 120px;
-      font-weight: bold;
       margin-bottom: 105px;
     }
 
@@ -21,11 +21,12 @@
       flex-direction: column;
       align-items: center;
       font-size: 27.6px;
-      font-weight: bold;
       line-height: 142.8%;
       margin-bottom: 30px;
+      font-family: Gilroy-Bold;
 
       .superscript {
+        font-family: Gilroy-Regular;
         text-align: center;
         position: relative;
         top: -12px;
