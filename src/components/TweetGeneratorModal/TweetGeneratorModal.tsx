@@ -13,20 +13,21 @@ export interface TweetGeneratorModalProps {
     tweet?: LeaderTweet;
 }
 
+const NONE_TAG = 'none';
+
 function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
     const [tweetContent, setTweetContent] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>();
     const [sponsoredTags, setSponsoredTags] = useState<string[]>([]);
     const [selectedTag, setSelectedTag] = useState<string>();
     const isReply = !!tweet;
 
     useEffect(() => {
         if (isReply) {
+            setLoading(true);
             generateReplyTweetContent(tweet.tweetId!).then(content => {
                 setTweetContent(content);
-            });
-        } else {
-            generateTweetContent().then(content => {
-                setTweetContent(content);
+                setLoading(false);
             });
         }
 
@@ -46,9 +47,11 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
 
     useEffect(() => {
         if (selectedTag) {
+            setLoading(true);
             setTweetContent('');
-            generateTweetContent(selectedTag).then(content => {
+            generateTweetContent(selectedTag === NONE_TAG ? '' : selectedTag).then(content => {
                 setTweetContent(content);
+                setLoading(false);
             });
         }
     }, [selectedTag]);
@@ -56,7 +59,7 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
     const sponsoredTopics = <>
         {!isReply && <>
             <div className='label'>
-                Sponsored Topics
+                1. Choose a Sponsored Topic
                 <Tooltip title={<span className='tooltip-text'>Adding sponsored Hashtag and tweet relevant content will grant you EXTRA mining rewards</span>}>
                     <span className='icon'>
                         <i className="fa-regular fa-circle-question"></i>
@@ -77,12 +80,23 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
                         </div>
                     </>
                 })}
+
+                <div className={`sponsored-tag ${selectedTag === NONE_TAG ? 'selected' : ''}`}
+                    key={NONE_TAG}
+                    onClick={() => {
+                        setSelectedTag(NONE_TAG);
+                    }}
+                >
+                    <div className='none-icon'>
+                        <i className="fa-solid fa-ban"></i>
+                    </div>
+                </div>
             </div>
         </>}
     </>
 
     const gptGeneration = <>
-        <div className='label'>GPT Generated</div>
+        <div className='label'>{isReply ? '' : '2. '}GPT Generated Tweet</div>
         {!!tweetContent && <>
             <div className='editor'>
                 <TextArea value={tweetContent} placeholder="GPT is generating a tweet for you..." onChange={(e) => {
@@ -92,12 +106,21 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
         </>}
 
         {!tweetContent && <>
-            <div className='loading-section'>
-                <LoadingBar></LoadingBar>
-                <div className='loading-info'>
-                    GPTMiner generates customized tweets for you based on your historical content
+            {loading && <>
+                <div className='loading-section'>
+                    <LoadingBar></LoadingBar>
+                    <div className='loading-info'>
+                        GPTMiner generates customized tweets for you based on your historical content
+                    </div>
                 </div>
-            </div>
+            </>}
+            {!loading && <>
+                <div className='loading-section'>
+                    <div className='loading-info'>
+                        Select a tag and GPT will generate a tweet for you.
+                    </div>
+                </div>
+            </>}
         </>}
     </>
 
@@ -116,8 +139,10 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
                     {gptGeneration}
                 </div>
                 <div className='modal-footer'>
-                    <div className='action-btn-primary active' onClick={() => {
-                        postTweet();
+                    <div className={`action-btn-primary ${tweetContent ? 'active' : 'disabled'}`} onClick={() => {
+                        if (tweetContent) {
+                            postTweet();
+                        }
                     }}>
                         <div>
                             <span className='icon'>
@@ -137,8 +162,10 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
                     {gptGeneration}
 
                     <div className='btn-container'>
-                        <div className='action-btn-primary active' onClick={() => {
-                            postTweet();
+                        <div className={`action-btn-primary ${tweetContent ? 'active' : 'disabled'}`} onClick={() => {
+                            if (tweetContent) {
+                                postTweet();
+                            }
                         }}>
                             <span className='icon'>
                                 <i className="fa-brands fa-twitter"></i>
