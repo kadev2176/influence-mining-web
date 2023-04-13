@@ -1,7 +1,8 @@
 .dashboard-container {
-  width: 100vw;
-  max-width: 956px;
-  min-height: 100vh;
+  // width: 100vw;
+  // max-width: 956px;
+  // min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -14,8 +15,12 @@
 
   .mining-rewards {
     padding: 34px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .card-title-row {
+      width: 100%;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -39,9 +44,11 @@
     }
 
     .reward-row {
+      width: 100%;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      margin-bottom: 39px;
 
       font-size: 28px;
       line-height: 33px;
@@ -52,6 +59,7 @@
 
   .claim-btn {
     width: 100%;
+    max-width: 330px;
     font-size: 14px;
     line-height: 16px;
     padding: 13px;
@@ -60,8 +68,8 @@
 
 @media only screen and (max-width: 991px) {
   .dashboard-container {
-    padding: 0 16px;
-    min-height: 50vh;
+    // padding: 0 16px;
+    // min-height: 50vh;
 
     .heading {
       font-size: 32px;

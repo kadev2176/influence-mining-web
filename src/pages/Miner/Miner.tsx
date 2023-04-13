@@ -11,6 +11,7 @@ import SigninModal from '../../components/SigninModal/SigninModal';
 import LeaderBoardTweet, { LeaderTweet } from '../../components/LeaderBoardTweet/LeaderBoardTweet';
 import { isMobile } from 'react-device-detect';
 import UserAvatar from '../../components/UserAvatar/UserAvatar';
+import Dashboard from '../Dashboard/Dashboard';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -31,6 +32,7 @@ function Miner() {
     const [signinModal, setSigninModal] = useState<boolean>(false);
     const [leaderTweets, setLeaderTweets] = useState<LeaderTweet[]>();
     const [selectedTweet, setSelectedTweet] = useState<LeaderTweet>();
+    const [miningMode, setMiningMode] = useState<'group' | 'solo'>('group');
 
     useEffect(() => {
         document.title = 'GPT Miner | Miner';
@@ -98,18 +100,7 @@ function Miner() {
 
     return <>
         <div className='vault-container'>
-            <div className='miner-title'>Solo Mining</div>
-            <div className='miner-description'>
-                GPT evaluates your Tweet (attaching #GPTMiner) based on Originality, Creativity, Practicality, Personality & Discussability and generates a SCORE based on which, you will be earning rewards.
-            </div>
-
-            <div className='section-card post-tweet'>
-                <div className='post-info'>Tweet with <span className='hashtag'>{MinerTweetHashTag}</span> to start mining!</div>
-                <div className='twit-btn action-btn-primary active' onClick={() => {
-                    setSelectedTweet(undefined);
-                    setTweetGeneratorModal(true);
-                }}>Tweet</div>
-            </div>
+            <Dashboard></Dashboard>
 
             {mostRecentTweet && <>
                 <div className='section-card miner-tweet'>
@@ -154,42 +145,70 @@ function Miner() {
                 </div>
             </>}
 
-            <div className='miner-title'>Group Mining</div>
-            <div className='miner-description'>
-                Comment under tweets (attaching #GPTMiner) to boost both yours and the original tweet's SCORE. More quality interaction in a thread means more earnings for everyone engaged.
+
+            <div className='switch-btn'>
+                <div className={`option ${miningMode === 'group' ? '' : 'active'}`} onClick={() => {
+                    setMiningMode('group');
+                }}>Group Mining</div>
+                <div className={`option ${miningMode === 'group' ? 'active' : ''}`} onClick={() => {
+                    setMiningMode('solo');
+                }}>Solo Mining</div>
+                <div className={`knob ${miningMode}`}></div>
             </div>
 
-            <div className={`select-tweet ${isMobile ? '' : 'section-card'}`}>
-                <div className='header'>
-                    <div className='title'>Select a tweet to reply</div>
-                    <div className={`action-btn-primary reply-btn ${selectedTweet ? 'active' : 'disabled'}`}
-                        onClick={() => {
-                            if (selectedTweet) {
-                                setTweetGeneratorModal(true);
-                            }
-                        }}
-                    >
-                        Reply
+            {miningMode === 'solo' && <>
+                <div className='miner-title'>Solo Mining</div>
+                <div className='miner-description'>
+                    GPT evaluates your Tweet (attaching #GPTMiner) based on Originality, Creativity, Practicality, Personality & Discussability and generates a SCORE based on which, you will be earning rewards.
+                </div>
+
+                <div className='section-card post-tweet'>
+                    <div className='post-info'>Tweet with <span className='hashtag'>{MinerTweetHashTag}</span> to start mining!</div>
+                    <div className='twit-btn action-btn-primary active' onClick={() => {
+                        setSelectedTweet(undefined);
+                        setTweetGeneratorModal(true);
+                    }}>Tweet</div>
+                </div>
+            </>}
+
+            {miningMode === 'group' && <>
+                <div className='miner-title'>Group Mining</div>
+                <div className='miner-description'>
+                    Comment under tweets (attaching #GPTMiner) to boost both yours and the original tweet's SCORE. More quality interaction in a thread means more earnings for everyone engaged.
+                </div>
+
+                <div className={`select-tweet ${isMobile ? '' : 'section-card'}`}>
+                    <div className='header'>
+                        <div className='title'>Select a tweet to reply</div>
+                        <div className={`action-btn-primary reply-btn ${selectedTweet ? 'active' : 'disabled'}`}
+                            onClick={() => {
+                                if (selectedTweet) {
+                                    setTweetGeneratorModal(true);
+                                }
+                            }}
+                        >
+                            Reply
+                        </div>
+                    </div>
+                    <div className='tweets'>
+                        {leaderTweets && <>
+                            {leaderTweets.map(tweet => {
+                                return <>
+                                    <LeaderBoardTweet
+                                        tweet={tweet}
+                                        isOwner={tweet.authorName === imAccount?.twitterName}
+                                        selectable={true}
+                                        selected={selectedTweet?.tweetId === tweet.tweetId && !!tweet.tweetId}
+                                        onSelect={(t) => {
+                                            setSelectedTweet(t);
+                                        }}
+                                    ></LeaderBoardTweet>
+                                </>
+                            })}
+                        </>}
                     </div>
                 </div>
-                <div className='tweets'>
-                    {leaderTweets && <>
-                        {leaderTweets.map(tweet => {
-                            return <>
-                                <LeaderBoardTweet
-                                    tweet={tweet}
-                                    isOwner={tweet.authorName === imAccount?.twitterName}
-                                    selectable={true}
-                                    selected={selectedTweet?.tweetId === tweet.tweetId && !!tweet.tweetId}
-                                    onSelect={(t) => {
-                                        setSelectedTweet(t);
-                                    }}
-                                ></LeaderBoardTweet>
-                            </>
-                        })}
-                    </>}
-                </div>
-            </div>
+            </>}
         </div>
 
         {tweetGeneratorModal && <>

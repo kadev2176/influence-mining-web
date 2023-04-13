@@ -7,6 +7,7 @@ import { useInterval } from '../../hooks/useInterval';
 import { Ad3Activity, getAD3Activity, getAd3Balance } from '../../services/mining.service';
 import { amountToFloatString } from '../../utils/format.util';
 import './Dashboard.scss';
+import { isMobile } from 'react-device-detect';
 
 export interface DashboardProps { }
 
@@ -60,12 +61,14 @@ function Dashboard({ }: DashboardProps) {
 
     return <>
         <div className='dashboard-container'>
-            <div className='heading'>
-                Dashboard
-            </div>
-            <div className='heading-description'>
-                Become a mining node by leveraging your social influence to earn revenue. Followers can buy NFTs of social influencers to earn revenue share. Advertisers can buy ad space with tokens.
-            </div>
+            {isMobile && <>
+                <div className='heading'>
+                    Dashboard
+                </div>
+                <div className='heading-description'>
+                    Become a mining node by leveraging your social influence to earn revenue. Followers can buy NFTs of social influencers to earn revenue share. Advertisers can buy ad space with tokens.
+                </div>
+            </>}
 
             <div className='section-card mining-rewards'>
                 <div className='card-title-row'>
@@ -86,13 +89,15 @@ function Dashboard({ }: DashboardProps) {
                     </div>
                     <div className='unit'>$AD3</div>
                 </div>
+
+                <div className='action-btn-primary active claim-btn' onClick={() => {
+                    setClaimModal(true)
+                }}>
+                    Claim
+                </div>
             </div>
 
-            <div className='action-btn-primary active claim-btn' onClick={() => {
-                setClaimModal(true)
-            }}>
-                Claim
-            </div>
+
         </div>
 
         {claimModal && <>

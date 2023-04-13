@@ -9,6 +9,50 @@
   flex-direction: column;
   align-items: center;
 
+  .switch-btn {
+    background: #FFFFFF21;
+    height: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border-radius: 23px;
+    padding: 0 14px;
+    margin-bottom: 20px;
+
+    .option {
+      z-index: 3;
+      font-size: 18px;
+      line-height: 21px;
+      min-width: 114px;
+      text-align: center;
+
+      &+.option {
+        margin-left: 44px;
+      }
+
+      &.active:hover {
+        cursor: pointer;
+      }
+    }
+
+    .knob {
+      position: absolute;
+      z-index: 2;
+      top: 2px;
+      left: 2px;
+      background: #1DA1F2;
+      width: 138px;
+      height: 42px;
+      border-radius: 21px;
+      transition: 0.3s ease all;
+
+      &.solo {
+        left: 160px;
+      }
+    }
+  }
+
   .miner-title {
     font-family: Gilroy-Bold;
     font-size: 36px;
@@ -272,7 +316,7 @@
             height: 42px;
           }
         }
-        
+
         .tweet-content {
           margin-left: 14px;
           max-width: 70%;

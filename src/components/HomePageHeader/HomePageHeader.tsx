@@ -12,10 +12,10 @@ const links = [
         label: 'Miner',
         route: '/miner'
     },
-    {
-        label: 'Dashboard',
-        route: '/dashboard'
-    },
+    // {
+    //     label: 'Dashboard',
+    //     route: '/dashboard'
+    // },
     {
         label: 'Leaderboard',
         route: '/leaderboard'
