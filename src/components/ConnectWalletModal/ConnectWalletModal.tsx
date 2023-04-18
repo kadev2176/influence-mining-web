@@ -25,12 +25,14 @@ function ConnectWalletModal({ onCancel }: ConnectWalletModalProps) {
     const content = <>
         <div className='title'>Connect Wallet</div>
         <div className='connect-btns'>
-            <div className='connect-btn' onClick={() => {
-                connect({ connector: connectors[0] })
-            }}>
-                <img src="/logo/logo_metamask.png" className='logo'></img>
-                MetaMask
-            </div>
+            {!isMobile && <>
+                <div className='connect-btn' onClick={() => {
+                    connect({ connector: connectors[0] })
+                }}>
+                    <img src="/logo/logo_metamask.png" className='logo'></img>
+                    MetaMask
+                </div>
+            </>}
             <div className='connect-btn' onClick={() => {
                 open()
             }}>

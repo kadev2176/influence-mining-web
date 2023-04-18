@@ -17,7 +17,7 @@ function MobileDrawer({ children, closable = true, onClose }: MobileDrawerProps)
             placement={'bottom'}
             closable={false}
             maskClosable={closable}
-            height={'fit-content'}
+            height={'auto'}
             open
             onClose={() => { onClose && onClose() }}
         >

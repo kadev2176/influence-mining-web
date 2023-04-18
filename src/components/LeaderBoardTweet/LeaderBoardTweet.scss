@@ -125,7 +125,7 @@
       font-size: 16px;
       line-height: 19px;
       text-align: center;
-      font-weight: bold;
+      font-family: Gilroy-Bold;
     }
   }
 
@@ -157,15 +157,20 @@
       transform-origin: top left;
     }
 
+    .evaluation+.content-row {
+      margin-top: 16px;
+    }
+
     .content-row {
       margin: 0;
 
-      & + .content-row {
+      &+.content-row {
         margin-top: 16px;
       }
 
       .position {
         min-width: unset;
+
         .small {
           font-size: 12px;
         }

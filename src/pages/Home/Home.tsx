@@ -27,7 +27,8 @@ function Home({ }: HomeProps) {
                     notification.success({
                         message: 'Login Successful!'
                     })
-                    navigate('/miner');
+                    window.location.href = `${window.location.origin}/#/miner`;
+                    // navigate('/miner');
                     return;
                 }
 
@@ -36,7 +37,8 @@ function Home({ }: HomeProps) {
                         message: 'Please Apply for Beta Access'
                     });
                     setTimeout(() => {
-                        navigate('/');
+                        // navigate('/');
+                        window.location.href = `${window.location.origin}`;
                     }, 1000);
                     return;
                 }
@@ -44,6 +46,7 @@ function Home({ }: HomeProps) {
                 notification.warning({
                     message: res.message
                 });
+                window.location.href = `${window.location.origin}`;
             });
         }
     }, []);

@@ -1,5 +1,4 @@
 .header-container {
-  font-family: 'Gilroy';
   position: fixed;
   top: 0;
   display: flex;
@@ -50,10 +49,11 @@
 
     .title {
       color: #fff;
-      font-weight: bold;
+      font-family: Gilroy-Bold;
       font-size: 24px;
       line-height: 28px;
       margin-left: 11px;
+      margin-top: 4px;
     }
   }
 

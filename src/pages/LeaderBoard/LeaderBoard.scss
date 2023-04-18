@@ -10,7 +10,7 @@
   .title {
     font-size: 36px;
     line-height: 42px;
-    font-weight: bold;
+    font-family: Gilroy-Bold;
   }
 
   .dashboard {
@@ -36,13 +36,14 @@
         line-height: 23px;
         opacity: 0.6;
         margin-bottom: 18px;
+        white-space: nowrap;
       }
 
       .value {
         color: #1DA1F2;
         font-size: 28px;
         line-height: 33px;
-        font-weight: bold;
+        font-family: Gilroy-Bold;
       }
     }
   }
@@ -105,7 +106,7 @@
         padding: 20px;
         height: fit-content;
 
-        & + .stat-card {
+        &+.stat-card {
           margin-top: 19px;
         }
 

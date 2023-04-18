@@ -22,6 +22,52 @@
       color: #FFFFFF;
       opacity: 0.6;
       margin-bottom: 14px;
+
+      .icon {
+        font-size: 16px;
+        margin-left: 5px;
+      }
+    }
+
+    .tags-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 20px;
+
+      .sponsored-tag {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1.5px solid rgba(255, 255, 255, 0.05);
+        border-radius: 49px;
+        font-size: 22.8499px;
+        line-height: 27px;
+        font-family: Gilroy-Bold;
+        padding: 10px 28px;
+        display: flex;
+        align-items: center;
+
+        & + .sponsored-tag {
+          margin-left: 16px;
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        &.selected {
+          border: 1.5px solid #FFFFFF;
+        }
+
+        .gift-icon {
+          margin-left: 5px;
+          height: 22px;
+          width: 22px;
+        }
+
+        .none-icon {
+          display: flex;
+        }
+      }
     }
 
     .editor {
@@ -44,6 +90,22 @@
         }
       }
     }
+
+    .loading-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 25px;
+      height: 170px;
+
+      .loading-info {
+        margin-top: 20px;
+        font-size: 20px;
+        line-height: 23px;
+        opacity: 0.6;
+      }
+    }
   }
 
   .modal-footer {
@@ -64,11 +126,57 @@
   display: flex;
   flex-direction: column;
 
-  .title {
+  .label {
     font-size: 20px;
     line-height: 23px;
     opacity: 0.6;
     margin-bottom: 14px;
+
+    .icon {
+      font-size: 16px;
+      margin-left: 5px;
+    }
+  }
+
+  .tags-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .sponsored-tag {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid rgba(255, 255, 255, 0.05);
+      border-radius: 30px;
+      font-size: 14px;
+      line-height: 16px;
+      font-family: Gilroy-Bold;
+      padding: 6px 17px;
+      display: flex;
+      align-items: center;
+
+      & + .sponsored-tag {
+        margin-left: 10px;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.selected {
+        border: 1.5px solid #FFFFFF;
+      }
+
+      .gift-icon {
+        margin-left: 5px;
+        height: 17px;
+        width: 17px;
+      }
+
+      .none-icon {
+        display: flex;
+      }
+    }
   }
 
   .editor {
@@ -87,6 +195,21 @@
         color: #FFFFFF;
         opacity: 0.6;
       }
+    }
+  }
+
+  .loading-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 170px;
+
+    .loading-info {
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 20px;
+      opacity: 0.6;
     }
   }
 

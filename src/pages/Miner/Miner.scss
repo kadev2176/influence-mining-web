@@ -9,10 +9,54 @@
   flex-direction: column;
   align-items: center;
 
+  .switch-btn {
+    background: #FFFFFF21;
+    height: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    border-radius: 23px;
+    padding: 0 14px;
+    margin-bottom: 20px;
+
+    .option {
+      z-index: 3;
+      font-size: 18px;
+      line-height: 21px;
+      min-width: 114px;
+      text-align: center;
+
+      &+.option {
+        margin-left: 44px;
+      }
+
+      &.active:hover {
+        cursor: pointer;
+      }
+    }
+
+    .knob {
+      position: absolute;
+      z-index: 2;
+      top: 2px;
+      left: 2px;
+      background: #1DA1F2;
+      width: 138px;
+      height: 42px;
+      border-radius: 21px;
+      transition: 0.3s ease all;
+
+      &.solo {
+        left: 160px;
+      }
+    }
+  }
+
   .miner-title {
+    font-family: Gilroy-Bold;
     font-size: 36px;
     line-height: 42px;
-    font-weight: bold;
     width: 100%;
     margin-bottom: 20px;
   }
@@ -69,7 +113,7 @@
         .text {
           font-size: 20px;
           line-height: 23px;
-          font-weight: bold;
+          font-family: Gilroy-Bold;
           color: #FFFFFF;
           opacity: 0.6;
         }
@@ -101,15 +145,21 @@
       padding: 14px;
       overflow: hidden;
 
-      .avatar {
-        width: 62px;
-        height: 62px;
-        border-radius: 50%;
+      .avatar-container {
+        display: flex;
 
-        &:hover {
-          cursor: pointer;
+        .avatar {
+          width: 62px;
+          height: 62px;
+          border-radius: 50%;
+
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
+
+
 
       .tweet-content {
         display: flex;
@@ -207,6 +257,7 @@
     .miner-title {
       font-size: 32px;
       line-height: 38px;
+      font-family: Gilroy-Bold;
     }
 
     .miner-description {
@@ -259,6 +310,13 @@
       }
 
       .tweet {
+        .avatar-container {
+          .avatar {
+            width: 42px;
+            height: 42px;
+          }
+        }
+
         .tweet-content {
           margin-left: 14px;
           max-width: 70%;
@@ -299,6 +357,7 @@
 
       .header {
         align-items: center;
+
         .title {
           font-weight: unset;
           font-size: 20px;
