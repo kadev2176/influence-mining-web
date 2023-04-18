@@ -12,6 +12,7 @@ import LeaderBoardTweet, { LeaderTweet } from '../../components/LeaderBoardTweet
 import { isMobile } from 'react-device-detect';
 import UserAvatar from '../../components/UserAvatar/UserAvatar';
 import Dashboard from '../Dashboard/Dashboard';
+import { useCountdown } from '../../hooks/useCountdown';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -33,6 +34,8 @@ function Miner() {
     const [leaderTweets, setLeaderTweets] = useState<LeaderTweet[]>();
     const [selectedTweet, setSelectedTweet] = useState<LeaderTweet>();
     const [miningMode, setMiningMode] = useState<'group' | 'solo'>('group');
+    const countdown = useCountdown();
+    const [showEvaluation, setShowEvaluation] = useState<boolean>(false);
 
     useEffect(() => {
         document.title = 'GPT Miner | Miner';
@@ -103,17 +106,8 @@ function Miner() {
             <Dashboard></Dashboard>
 
             {mostRecentTweet && <>
-                <div className='section-card miner-tweet'>
-                    <div className='gpt-evaluation'>
-                        <div className='title'>
-                            <div className='text'>GPT Evaluation</div>
-                            <div className='tag'>Only the latest one is shown</div>
-                        </div>
-                        <div className='evaluation'>
-                            {mostRecentTweet.evaluation}
-                        </div>
-                    </div>
-                    <div className='tweet'>
+                <div className='miner-tweet'>
+                    <div className='section-card miner-tweet-content'>
                         <div className='avatar-container' onClick={() => {
                             window.open(mostRecentTweet.authorUrl);
                         }}>
@@ -123,7 +117,9 @@ function Miner() {
                             <div className='user-row' onClick={() => {
                                 window.open(mostRecentTweet.authorUrl);
                             }}>
-                                <span className='username'>{imAccount?.twitterName}</span>
+                                <span className='username'>
+                                    {imAccount?.twitterName}
+                                </span>
                                 <span className='twitter-name'>@{imAccount?.twitterUsername}</span>
                             </div>
                             <div className='content-row' onClick={() => {
@@ -132,19 +128,46 @@ function Miner() {
                                 {mostRecentTweet.tweetContent}
                             </div>
                         </div>
-                        <div className='mining-indicator'>
-                        </div>
 
                         <div className='corner-tag'>
-                            <div className='icon'>
-                                <i className="fa-solid fa-check"></i>
+                            <div className='timer-label'>Mining time left</div>
+                            <div className='timer'>
+                                <span className='value'>{countdown.hours}</span>
+                                <span className='colon'>:</span>
+                                <span className='value'>{countdown.mins}</span>
+                                <span className='colon'>:</span>
+                                <span className='value'>{countdown.seconds}</span>
                             </div>
-                            indexed
                         </div>
                     </div>
+                    <div className='section-card gpt-score'>
+                        <div className='label'>GPT Evaluation:</div>
+                        <div className='scores'>
+
+                        </div>
+                        <div className='evaluation-toggle' onClick={() => {
+                            setShowEvaluation(!showEvaluation);
+                        }}>
+                            {!showEvaluation && <>
+                                <span className='icon'>
+                                    <i className="fa-solid fa-chevron-down"></i>
+                                </span>
+                            </>}
+                            {showEvaluation && <>
+                                <span className='icon'>
+                                    <i className="fa-solid fa-chevron-up"></i>
+                                </span>
+                            </>}
+                        </div>
+                    </div>
+
+                    {showEvaluation && <>
+                        <div className='section-card gpt-evaluation'>
+                            GPT Evaluation: {mostRecentTweet.evaluation}
+                        </div>
+                    </>}
                 </div>
             </>}
-
 
             <div className='switch-btn'>
                 <div className={`option ${miningMode === 'group' ? '' : 'active'}`} onClick={() => {
