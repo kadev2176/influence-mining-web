@@ -15,6 +15,7 @@ export type ImAccount = {
   wallet: string;
   chainId: number;
   influence: string;
+  influenceBonus: string;
   ad3Balance: string;
   accountReferalCount: number;
   pluginReferalCount: number;
@@ -28,6 +29,7 @@ export type ImAccount = {
   tweetId?: string;
   conversationId?: string;
   tweetContent?: string;
+  tweetContentScore?: string;
   tweetEvaluation?: string;
   twitterId: string;
   twitterAccount: string;
@@ -82,12 +84,14 @@ export interface Ad3Activity {
 }
 
 export const queryAllImAccounts = async (query: string) => {
+  // todo: influenceBoost & influenceBoostLiquidityInAd3
   const graphQlQuery = `{
     allImAccounts(${query}) {
       nodes {
         id,
         wallet,
         influence,
+        influenceBonus,
         ad3Balance,
         accountReferalCount,
         pluginReferalCount,
@@ -119,6 +123,7 @@ export const queryAllImAccounts = async (query: string) => {
       conversationId: tweetStats.conversation_id,
       tweetContent: tweetStats.tweet_content,
       tweetEvaluation: tweetStats.evaluation,
+      tweetContentScore: tweetStats.score,
       twitterUsername: twitterAccount.username,
       twitterName: twitterAccount.name,
       twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url),

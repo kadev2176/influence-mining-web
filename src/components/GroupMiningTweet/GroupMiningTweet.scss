@@ -1,0 +1,75 @@
+.group-mining-tweet {
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    background: #1D202F;
+  }
+
+  .avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .tweet-content {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+
+    .user-row {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      line-height: 28px;
+
+      .user {
+        display: flex;
+        flex-direction: row;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        .username {
+          color: #fff;
+        }
+
+        .twitter-name {
+          margin-left: 10px;
+          opacity: 0.5;
+        }
+      }
+
+      .scores {
+        display: flex;
+        flex-grow: 1;
+        justify-content: flex-end;
+      }
+    }
+
+    .content-row {
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 28px;
+      width: 100%;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

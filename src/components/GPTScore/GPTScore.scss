@@ -1,0 +1,27 @@
+.gpt-score-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 11px;
+  padding: 6px 10px;
+
+  & + .gpt-score-card {
+    margin-left: 20px;
+  }
+
+  .gpt-score-label {
+    font-size: 12px;
+    line-height: 14px;
+    color: #FFFFFF;
+    opacity: 0.5;
+    margin-bottom: 7px;
+  }
+
+  .gpt-score-value {
+    font-family: Gilroy-Bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: #1DA1F2;
+  }
+}

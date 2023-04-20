@@ -235,6 +235,12 @@
         line-height: 28px;
       }
 
+      .scores {
+        flex-grow: 1;
+        display: flex;
+        margin-left: 20px;
+      }
+
       .evaluation-toggle {
         background: rgba(255, 255, 255, 0.1);
         border-radius: 5px;
@@ -244,6 +250,7 @@
         justify-content: center;
         padding: 2px 7px;
         color: #1DA1F2;
+        cursor: pointer;
       }
     }
 

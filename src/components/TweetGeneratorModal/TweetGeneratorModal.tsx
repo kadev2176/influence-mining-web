@@ -7,10 +7,11 @@ import { LeaderTweet } from '../LeaderBoardTweet/LeaderBoardTweet';
 import LoadingBar from '../LoadingBar/LoadingBar';
 import MobileDrawer from '../MobileDrawer/MobileDrawer';
 import './TweetGeneratorModal.scss';
+import { GroupMiningLeaderTweet } from '../GroupMiningTweet/GroupMiningTweet';
 
 export interface TweetGeneratorModalProps {
     onCancel: () => void;
-    tweet?: LeaderTweet;
+    tweet?: GroupMiningLeaderTweet;
 }
 
 const NONE_TAG = 'none';
@@ -70,7 +71,7 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
                 {sponsoredTags.map(tag => {
                     return <>
                         <div className={`sponsored-tag ${selectedTag === tag ? 'selected' : ''}`}
-                            key={tag}
+                            key={`key-${tag}`}
                             onClick={() => {
                                 setSelectedTag(tag);
                             }}
