@@ -1,6 +1,11 @@
 @import '../../common.scss';
 
+:root {
+  --angle: 45deg;
+}
+
 .vault-container {
+
   color: #fff;
   width: 100vw;
   max-width: 956px;
@@ -97,10 +102,20 @@
   .miner-tweet {
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(255, 255, 255, 0.13);
+    border: 3px solid rgba(255, 255, 255, 0.13);
     border-radius: 21px;
     padding: 35px;
     margin-bottom: 20px;
+    background-image: linear-gradient(to right,
+        #10121A,
+        #10121A),
+      conic-gradient(from var(--angle),
+        #1DA1F200,
+        #1DA1F2,
+      );
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    animation: rotate 6s linear infinite;
 
     .section-card {
       margin-bottom: 0;
@@ -281,6 +296,22 @@
         line-height: 16px;
       }
     }
+  }
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotate {
+  from {
+    --angle: 0deg;
+  }
+
+  to {
+    --angle: 360deg;
   }
 }
 
