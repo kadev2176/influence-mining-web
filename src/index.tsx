@@ -21,6 +21,10 @@ import LeaderBoard from './pages/LeaderBoard/LeaderBoard';
 import Dashboard from './pages/Dashboard/Dashboard';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
+import './fonts/Gilroy-Bold.ttf';
+import './fonts/Gilroy-Regular.ttf';
+
+
 declare global {
   interface Window {
     apiWs: ApiPromise;
