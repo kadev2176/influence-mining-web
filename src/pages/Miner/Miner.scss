@@ -56,6 +56,17 @@
         left: 160px;
       }
     }
+
+    &.kol {
+      .knob {
+        left: 160px;
+
+        &.solo {
+          left: 2px;
+        }
+      }
+
+    }
   }
 
   .miner-title {
@@ -100,6 +111,7 @@
   }
 
   .miner-tweet {
+    width: 100%;
     display: flex;
     flex-direction: column;
     border: 3px solid rgba(255, 255, 255, 0.13);

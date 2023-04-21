@@ -8,13 +8,13 @@ import './Miner.scss';
 import dayjs from 'dayjs'
 import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
 import SigninModal from '../../components/SigninModal/SigninModal';
-import LeaderBoardTweet, { LeaderTweet } from '../../components/LeaderBoardTweet/LeaderBoardTweet';
-import { isMobile } from 'react-device-detect';
 import UserAvatar from '../../components/UserAvatar/UserAvatar';
 import Dashboard from '../Dashboard/Dashboard';
 import { useCountdown } from '../../hooks/useCountdown';
 import GroupMiningTweet, { GroupMiningLeaderTweet } from '../../components/GroupMiningTweet/GroupMiningTweet';
 import GPTScore from '../../components/GPTScore/GPTScore';
+import { useHNFT } from '../../hooks/useHNFT';
+import { Tooltip } from 'antd';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -37,6 +37,15 @@ function Miner() {
     const [miningMode, setMiningMode] = useState<'group' | 'solo'>('group');
     const countdown = useCountdown();
     const [showEvaluation, setShowEvaluation] = useState<boolean>(false);
+    const hnft = useHNFT();
+    const [isKOL, setIsKOL] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (Number(hnft.level)) {
+            setIsKOL(true);
+            setMiningMode('solo');
+        }
+    }, [])
 
     useEffect(() => {
         document.title = 'GPT Miner | Miner';
@@ -46,7 +55,7 @@ function Miner() {
         if (!loading && !imAccount) {
             setSigninModal(true);
         }
-    }, [imAccount, loading])
+    }, [imAccount, loading]);
 
     useInterval(() => {
         refresh()
@@ -174,14 +183,26 @@ function Miner() {
     return <>
         <div className='vault-container'>
             <Dashboard></Dashboard>
-            
-            <div className='switch-btn'>
-                <div className={`option ${miningMode === 'group' ? '' : 'active'}`} onClick={() => {
-                    setMiningMode('group');
-                }}>Group Mining</div>
-                <div className={`option ${miningMode === 'group' ? 'active' : ''}`} onClick={() => {
-                    setMiningMode('solo');
-                }}>Solo Mining</div>
+
+            <div className={`switch-btn ${isKOL ? 'kol' : ''}`}>
+                {isKOL && <>
+                    <div className={`option ${miningMode === 'group' ? 'active' : ''}`} onClick={() => {
+                        setMiningMode('solo');
+                    }}>Solo Mining</div>
+                    <div className={`option ${miningMode === 'group' ? '' : 'active'}`} onClick={() => {
+                        setMiningMode('group');
+                    }}>Group Mining</div>
+                </>}
+
+                {!isKOL && <>
+                    <div className={`option ${miningMode === 'group' ? '' : 'active'}`} onClick={() => {
+                        setMiningMode('group');
+                    }}>Group Mining</div>
+                    <div className={`option ${miningMode === 'group' ? 'active' : ''}`}>
+                        <Tooltip title="Unlock this feature by upgrading your HNFT">Solo Mining</Tooltip>
+                    </div>
+                </>}
+
                 <div className={`knob ${miningMode}`}></div>
             </div>
 
