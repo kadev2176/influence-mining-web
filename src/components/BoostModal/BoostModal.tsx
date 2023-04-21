@@ -32,12 +32,14 @@ function BoostModal({ onCancel }: BoostModalProps) {
 
                         <div className='current-stat'>
                             <div className='stat-label'>APY</div>
-                            <div className='stat-value'>{Number(1222).toLocaleString('en-US')}%</div>
+                            {/* <div className='stat-value'>{Number(1222).toLocaleString('en-US')}%</div> */}
+                            <div className='stat-value'>-</div>
                         </div>
 
                         <div className='current-stat'>
                             <div className='stat-label'>TVL</div>
-                            <div className='stat-value'>{Number(1222).toLocaleString('en-US')}</div>
+                            {/* <div className='stat-value'>{Number(1222).toLocaleString('en-US')}</div> */}
+                            <div className='stat-value'>-</div>
                         </div>
                     </div>
                     <div className='boost-btn'
