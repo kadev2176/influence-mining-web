@@ -5,6 +5,7 @@ import './GroupMiningTweet.scss';
 import GPTScore from '../GPTScore/GPTScore';
 import { formatInfluenceScore } from '../../utils/format.util';
 import TweetGeneratorModal from '../TweetGeneratorModal/TweetGeneratorModal';
+import { isMobile } from 'react-device-detect';
 
 export interface GroupMiningLeaderTweet extends Partial<OembedTweet> {
     twitterName: string;
@@ -24,9 +25,20 @@ export interface GroupMiningTweetProps {
 function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
     const [replyTweetModal, setReplyTweetModal] = useState<boolean>(false);
 
+    const replyTweet = () => {
+        if (isMobile) {
+            window.open(`twitter://post?${tweet ? `in_reply_to=${tweet.tweetId}` : ''}}`);
+            return;
+        }
+    
+        window.open(`https://twitter.com/intent/tweet?${tweet ? `in_reply_to=${tweet.tweetId}` : ''}`);
+    }
+
     return <>
         <div className='group-mining-tweet section-card' onClick={() => {
-            setReplyTweetModal(true);
+            // setReplyTweetModal(true);
+
+            replyTweet();
         }}>
             <div className='avatar-container' onClick={() => {
                 // window.open(tweet.authorUrl);
