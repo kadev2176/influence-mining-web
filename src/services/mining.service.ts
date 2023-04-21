@@ -16,6 +16,8 @@ export type ImAccount = {
   chainId: number;
   influence: string;
   influenceBonus: string;
+  influenceBoost: string;
+  influenceBoostLiquidityInAd3: string;
   ad3Balance: string;
   accountReferalCount: number;
   pluginReferalCount: number;
@@ -84,7 +86,6 @@ export interface Ad3Activity {
 }
 
 export const queryAllImAccounts = async (query: string) => {
-  // todo: influenceBoost & influenceBoostLiquidityInAd3
   const graphQlQuery = `{
     allImAccounts(${query}) {
       nodes {
@@ -92,6 +93,8 @@ export const queryAllImAccounts = async (query: string) => {
         wallet,
         influence,
         influenceBonus,
+        influenceBoost,
+        influenceBoostLiquidityInAd3,
         ad3Balance,
         accountReferalCount,
         pluginReferalCount,

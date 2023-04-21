@@ -12,6 +12,7 @@ export interface GroupMiningLeaderTweet extends Partial<OembedTweet> {
     twitterProfileImageUri: string;
     influence?: string;
     influenceBonus?: string;
+    influenceBoost?: string;
     boost?: string;
     tweetContentScore?: string;
 }
@@ -44,7 +45,7 @@ function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
                     </div>
                     <div className='scores'>
                         <GPTScore label={'Base'} value={`+${formatInfluenceScore(tweet?.tweetContentScore)}`}></GPTScore>
-                        <GPTScore label={'Boost'} value={`x1`}></GPTScore>
+                        <GPTScore label={'Boost'} value={`x${tweet.influenceBoost}`}></GPTScore>
                         <GPTScore label={'Reply'} value={`+${formatInfluenceScore(tweet?.influenceBonus)}`}></GPTScore>
                         <GPTScore label={'Total'} value={`+${formatInfluenceScore(tweet?.influence)}`}></GPTScore>
                     </div>

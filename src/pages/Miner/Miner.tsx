@@ -95,6 +95,7 @@ function Miner() {
                 twitterProfileImageUri: formatTwitterImageUrl(leaderAccount?.twitterProfileImageUri),
                 influence: leaderAccount?.influence,
                 influenceBonus: leaderAccount.influenceBonus,
+                influenceBoost: leaderAccount.influenceBoost,
                 twitterName: leaderAccount?.twitterName,
                 twitterUsername: leaderAccount?.twitterUsername,
                 tweetContent: leaderAccount.tweetContent,
@@ -151,7 +152,7 @@ function Miner() {
                     <div className='label'>GPT Evaluation:</div>
                     <div className='scores'>
                         <GPTScore label={'Base'} value={`+${formatInfluenceScore(imAccount?.tweetContentScore)}`}></GPTScore>
-                        <GPTScore label={'Boost'} value={`x1`}></GPTScore>
+                        <GPTScore label={'Boost'} value={`x${imAccount?.influenceBoost}`} boost></GPTScore>
                         <GPTScore label={'Reply'} value={`+${formatInfluenceScore(imAccount?.influenceBonus)}`}></GPTScore>
                         <GPTScore label={'Total'} value={`+${formatInfluenceScore(imAccount?.influence)}`}></GPTScore>
                     </div>
