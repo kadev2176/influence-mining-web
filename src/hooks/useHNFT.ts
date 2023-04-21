@@ -14,6 +14,7 @@ export interface HNFT {
   level?: string;
   levelName?: string;
   miningPower?: number;
+  onWhitelist?: boolean;
 }
 
 export const useHNFT = () => {
@@ -47,6 +48,13 @@ export const useHNFT = () => {
     args: [tokenId],
   });
 
+  const { data: onWhitelist } = useContractRead<unknown[], string, BigNumber>({
+    address: EIP5489ForInfluenceMiningContractAddress,
+    abi: EIP5489ForInfluenceMining.abi,
+    functionName: 'kolWhiteList',
+    args: [address],
+  });
+
   const token = tokenUri ? JSON.parse(Buffer.from(tokenUri.slice(29), 'base64').toString()) : {}
 
   const levelString = level?.toString() ?? '0';
@@ -56,6 +64,7 @@ export const useHNFT = () => {
     tokenId: tokenId?.toString(),
     address: EIP5489ForInfluenceMiningContractAddress,
     balance: nftBalance?.toNumber() ?? 0,
+    onWhitelist: onWhitelist,
     level: levelString,
     levelName: BillboardLevel2Name[levelString],
     miningPower: BillboardLevel2MiningPower[levelString],
