@@ -45,30 +45,35 @@ export const BillboardLevel2MiningPower: { [level: string]: number } = {
 export const HNFT_CONFIG = [
   {
     level: 0,
+    rank: 'Common',
     name: 'Common Billboard',
     boost: 'X2',
     price: '0'
   },
   {
     level: 1,
+    rank: 'Uncommon',
     name: 'Uncommon Billboard',
     boost: 'X5',
     price: '0.3'
   },
   {
     level: 2,
+    rank: 'Rare',
     name: 'Rare Billboard',
     boost: 'X10',
     price: '1.2'
   },
   {
     level: 3,
+    rank: 'Epic',
     name: 'Epic Billboard',
     boost: 'X20',
     price: '4.8'
   },
   {
     level: 4,
+    rank: 'Legendary',
     name: 'Legendary Billboard',
     boost: 'X40',
     price: '19.2'

@@ -19,8 +19,9 @@ function BillboardNftImage({ imageUrl, level = 0, active, selected, showTag = tr
         <div className={`nft-image ${active ? 'active' : ''} ${selected ? 'selected' : ''}`}>
             {showTag && <>
                 <div className='boost-tag'>
-                    <span className='icon'><i className="fa-solid fa-rocket"></i></span>
-                    {HNFT_CONFIG[level].boost}
+                    {HNFT_CONFIG[level].rank}
+                    {/* <span className='icon'><i className="fa-solid fa-rocket"></i></span> */}
+                    {/* {HNFT_CONFIG[level].boost} */}
                 </div>
             </>}
 

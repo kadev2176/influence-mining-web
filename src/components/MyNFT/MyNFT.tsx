@@ -42,9 +42,7 @@ function MyNFT({ }: MyNFTProps) {
                 {isConnected && <>
                     {!hnft.balance && <>
                         <div className='no-hnft' onClick={() => {
-                            notification.info({
-                                message: 'Coming Soon'
-                            })
+                            setMintNftModal(true);
                         }}>
                             <span className='text'>
                                 {isMobile ? 'Mint HNFT' : 'Mint My HNFT'}
@@ -59,9 +57,7 @@ function MyNFT({ }: MyNFTProps) {
 
                         {!isMobile && <>
                             <div className='action-btn-primary active' onClick={() => {
-                                notification.info({
-                                    message: 'Coming Soon'
-                                })
+                                setMintNftModal(true);
                             }}>Upgrade HNFT</div>
                         </>}
                     </>}
@@ -73,7 +69,7 @@ function MyNFT({ }: MyNFTProps) {
             </>}
 
             {mintNftModal && <>
-                <MintNFTModal onCancel={() => { setMintNftModal(false) }}></MintNFTModal>
+                <MintNFTModal hnft={hnft} onCancel={() => { setMintNftModal(false) }}></MintNFTModal>
             </>}
         </>}
     </>;
