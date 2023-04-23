@@ -1,0 +1,37 @@
+import React from 'react';
+import { OembedTweet } from '../../services/twitter.service';
+import { formatInfluenceScore } from '../../utils/format.util';
+import UserAvatar from '../UserAvatar/UserAvatar';
+import './LeaderBoardUserCard.scss';
+
+export interface LeaderTweet extends Partial<OembedTweet> {
+    evaluation: string;
+    avatar: string;
+    rank: string;
+    influence: string;
+}
+export interface LeaderBoardUserCardProps {
+    tweet: LeaderTweet,
+    size?: 'default' | 'large',
+    children?: React.ReactNode
+}
+
+const LeaderBoardUserCard = ({ tweet, size = 'default', children }: LeaderBoardUserCardProps) => <>
+    <div className={`user-card-container ${size}`}>
+        <div className='user-card-container-ad' />
+        <div className='user-card-container-box' onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.open(tweet.authorUrl);
+        }}>
+            <div className='user-avatar'>
+                <UserAvatar src={tweet.avatar} className='avatar' />
+            </div>
+            <div className='user-name'>{tweet.authorName}</div>
+        </div>
+        <div className='gpt-score'>GPT Score: <span>{formatInfluenceScore(tweet.influence)}</span></div>
+        {children}
+    </div>
+</>;
+
+export default LeaderBoardUserCard;

@@ -298,11 +298,11 @@ export const generateWithdrawSignature = async (amount: string) => {
       'Content-Type': 'application/json'
     },
   });
-  
+
   if (!resp) {
     return;
   }
-  
+
   const sig = await resp.json();
   return sig as WithdrawAd3Signature;
 }
@@ -391,8 +391,9 @@ export const getMyIMAccount = async () => {
   return accounts[0];
 }
 
-export const getLeaderBoardImAccounts = async (count: number = 20, noReply: boolean = false) => {
-  const query = `orderBy: INFLUENCE_DESC, first: ${count}`;
+export const getLeaderBoardImAccounts = async (count: number = 20, userId: string = '') => {
+  // const query = `orderBy: INFLUENCE_DESC, first: ${count}`;
+  const query = `orderBy: INFLUENCE_DESC, first: ${count}, after: ${userId ? `"${userId}"` : null}`;
   // const query = `orderBy: INFLUENCE_DESC, first: ${count}${noReply ? ",filter: { tweetStats: { condition: EQUAL, value: \"{\"tweet_id\": ${JSON_EXTRACT(tweetStats, '$.conversation_id')} }\" } }" : ''}`;
   // const query = `orderBy: INFLUENCE_DESC, first: ${count}` + ",filter: { tweetStats: { condition: EQUAL, value: \"${JSON_EXTRACT(tweetStats, '$.tweet_id')}=${JSON_EXTRACT(tweetStats, '$.conversation_id')}\" } }";
   return queryAllImAccounts(query);
