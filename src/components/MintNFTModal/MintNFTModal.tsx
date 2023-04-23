@@ -50,7 +50,9 @@ function MintNFTModal({ onCancel, hnft, onSuccess }: MintNFTModalProps) {
 
     useEffect(() => {
         if (selectedNft) {
-            // todo: optional
+            if (selectedNft.level === 1 && hnft.onWhitelist) {
+                return;
+            }
             const priceDiff = BigNumber.from(prices[selectedNft.level]).sub(prices[Number(hnft.level!)]).toString();
             setPriceDiff(priceDiff);
         }
@@ -139,23 +141,23 @@ function MintNFTModal({ onCancel, hnft, onSuccess }: MintNFTModalProps) {
                 </>}
 
                 {!hnft.balance && <>
-                    {(mintPrepareError || !mint) && <>
+                    {(!mint && !approve) && <>
                         <Tooltip title={'insufficient $AD3'}>
                             <div className='action-btn-primary disabled'>Mint</div>
                         </Tooltip>
                     </>}
 
-                    {!mintPrepareError && mint && <>
+                    {(mint || approve) && <>
                         <div className='action-btn-primary active' onClick={() => {
-                            if (selectedNft && mint) {
-                                mint()
+                            if (Number(priceDiff) > 0 && approve) {
+                                approve();
+                            } else if (mint) {
+                                mint();
                             }
                         }}>Mint</div>
                     </>}
                 </>}
             </>}
-
-
         </>}
     </>;
 
