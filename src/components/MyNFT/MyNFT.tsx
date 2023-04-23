@@ -69,7 +69,9 @@ function MyNFT({ }: MyNFTProps) {
             </>}
 
             {mintNftModal && <>
-                <MintNFTModal hnft={hnft} onCancel={() => { setMintNftModal(false) }}></MintNFTModal>
+                <MintNFTModal hnft={hnft} onCancel={() => { setMintNftModal(false) }} onSuccess={() => {
+                    hnft.refetch();
+                }}></MintNFTModal>
             </>}
         </>}
     </>;

@@ -15,40 +15,41 @@ export interface HNFT {
   levelName?: string;
   miningPower?: number;
   onWhitelist?: boolean;
+  refetch: () => void;
 }
 
 export const useHNFT = () => {
   const { address } = useAccount();
 
-  const { data: nftBalance } = useContractRead<unknown[], string, BigNumber>({
+  const { data: nftBalance, refetch: refetchBalance } = useContractRead<unknown[], string, BigNumber>({
     address: EIP5489ForInfluenceMiningContractAddress,
     abi: EIP5489ForInfluenceMining.abi,
     functionName: 'balanceOf',
     args: [address],
   });
 
-  const { data: tokenId } = useContractRead<unknown[], string, BigNumber>({
+  const { data: tokenId, refetch: refetchTokenId } = useContractRead<unknown[], string, BigNumber>({
     address: EIP5489ForInfluenceMiningContractAddress,
     abi: EIP5489ForInfluenceMining.abi,
     functionName: 'tokenOfOwnerByIndex',
     args: [address, 0],
   });
 
-  const { data: tokenUri } = useContractRead<unknown[], string, string>({
+  const { data: tokenUri, refetch: refetchTokenUri } = useContractRead<unknown[], string, string>({
     address: EIP5489ForInfluenceMiningContractAddress,
     abi: EIP5489ForInfluenceMining.abi,
     functionName: 'tokenURI',
     args: [tokenId],
   });
 
-  const { data: level } = useContractRead<unknown[], string, string>({
+  const { data: level, refetch: refetchLevel } = useContractRead<unknown[], string, string>({
     address: EIP5489ForInfluenceMiningContractAddress,
     abi: EIP5489ForInfluenceMining.abi,
     functionName: 'token2Level',
     args: [tokenId],
   });
 
-  const { data: onWhitelist } = useContractRead<unknown[], string, BigNumber>({
+  const { data: onWhitelist, refetch: refetchWhitelistStatus } = useContractRead<unknown[], string, BigNumber>({
     address: EIP5489ForInfluenceMiningContractAddress,
     abi: EIP5489ForInfluenceMining.abi,
     functionName: 'kolWhiteList',
@@ -68,6 +69,13 @@ export const useHNFT = () => {
     level: levelString,
     levelName: BillboardLevel2Name[levelString],
     miningPower: BillboardLevel2MiningPower[levelString],
+    refetch: () => {
+      refetchBalance();
+      refetchTokenId();
+      refetchTokenUri();
+      refetchLevel();
+      refetchWhitelistStatus();
+    }
   };
 
   return hnft;
