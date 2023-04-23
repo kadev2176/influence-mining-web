@@ -14,7 +14,7 @@
     }
   }
 
-  & + .gpt-score-card {
+  &+.gpt-score-card {
     margin-left: 20px;
   }
 
@@ -31,5 +31,24 @@
     font-size: 24px;
     line-height: 28px;
     color: #1DA1F2;
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .gpt-score-card {
+    padding: 10px;
+    border-radius: 8px;
+    &+.gpt-score-card {
+      margin-left: 10px;
+    }
+    .gpt-score-label {
+      font-size: 8px;
+      line-height: 9px;
+    }
+
+    .gpt-score-value {
+      font-size: 15px;
+      line-height: 18px;
+    }
   }
 }

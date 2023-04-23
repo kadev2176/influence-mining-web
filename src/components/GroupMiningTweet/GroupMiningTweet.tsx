@@ -37,7 +37,6 @@ function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
     return <>
         <div className='group-mining-tweet section-card' onClick={() => {
             // setReplyTweetModal(true);
-
             replyTweet();
         }}>
             <div className='avatar-container' onClick={() => {

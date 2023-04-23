@@ -4,7 +4,6 @@ import './HomePageHeader.scss';
 import { isMobile } from 'react-device-detect';
 import { Dropdown } from 'antd';
 import UserAvatar from '../UserAvatar/UserAvatar';
-import { useConnect } from 'wagmi';
 import { useAccount } from 'wagmi';
 import { shortenString } from '../../utils/format.util';
 
