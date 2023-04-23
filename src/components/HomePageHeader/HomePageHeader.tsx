@@ -4,6 +4,9 @@ import './HomePageHeader.scss';
 import { isMobile } from 'react-device-detect';
 import { Dropdown } from 'antd';
 import UserAvatar from '../UserAvatar/UserAvatar';
+import { useConnect } from 'wagmi';
+import { useAccount } from 'wagmi';
+import { shortenString } from '../../utils/format.util';
 
 export interface HomePageHeaderProps { }
 
@@ -12,10 +15,6 @@ const links = [
         label: 'Miner',
         route: '/miner'
     },
-    // {
-    //     label: 'Dashboard',
-    //     route: '/dashboard'
-    // },
     {
         label: 'Leaderboard',
         route: '/leaderboard'
@@ -25,6 +24,7 @@ const links = [
 function HomePageHeader({ }: HomePageHeaderProps) {
     const navigate = useNavigate();
     const location = useLocation();
+    const { address } = useAccount();
 
     const openWhitepaper = () => {
         window.open('https://parami.gitbook.io/gpt-miner/');
@@ -56,29 +56,37 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                         })}
                     </div>
 
-                    <Dropdown dropdownRender={() => {
-                        return <>
-                            <div className='user-profile-dropdown'>
-                                <div className='item' onClick={openWhitepaper}>Whitepaper</div>
-                                <div className='item disabled'>Whitelist</div>
-                                <div className='item' onClick={() => {
-                                    window.localStorage.removeItem('authcookiebytwitter');
-                                    window.localStorage.removeItem('expiretime');
-                                    window.localStorage.removeItem('userid');
-                                    navigate('/');
-                                }}>Sign out</div>
+                    <div className='user-info-section'>
+                        {!!address && <>
+                            <div className='user-profile'>
+                                <div className='username'>{shortenString(address, 13)}</div>
                             </div>
-                        </>
-                    }}>
-                        <div className='user-profile'>
-                            {imAccount && <>
-                                <div className='username'>
-                                    {`${imAccount.twitterName}`}
+                        </>}
+
+                        <Dropdown dropdownRender={() => {
+                            return <>
+                                <div className='user-profile-dropdown'>
+                                    <div className='item' onClick={openWhitepaper}>Whitepaper</div>
+                                    <div className='item disabled'>Whitelist</div>
+                                    <div className='item' onClick={() => {
+                                        window.localStorage.removeItem('authcookiebytwitter');
+                                        window.localStorage.removeItem('expiretime');
+                                        window.localStorage.removeItem('userid');
+                                        navigate('/');
+                                    }}>Sign out</div>
                                 </div>
-                                <UserAvatar className='user-avatar' src={imAccount.twitterProfileImageUri}></UserAvatar>
-                            </>}
-                        </div>
-                    </Dropdown>
+                            </>
+                        }}>
+                            <div className='user-profile'>
+                                {imAccount && <>
+                                    <div className='username'>
+                                        {`${imAccount.twitterName}`}
+                                    </div>
+                                    <UserAvatar className='user-avatar' src={imAccount.twitterProfileImageUri}></UserAvatar>
+                                </>}
+                            </div>
+                        </Dropdown>
+                    </div>
                 </>}
             </>}
 

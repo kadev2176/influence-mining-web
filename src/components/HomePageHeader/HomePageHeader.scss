@@ -42,6 +42,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
+    width: 270px;
 
     .logo {
       height: 40px;
@@ -82,6 +83,14 @@
     }
   }
 
+  .user-info-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 270px;
+    justify-content: flex-end;
+  }
+
   .user-profile {
     height: 50px;
     background: #10121A;
@@ -91,6 +100,10 @@
     padding-left: 15px;
     padding-right: 13px;
     align-items: center;
+
+    &+.user-profile {
+      margin-left: 12px;
+    }
 
     &:hover {
       background: #1C1E25;
