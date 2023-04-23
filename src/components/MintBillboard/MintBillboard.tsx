@@ -48,7 +48,7 @@ function MintBillboard() {
     const hnft = useHNFT();
     const { imAccount } = useImAccount();
     const { mint, isSuccess: mintSuccess, isLoading: mintLoading, error: mintError } = useMintBillboard(mintLevel, imAccount?.twitterProfileImageUri ?? ''); // default image?
-    const { upgradeBillboardLevel, isSuccess: upgradeSuccess, isLoading: upgradeLoading, error: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
+    const { upgradeHnft, isSuccess: upgradeSuccess, isLoading: upgradeLoading, error: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
     const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError } = useApproveAD3(price);
 
     const clearState = () => {
@@ -88,8 +88,8 @@ function MintBillboard() {
     }, [price])
 
     useEffect(() => {
-        if (upgradeToLevel !== undefined && upgradeBillboardLevel && approveSuccess) {
-            upgradeBillboardLevel();
+        if (upgradeToLevel !== undefined && upgradeHnft && approveSuccess) {
+            upgradeHnft();
         }
     }, [upgradeToLevel, approveSuccess]);
 

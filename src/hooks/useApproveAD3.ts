@@ -3,7 +3,7 @@ import { AD3ContractAddress, EIP5489ForInfluenceMiningContractAddress } from "..
 import AD3Contract from '../contracts/AD3.json';
 
 export const useApproveAD3 = (amount?: string) => {
-  const { config } = usePrepareContractWrite({
+  const { config, error: prepareError } = usePrepareContractWrite({
     address: AD3ContractAddress,
     abi: AD3Contract.abi,
     functionName: 'approve',
@@ -19,6 +19,7 @@ export const useApproveAD3 = (amount?: string) => {
     isLoading: writeLoading || waitTxLoading,
     isSuccess,
     isError,
-    error
+    error,
+    prepareError
   }
 }

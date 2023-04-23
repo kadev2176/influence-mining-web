@@ -75,3 +75,13 @@ export const formatTwitterImageUrl = (url?: string) => {
 export const formatInfluenceScore = (value: string | bigint = '0') => {
 	return Number(amountToFloatString(value, 2)).toLocaleString('en-US');
 }
+
+export const shortenString = (str: string, maxLength: number) => {
+  if (str.length > maxLength) {
+    const ellipsis = '...';
+    const beginning = str.slice(0, Math.ceil(maxLength / 2 - ellipsis.length / 2) + 1);
+    const end = str.slice(str.length - maxLength / 2 + ellipsis.length / 2 + 1);
+    return beginning + ellipsis + end;
+  }
+  return str;
+}
