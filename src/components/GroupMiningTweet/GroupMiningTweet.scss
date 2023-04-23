@@ -74,3 +74,37 @@
     }
   }
 }
+
+@media only screen and (max-width: 991px) {
+  .group-mining-tweet {
+    &.section-card {
+      padding: 12px;
+    }
+
+    .avatar-container {
+      .avatar {
+        width: 38px;
+        height: 38px;
+      }
+    }
+
+    .tweet-content {
+      .user-row {
+        font-size: 14px;
+        line-height: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        
+        .user {
+          margin-bottom: 12px;
+        }
+      }
+
+      .content-row {
+        font-size: 14px;
+        line-height: 17px;
+      }
+    }
+  }
+}

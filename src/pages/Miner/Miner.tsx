@@ -15,6 +15,7 @@ import GroupMiningTweet, { GroupMiningLeaderTweet } from '../../components/Group
 import GPTScore from '../../components/GPTScore/GPTScore';
 import { useHNFT } from '../../hooks/useHNFT';
 import { Tooltip } from 'antd';
+import { isMobile } from 'react-device-detect';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -115,6 +116,18 @@ function Miner() {
     const currentMiningTweet = <>
         {mostRecentTweet && <>
             <div className='miner-tweet'>
+                {isMobile && <>
+                    <div className='countdown-card'>
+                        <div className='timer-label'>Mining time left</div>
+                        <div className='timer'>
+                            <span className='value'>{countdown.hours}</span>
+                            <span className='colon'>:</span>
+                            <span className='value'>{countdown.mins}</span>
+                            <span className='colon'>:</span>
+                            <span className='value'>{countdown.seconds}</span>
+                        </div>
+                    </div>
+                </>}
                 <div className='section-card miner-tweet-content'>
                     <div className='avatar-container' onClick={() => {
                         window.open(mostRecentTweet.authorUrl);
@@ -137,16 +150,18 @@ function Miner() {
                         </div>
                     </div>
 
-                    <div className='corner-tag'>
-                        <div className='timer-label'>Mining time left</div>
-                        <div className='timer'>
-                            <span className='value'>{countdown.hours}</span>
-                            <span className='colon'>:</span>
-                            <span className='value'>{countdown.mins}</span>
-                            <span className='colon'>:</span>
-                            <span className='value'>{countdown.seconds}</span>
+                    {!isMobile && <>
+                        <div className='corner-tag'>
+                            <div className='timer-label'>Mining time left</div>
+                            <div className='timer'>
+                                <span className='value'>{countdown.hours}</span>
+                                <span className='colon'>:</span>
+                                <span className='value'>{countdown.mins}</span>
+                                <span className='colon'>:</span>
+                                <span className='value'>{countdown.seconds}</span>
+                            </div>
                         </div>
-                    </div>
+                    </>}
                 </div>
                 <div className='section-card gpt-score'>
                     <div className='label'>GPT Evaluation:</div>
@@ -155,20 +170,23 @@ function Miner() {
                         <GPTScore label={'Boost'} value={`x${imAccount?.influenceBoost}`} boost></GPTScore>
                         <GPTScore label={'Reply'} value={`+${formatInfluenceScore(imAccount?.influenceBonus)}`}></GPTScore>
                         <GPTScore label={'Total'} value={`+${formatInfluenceScore(imAccount?.influence)}`}></GPTScore>
-                    </div>
-                    <div className='evaluation-toggle' onClick={() => {
-                        setShowEvaluation(!showEvaluation);
-                    }}>
-                        {!showEvaluation && <>
-                            <span className='icon'>
-                                <i className="fa-solid fa-chevron-down"></i>
-                            </span>
-                        </>}
-                        {showEvaluation && <>
-                            <span className='icon'>
-                                <i className="fa-solid fa-chevron-up"></i>
-                            </span>
-                        </>}
+
+                        <div className='toggle-container'>
+                            <div className='evaluation-toggle' onClick={() => {
+                                setShowEvaluation(!showEvaluation);
+                            }}>
+                                {!showEvaluation && <>
+                                    <span className='icon'>
+                                        <i className="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                </>}
+                                {showEvaluation && <>
+                                    <span className='icon'>
+                                        <i className="fa-solid fa-chevron-up"></i>
+                                    </span>
+                                </>}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
