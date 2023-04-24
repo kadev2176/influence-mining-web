@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 // import { useImAccount } from '../../hooks/useImAccount';
-import { getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity } from '../../services/mining.service';
+import { getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity, queryImAccountPageTest } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
 import { amountToFloatString, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
 import LeaderBoardUserCard from '../../components/LeaderBoardUserCard/LeaderBoardUserCard';
@@ -19,6 +19,10 @@ function LeaderBoard(_: LeaderBoardProps) {
 
     useEffect(() => {
         document.title = 'GPT Miner | Leaderboard';
+    }, []);
+
+    useEffect(() => {
+        queryImAccountPageTest();
     }, []);
 
     const fetchLeaderBoard = useCallback(async () => {

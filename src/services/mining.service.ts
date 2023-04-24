@@ -85,6 +85,43 @@ export interface Ad3Activity {
   startTime: number;
 }
 
+export const queryImAccountPageTest = async () => {
+  const graphQlQuery = `{
+    allImAccounts(orderBy: INFLUENCE_DESC, first: 6, after: "WyJpbmZsdWVuY2VfZGVzYyIsWzc3NTAsNzhdXQ==") {
+      edges {
+        node {
+          id,
+          wallet,
+          influence,
+          influenceBonus,
+          influenceBoost,
+          influenceBoostLiquidityInAd3,
+          ad3Balance,
+          accountReferalCount,
+          pluginReferalCount,
+          updatedTime,
+          beginPreemptTime,
+          hnftContractAddr,
+          hnftTokenId,
+          tweetStats,
+          twitterId,
+          twitterAccount
+        }
+        cursor
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(graphQlQuery, '');
+
+  if (!res) {
+    return;
+  }
+
+  const { data } = await res.json();
+  console.log('query pagination', data);
+}
+
 export const queryAllImAccounts = async (query: string) => {
   const graphQlQuery = `{
     allImAccounts(${query}) {
