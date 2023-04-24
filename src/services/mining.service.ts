@@ -134,6 +134,78 @@ export const queryAllImAccounts = async (query: string) => {
   });
 }
 
+export const queryAllImAccountsOfPage = async (query: string) => {
+  const graphQlQuery = `{
+    allImAccounts(${query}) {
+      edges {
+        node {
+          id,
+          wallet,
+          influence,
+          influenceBonus,
+          influenceBoost,
+          influenceBoostLiquidityInAd3,
+          ad3Balance,
+          accountReferalCount,
+          pluginReferalCount,
+          updatedTime,
+          beginPreemptTime,
+          hnftContractAddr,
+          hnftTokenId,
+          tweetStats,
+          twitterId,
+          twitterAccount
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(graphQlQuery, '');
+
+  if (!res) {
+    return {
+      nodes: [],
+      pageInfo: {
+        endCursor: '',
+        hasNextPage: false,
+      }
+    };
+  }
+
+  const { data } = await res.json();
+  const { edges, pageInfo } = data.allImAccounts || {};
+  const accounts = edges as { node: ImAccount, cursor: string }[];
+  const nodes = accounts.map(({ node: account, cursor }) => {
+    const twitterAccount = JSON.parse(account.twitterAccount);
+    const tweetStats = JSON.parse(account.tweetStats);
+
+    return {
+      node: {
+        ...account,
+        tweetId: tweetStats.tweet_id,
+        conversationId: tweetStats.conversation_id,
+        tweetContent: tweetStats.tweet_content,
+        tweetEvaluation: tweetStats.evaluation,
+        tweetContentScore: tweetStats.score,
+        twitterUsername: twitterAccount.username,
+        twitterName: twitterAccount.name,
+        twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url),
+      } as ImAccount,
+      cursor
+    };
+  });
+
+  return {
+    nodes,
+    pageInfo,
+  }
+}
+
 export const getTwitterOauthUrl = async () => {
   try {
     const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/twitter/login?state=gptminer_login`);
@@ -298,11 +370,11 @@ export const generateWithdrawSignature = async (amount: string) => {
       'Content-Type': 'application/json'
     },
   });
-  
+
   if (!resp) {
     return;
   }
-  
+
   const sig = await resp.json();
   return sig as WithdrawAd3Signature;
 }
@@ -391,8 +463,11 @@ export const getMyIMAccount = async () => {
   return accounts[0];
 }
 
-export const getLeaderBoardImAccounts = async (count: number = 20, noReply: boolean = false) => {
-  const query = `orderBy: INFLUENCE_DESC, first: ${count}`;
+export const getLeaderBoardImAccountsOfPage = async (count: number = 20, cursor: string | undefined = '') => queryAllImAccountsOfPage(`orderBy: INFLUENCE_DESC, first: ${count}, after: ${cursor ? `"${cursor}"` : null}`);
+
+export const getLeaderBoardImAccounts = async (count: number = 20, userId: string = '') => {
+  // const query = `orderBy: INFLUENCE_DESC, first: ${count}`;
+  const query = `orderBy: INFLUENCE_DESC, first: ${count}, after: ${userId ? `"${userId}"` : null}`;
   // const query = `orderBy: INFLUENCE_DESC, first: ${count}${noReply ? ",filter: { tweetStats: { condition: EQUAL, value: \"{\"tweet_id\": ${JSON_EXTRACT(tweetStats, '$.conversation_id')} }\" } }" : ''}`;
   // const query = `orderBy: INFLUENCE_DESC, first: ${count}` + ",filter: { tweetStats: { condition: EQUAL, value: \"${JSON_EXTRACT(tweetStats, '$.tweet_id')}=${JSON_EXTRACT(tweetStats, '$.conversation_id')}\" } }";
   return queryAllImAccounts(query);

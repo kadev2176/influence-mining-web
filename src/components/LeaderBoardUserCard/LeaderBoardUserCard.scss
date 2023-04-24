@@ -1,0 +1,91 @@
+@import '../../common.scss';
+
+.user-card-container {
+  position: relative;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &.large {
+    .user-card-container-ad {
+      width: 53px;
+      height: 53px;
+    }
+
+    .user-card-container-box {
+      .user-avatar {
+        width: 144px;
+        height: 144px;
+        margin-bottom: 6px;
+      }
+
+      .user-name {
+        font-size: 34px;
+        line-height: 47px;
+        margin-bottom: 6px;
+      }
+    }
+  }
+
+  .user-card-container-box {
+    cursor: pointer;
+
+    .user-avatar {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-bottom: 10px;
+      margin-left: auto;
+      margin-right: auto;
+
+      .avatar {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .user-name {
+      font-size: 26px;
+      line-height: 30px;
+      color: #fff;
+      max-width: 200px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 8px;
+    }
+  }
+
+  .gpt-score {
+    font-size: 24px;
+    line-height: 28px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+
+    span {
+      color: #1DA1F2;
+      font-weight: bold;
+    }
+  }
+
+  .user-card-container-ad {
+    background-color: #fff;
+    border-radius: 50%;
+    width: 37px;
+    height: 37px;
+    border: 2px solid #fff;
+    position: absolute;
+    left: 50%;
+    z-index: 10;
+    top: 0;
+    transform: translateX(70%);
+    cursor: pointer;
+    background-image: url('../../../public/heart.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 66%;
+  }
+}

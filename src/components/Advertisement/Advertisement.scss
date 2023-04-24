@@ -1,0 +1,192 @@
+@import '../../common.scss';
+
+.advertisementContainer {
+  .bid-section {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 442px;
+    background: #10121A;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .dao-info {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-left: 12px;
+    }
+
+    .dao-info-text {
+      color: #FFFFFF;
+      font-size: 24px;
+    }
+
+    .token-price {
+      font-size: 20px;
+
+      .number {
+        color: rgba(255, 255, 255, 0.5)
+      }
+    }
+
+    .token-price,
+    .dao-info-text {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .help {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.5);
+      padding: 0 12px;
+      margin-top: 30px;
+    }
+
+    .change.flat {
+      background: #4AA372;
+      border-radius: 38px;
+      height: 24px;
+      font-size: 14px;
+      align-items: center;
+      display: flex;
+      padding: 0 8px;
+    }
+  }
+
+  .sponsor-info {
+    padding: 28px 28px 20px 28px;
+    background: #161820;
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    border-radius: 20px;
+    width: 564px;
+
+    .sponsor-header {
+      display: flex;
+      align-items: center;
+    }
+
+    .sponsor-desc {
+      display: flex;
+      flex-direction: column;
+      font-size: 24px;
+      margin-left: 12px;
+
+      >span {
+        color: rgba(255, 255, 255, 0.5)
+      }
+    }
+
+    .ad-section {
+      background: #10121A;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 10px;
+      margin-top: 24px;
+      font-size: 24px;
+      color: #fff;
+      position: relative;
+
+      &-arrow {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        transform: rotate(45deg);
+        left: 24px;
+        top: -11px;
+        z-index: 1;
+        background: #10121A;
+        border-top-left-radius: 5px;
+        border-top: 1px solid rgba(255, 255, 255, 0.13);
+        border-left: 1px solid rgba(255, 255, 255, 0.13);
+      }
+    }
+
+    .ad-header {
+      font-size: 24px;
+      color: #fff;
+      padding: 24px 24px 8px 24px;
+    }
+
+    .ad-content {
+      padding: 48px;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      overflow: hidden;
+    }
+
+    .reward {
+      &-amount {
+        display: flex;
+        align-items: center;
+        margin-top: 22px;
+      }
+
+      &-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 12px;
+      }
+    }
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  .action-button {
+    min-width: 100px;
+    cursor: pointer;
+    padding: 12px 18px;
+    width: fit-content;
+    border-radius: 30px;
+    background: #fff;
+    font-size: 20px;
+    color: #10121A;
+  }
+
+  .ad-button {
+    background: rgba(255, 255, 255, 0.5);
+    margin-top: 22px;
+    color: #fff;
+
+    &:first-child {
+      width: 40%;
+    }
+
+    &:last-child {
+      width: 60%;
+    }
+  }
+
+  .action-button.left {
+    border-radius: 30px 0 0 30px;
+    margin-right: 6px;
+  }
+
+  .action-button.right {
+    border-radius: 0 30px 30px 0;
+  }
+
+  .action-button.left.right {
+    border-radius: 30px;
+  }
+
+  .action-button:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+}

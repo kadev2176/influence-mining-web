@@ -1,53 +1,60 @@
-import { Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useImAccount } from '../../hooks/useImAccount';
-import { useInterval } from '../../hooks/useInterval';
-import { getMyIMAccount, getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity, ImAccount } from '../../services/mining.service';
+import { useEffect, useState, useCallback } from 'react';
+// import { useImAccount } from '../../hooks/useImAccount';
+import { getPoolSummary, PoolSummary, getAD3Activity, getLeaderBoardImAccountsOfPage } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
-import { amountToFloatString, formatAd3Amount, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
-import LeaderBoardTweet from '../../components/LeaderBoardTweet/LeaderBoardTweet';
+import { amountToFloatString, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
+import LeaderBoardUserCard from '../../components/LeaderBoardUserCard/LeaderBoardUserCard';
 import './LeaderBoard.scss';
 
 export interface LeaderBoardProps {
 }
 
-function LeaderBoard({ }: LeaderBoardProps) {
+type PageInfoType = {
+    hasNextPage: boolean;
+    endCursor: string;
+}
+
+function LeaderBoard(_: LeaderBoardProps) {
+    const [loading, setLoading] = useState<boolean>(true);
     const [poolSummary, setPoolSummary] = useState<PoolSummary>();
-    const [leaderboardRows, setLeaderBoardRows] = useState<any[]>();
+    const [leaderboardRows, setLeaderBoardRows] = useState<any[]>([]);
     const [halveTime, setHalveTime] = useState<string>('-');
-    const { imAccount } = useImAccount();
+    const [pageInfo, setPageInfo] = useState<PageInfoType>({ hasNextPage: true, endCursor: '' });
+    // const { imAccount } = useImAccount();
 
     useEffect(() => {
         document.title = 'GPT Miner | Leaderboard';
     }, []);
 
-    const fetchLeaderBoard = async (imAccount: ImAccount) => {
-        const leaders = await getLeaderBoardImAccounts();
-        const accounts = [imAccount, ...leaders ?? []];
-
-        const rank = (leaders ?? []).findIndex(account => account.id === imAccount?.id);
-        const rows = await Promise.all(accounts.map(async (account, index) => {
+    const fetchLeaderBoard = useCallback(async () => {
+        if (!pageInfo?.hasNextPage) return;
+        setLoading(true);
+        const { nodes: leaders, pageInfo: pageInfoData } = await getLeaderBoardImAccountsOfPage(20, pageInfo?.endCursor);
+        setPageInfo(pageInfoData);
+        const rows = await Promise.all((leaders || []).map(async ({ node: account }, index) => {
             const tweet = account?.tweetId ? await fetchOembedTweet(account?.tweetId) : {};
             return {
+                ...account,
                 avatar: formatTwitterImageUrl(account?.twitterProfileImageUri),
                 influence: account?.influence,
-                rank: index > 0
-                    ? `${index}`
-                    : (rank >= 0 ? `${rank + 1}` : 'Unknown'),
+                rank: index + 1,
                 tweetContent: account.tweetContent,
                 authorName: account.twitterName,
                 ...tweet,
                 evaluation: account.tweetEvaluation
             };
         }));
-        setLeaderBoardRows(rows);
-    }
+
+        if (rows?.length) {
+            setLeaderBoardRows(old => [...old, ...rows]);
+        }
+        setLoading(false);
+    }, [pageInfo?.endCursor, pageInfo?.hasNextPage])
 
     useEffect(() => {
-        if (imAccount) {
-            fetchLeaderBoard(imAccount);
-        }
-    }, [imAccount])
+        fetchLeaderBoard();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     useEffect(() => {
         getPoolSummary().then((res) => {
@@ -67,8 +74,11 @@ function LeaderBoard({ }: LeaderBoardProps) {
     return <>
         <div className='leaderboard-container'>
             <div className='title'>
-                Leaderboard
+                ROLLING 24H LEADERBOARD
             </div>
+            <p className='introduce'>
+                Turn into a mining node by tweeting and use your social influence to earn revenue. Fans can buy NFTs of social influencers to earn revenue share. Advertisers can buy ad space with tokens
+            </p>
 
             <div className='dashboard'>
                 <div className='stat-card'>
@@ -88,17 +98,18 @@ function LeaderBoard({ }: LeaderBoardProps) {
             </div>
 
             <div className='leaderboard-tweets'>
-                <Row className='leaderboard-header'>
-                    <Col span={2}>Position</Col>
-                    <Col span={19}>User</Col>
-                    <Col span={1}>Boost</Col>
-                    <Col span={2}>Score</Col>
-                </Row>
-
                 {leaderboardRows && leaderboardRows.length > 0 && <>
-                    {leaderboardRows.map((tweet, index) => {
-                        return <LeaderBoardTweet tweet={tweet} isOwner={!index}></LeaderBoardTweet>
-                    })}
+                    {leaderboardRows.map((tweet, index) => (
+                        <div className={`leaderboard-tweet${index < 4 ? ` item-${index}` : ''}`} key={index}>
+                            <LeaderBoardUserCard tweet={tweet} size={index === 0 ? 'large' : 'default'}></LeaderBoardUserCard>
+                        </div>
+                    ))}
+                    <div className='loading-box'>
+                        {pageInfo?.hasNextPage ? <button
+                            disabled={loading}
+                            onClick={fetchLeaderBoard}
+                        >{`Load${loading ? 'ing' : ' more'}`}</button> : <p>In the end, there is no more</p>}
+                    </div>
                 </>}
             </div>
         </div>
