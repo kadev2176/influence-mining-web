@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 // import { useImAccount } from '../../hooks/useImAccount';
 import { getLeaderBoardImAccounts, getPoolSummary, PoolSummary, getAD3Activity } from '../../services/mining.service';
 import { fetchOembedTweet } from '../../services/twitter.service';
 import { amountToFloatString, formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
 import LeaderBoardUserCard from '../../components/LeaderBoardUserCard/LeaderBoardUserCard';
 import './LeaderBoard.scss';
-import { useCallback } from 'react';
 
 export interface LeaderBoardProps {
 }
