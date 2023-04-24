@@ -85,43 +85,6 @@ export interface Ad3Activity {
   startTime: number;
 }
 
-export const queryImAccountPageTest = async () => {
-  const graphQlQuery = `{
-    allImAccounts(orderBy: INFLUENCE_DESC, first: 6, after: "WyJpbmZsdWVuY2VfZGVzYyIsWzc3NTAsNzhdXQ==") {
-      edges {
-        node {
-          id,
-          wallet,
-          influence,
-          influenceBonus,
-          influenceBoost,
-          influenceBoostLiquidityInAd3,
-          ad3Balance,
-          accountReferalCount,
-          pluginReferalCount,
-          updatedTime,
-          beginPreemptTime,
-          hnftContractAddr,
-          hnftTokenId,
-          tweetStats,
-          twitterId,
-          twitterAccount
-        }
-        cursor
-      }
-    }
-  }`;
-
-  const res = await doGraghQueryIM(graphQlQuery, '');
-
-  if (!res) {
-    return;
-  }
-
-  const { data } = await res.json();
-  console.log('query pagination', data);
-}
-
 export const queryAllImAccounts = async (query: string) => {
   const graphQlQuery = `{
     allImAccounts(${query}) {
@@ -169,6 +132,78 @@ export const queryAllImAccounts = async (query: string) => {
       twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url),
     } as ImAccount;
   });
+}
+
+export const queryAllImAccountsOfPage = async (query: string) => {
+  const graphQlQuery = `{
+    allImAccounts(${query}) {
+      edges {
+        node {
+          id,
+          wallet,
+          influence,
+          influenceBonus,
+          influenceBoost,
+          influenceBoostLiquidityInAd3,
+          ad3Balance,
+          accountReferalCount,
+          pluginReferalCount,
+          updatedTime,
+          beginPreemptTime,
+          hnftContractAddr,
+          hnftTokenId,
+          tweetStats,
+          twitterId,
+          twitterAccount
+        }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }`;
+
+  const res = await doGraghQueryIM(graphQlQuery, '');
+
+  if (!res) {
+    return {
+      nodes: [],
+      pageInfo: {
+        endCursor: '',
+        hasNextPage: false,
+      }
+    };
+  }
+
+  const { data } = await res.json();
+  const { edges, pageInfo } = data.allImAccounts || {};
+  const accounts = edges as { node: ImAccount, cursor: string }[];
+  const nodes = accounts.map(({ node: account, cursor }) => {
+    const twitterAccount = JSON.parse(account.twitterAccount);
+    const tweetStats = JSON.parse(account.tweetStats);
+
+    return {
+      node: {
+        ...account,
+        tweetId: tweetStats.tweet_id,
+        conversationId: tweetStats.conversation_id,
+        tweetContent: tweetStats.tweet_content,
+        tweetEvaluation: tweetStats.evaluation,
+        tweetContentScore: tweetStats.score,
+        twitterUsername: twitterAccount.username,
+        twitterName: twitterAccount.name,
+        twitterProfileImageUri: formatTwitterImageUrl(twitterAccount.profile_image_url),
+      } as ImAccount,
+      cursor
+    };
+  });
+
+  return {
+    nodes,
+    pageInfo,
+  }
 }
 
 export const getTwitterOauthUrl = async () => {
@@ -427,6 +462,8 @@ export const getMyIMAccount = async () => {
   }
   return accounts[0];
 }
+
+export const getLeaderBoardImAccountsOfPage = async (count: number = 20, cursor: string | undefined = '') => queryAllImAccountsOfPage(`orderBy: INFLUENCE_DESC, first: ${count}, after: ${cursor ? `"${cursor}"` : null}`);
 
 export const getLeaderBoardImAccounts = async (count: number = 20, userId: string = '') => {
   // const query = `orderBy: INFLUENCE_DESC, first: ${count}`;
