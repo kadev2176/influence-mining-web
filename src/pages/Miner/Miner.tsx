@@ -217,8 +217,11 @@ function Miner() {
                     <div className={`option ${miningMode === 'group' ? '' : 'active'}`} onClick={() => {
                         setMiningMode('group');
                     }}>Group Mining</div>
-                    <div className={`option ${miningMode === 'group' ? 'active' : ''}`}>
-                        <Tooltip title="Unlock this feature by upgrading your HNFT">Solo Mining</Tooltip>
+                    <div className={`option ${miningMode === 'group' ? 'active' : ''}`} onClick={() => {
+                        setMiningMode('solo');
+                    }}>
+                        Solo Mining
+                        {/* <Tooltip title="Unlock this feature by upgrading your HNFT">Solo Mining</Tooltip> */}
                     </div>
                 </>}
 
