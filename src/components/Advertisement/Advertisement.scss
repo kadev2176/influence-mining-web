@@ -1,6 +1,6 @@
 @import '../../common.scss';
 
-.advertisementContainer {
+.advertisement-container {
   .bid-section {
     display: flex;
     flex-direction: column;
@@ -13,6 +13,10 @@
     .user-info {
       display: flex;
       align-items: center;
+    }
+
+    .user-name {
+      @include text-overflow(200px);
     }
 
     .dao-info {
@@ -53,8 +57,8 @@
       border-radius: 38px;
       height: 24px;
       font-size: 14px;
-      align-items: center;
       display: flex;
+      align-items: center;
       padding: 0 8px;
     }
   }
@@ -113,7 +117,7 @@
     }
 
     .ad-content {
-      padding: 48px;
+      padding: 70px;
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
       overflow: hidden;
@@ -141,9 +145,7 @@
   }
 
   .footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    @include flex(center);
     text-align: center;
     margin-top: 12px;
   }
@@ -188,5 +190,75 @@
 
   .action-button:hover {
     background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .advertisement-container {
+    width: 100%;
+
+    .bid-section {
+      width: fit-content;
+
+      .user-name {
+        @include text-overflow(150px);
+      }
+
+      .dao-info-text {
+        font-size: 22px;
+      }
+
+      .token-price {
+        font-size: 18px;
+      }
+
+      .change.flat {
+        font-size: 12px;
+      }
+
+      .help {
+        font-size: 14px;
+        margin-top: 26px;
+      }
+    }
+
+    .sponsor-info {
+      width: fit-content;
+      padding: 18px;
+
+      .ad-header {
+        padding: 15px 15px 4px 15px;
+      }
+
+      .ad-section,
+      .ad-header,
+      .sponsor-desc {
+        font-size: 15px;
+      }
+
+      .ad-content {
+        padding: 26px;
+      }
+
+      .reward-amount {
+        margin-top: 14px;
+      }
+
+      .ad-button {
+        font-size: 15px;
+        margin-top: 0;
+      }
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+    }
+
+    .action-button {
+      font-size: 18px;
+      padding: 10px 16px;
+    }
+
   }
 }

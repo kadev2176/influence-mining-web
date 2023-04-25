@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { notification } from 'antd';
 import './Advertisement.scss';
 import { LeaderTweet } from '../LeaderBoardUserCard/LeaderBoardUserCard';
 import UserAvatar from '../UserAvatar/UserAvatar';
@@ -15,10 +16,14 @@ interface AdvertisementProps {
 const Advertisement: React.FC<AdvertisementProps> = (props) => {
   const { ad, tweet } = props || {};
 
-  useEffect(() => {}, [ad]);
+  const handleComingSoon = () => {
+    notification.info({
+      message: 'Coming Soon',
+    });
+  };
 
   return (
-    <div className='advertisementContainer'>
+    <div className='advertisement-container'>
       {!ad?.type && (
         <div className='sponsor-info'>
           <div className='sponsor-header'>
@@ -49,8 +54,16 @@ const Advertisement: React.FC<AdvertisementProps> = (props) => {
                   </div>
                 </div>
                 <div className='footer'>
-                  <div className='action-button left ad-button'>Claim</div>
-                  <div className='action-button right ad-button'>
+                  <div
+                    className='action-button left ad-button'
+                    onClick={handleComingSoon}
+                  >
+                    Claim
+                  </div>
+                  <div
+                    className='action-button right ad-button'
+                    onClick={handleComingSoon}
+                  >
                     Claim&Learn more
                   </div>
                 </div>
@@ -66,7 +79,9 @@ const Advertisement: React.FC<AdvertisementProps> = (props) => {
             <UserAvatar src={tweet?.avatar} className='avatar' />
             <div className='dao-info'>
               <div className='dao-info-text'>
-                <div className='user-name'>{tweet?.authorName}</div>
+                <div className='user-name' title={tweet?.authorName}>
+                  {tweet?.authorName}
+                </div>
                 <div className='price'>~11.16 AD3</div>
               </div>
               <div className='token-price'>
@@ -80,8 +95,12 @@ const Advertisement: React.FC<AdvertisementProps> = (props) => {
               0xzhaozhao hNFT is available to be hyperlinked...
             </div>
             <div className='footer'>
-              <div className='action-button left'>Place an Ad</div>
-              <div className='action-button right'>Buy more</div>
+              <div className='action-button left' onClick={handleComingSoon}>
+                Place an Ad
+              </div>
+              <div className='action-button right' onClick={handleComingSoon}>
+                Buy more
+              </div>
             </div>
           </div>
         </div>

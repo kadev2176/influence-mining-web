@@ -1,5 +1,6 @@
 import React from 'react';
 import { Popover } from 'antd';
+import { isMobile } from 'react-device-detect';
 import { OembedTweet } from '../../services/twitter.service';
 import { formatInfluenceScore } from '../../utils/format.util';
 import UserAvatar from '../UserAvatar/UserAvatar';
@@ -32,8 +33,8 @@ const LeaderBoardUserCard = ({
           padding: 0,
           backgroundColor: 'transparent',
         }}
-        placement='topLeft'
-        content={<Advertisement ad={{ type: '1221' }} tweet={tweet} />}
+        placement={isMobile ? 'bottom' : 'topLeft'}
+        content={<Advertisement ad={{ type: '123' }} tweet={tweet} />}
       >
         <div className='user-card-container-ad' />
       </Popover>
@@ -48,7 +49,9 @@ const LeaderBoardUserCard = ({
         <div className='user-avatar'>
           <UserAvatar src={tweet.avatar} className='avatar' />
         </div>
-        <div className='user-name'>{tweet.authorName}</div>
+        <div className='user-name' title={tweet.authorName}>
+          {tweet.authorName}
+        </div>
       </div>
       <div className='gpt-score'>
         GPT Score: <span>{formatInfluenceScore(tweet.influence)}</span>
