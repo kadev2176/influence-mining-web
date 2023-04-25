@@ -199,9 +199,11 @@
 
     .bid-section {
       width: fit-content;
+      padding: 0;
+      border: none;
 
       .user-name {
-        @include text-overflow(150px);
+        @include text-overflow(140px);
       }
 
       .dao-info-text {
@@ -219,12 +221,16 @@
       .help {
         font-size: 14px;
         margin-top: 26px;
+        padding: 0;
       }
     }
 
     .sponsor-info {
       width: fit-content;
-      padding: 18px;
+      padding: 0;
+      border: none;
+      background: none;
+      border-radius: 0;
 
       .ad-header {
         padding: 15px 15px 4px 15px;
@@ -237,7 +243,7 @@
       }
 
       .ad-content {
-        padding: 26px;
+        padding: 18px;
       }
 
       .reward-amount {
@@ -257,7 +263,7 @@
 
     .action-button {
       font-size: 18px;
-      padding: 10px 16px;
+      padding: 10px 12px;
     }
 
   }
