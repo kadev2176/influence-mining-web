@@ -21,6 +21,16 @@ function MobileDrawer({ children, closable = true, onClose }: MobileDrawerProps)
             open
             onClose={() => { onClose && onClose() }}
         >
+            {closable && <>
+                <div className='close-header'>
+                    <div className='close-icon' onClick={() => {
+                        onClose && onClose()
+                    }}>
+                        <i className='fa-solid fa-xmark'></i>
+                    </div>
+                </div>
+            </>}
+
             {children}
         </Drawer>
     </>;
