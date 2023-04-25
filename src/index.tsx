@@ -19,6 +19,7 @@ import Miner from './pages/Miner/Miner';
 import Landing from './pages/Landing/Landing';
 import LeaderBoard from './pages/LeaderBoard/LeaderBoard';
 import Dashboard from './pages/Dashboard/Dashboard';
+import BidHNFT from './pages/BidHNTF/BidHNFT';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
 import './fonts/Gilroy-Bold.ttf';
@@ -69,6 +70,7 @@ root.render(
               <Route path="/miner" element={<Miner />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
+              <Route path='/bid' element={<BidHNFT />} />
 
               <Route path="/test" element={<Test />} />
               {/* <Route path="/billboard" element={<MintBillboard />} /> */}

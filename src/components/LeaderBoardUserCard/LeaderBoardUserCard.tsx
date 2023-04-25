@@ -33,7 +33,7 @@ const LeaderBoardUserCard = ({
 
   const handleCloseDrawer = () => {
     setOpenDrawer(false);
-  }
+  };
 
   return (
     <div className={`user-card-container ${size}`}>
@@ -53,11 +53,14 @@ const LeaderBoardUserCard = ({
       )}
 
       {isMobile && (
-        <div className='user-card-container-ad' onClick={handleOpenDrawer} />
+        <>
+          <div className='user-card-container-ad' onClick={handleOpenDrawer} />
+          <MobileDrawer open={openDrawer} closable onClose={handleCloseDrawer}>
+            <Advertisement ad={{ type: '123' }} tweet={tweet} />
+          </MobileDrawer>
+        </>
       )}
-      <MobileDrawer open={openDrawer} closable onClose={handleCloseDrawer}>
-        <Advertisement ad={{ type: '123' }} tweet={tweet} />
-      </MobileDrawer>
+
       <div
         className='user-card-container-box'
         onClick={(e) => {

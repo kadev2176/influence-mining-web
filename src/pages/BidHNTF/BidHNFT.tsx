@@ -1,13 +1,11 @@
 import React from 'react';
-import { Modal } from 'antd';
+import './BidHNFT.scss';
 
 interface BidHNFTProps {
 }
 
 const BidHNFT: React.FC<BidHNFTProps> = (props) => {
-  return (
-    <Modal></Modal>
-  );
+  return <div className='bid-ad-container'>bid...</div>;
 };
 
 export default BidHNFT;

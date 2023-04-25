@@ -95,7 +95,12 @@ const Advertisement: React.FC<AdvertisementProps> = (props) => {
               0xzhaozhao hNFT is available to be hyperlinked...
             </div>
             <div className='footer'>
-              <div className='action-button left' onClick={handleComingSoon}>
+              <div
+                className='action-button left'
+                onClick={() => {
+                  window.location.href = `${window.location.origin}/#/bid`;
+                }}
+              >
                 Place an Ad
               </div>
               <div className='action-button right' onClick={handleComingSoon}>
