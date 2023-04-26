@@ -3,25 +3,47 @@ import TextArea from 'antd/es/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { generateReplyTweetContent, generateTweetContent, getSponsoredTags } from '../../services/twitter.service';
-import { LeaderTweet } from '../LeaderBoardTweet/LeaderBoardTweet';
 import LoadingBar from '../LoadingBar/LoadingBar';
 import MobileDrawer from '../MobileDrawer/MobileDrawer';
 import './TweetGeneratorModal.scss';
 import { GroupMiningLeaderTweet } from '../GroupMiningTweet/GroupMiningTweet';
+import { OFFICIAL_TAG } from '../../models/parami';
+import { useSearchParams } from 'react-router-dom';
 
 export interface TweetGeneratorModalProps {
     onCancel: () => void;
     tweet?: GroupMiningLeaderTweet;
+    tag?: string;
 }
 
 const NONE_TAG = 'none';
 
-function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
-    const [tweetContent, setTweetContent] = useState<string>('');
+const addTag = (content: string, tag: string) => {
+    if (!content.includes(tag)) {
+        return `${content} ${tag}`;
+    }
+    return content;
+}
+
+function TweetGeneratorModal({ onCancel, tweet, tag }: TweetGeneratorModalProps) {
+    const [tweetContent, setTweetContent] = useState<string>(OFFICIAL_TAG);
     const [loading, setLoading] = useState<boolean>();
     const [sponsoredTags, setSponsoredTags] = useState<string[]>([]);
-    const [selectedTag, setSelectedTag] = useState<string>();
+    const [selectedTag, setSelectedTag] = useState<string | undefined>(tag);
     const isReply = !!tweet;
+    const [params] = useSearchParams();
+
+    useEffect(() => {
+        if (params && sponsoredTags?.length) {
+            const tag = params.get('tag');
+            if (tag) {
+                const preSelectedTag = sponsoredTags.find(sponsoredTag => sponsoredTag.toLocaleLowerCase() === tag.toLocaleLowerCase())
+                if (preSelectedTag) {
+                    setSelectedTag(preSelectedTag);
+                }
+            }
+        }
+    }, [params, sponsoredTags])
 
     useEffect(() => {
         if (isReply) {
@@ -48,19 +70,16 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
 
     useEffect(() => {
         if (selectedTag) {
-            setLoading(true);
-            setTweetContent('');
-            generateTweetContent(selectedTag === NONE_TAG ? '' : selectedTag).then(content => {
-                setTweetContent(content);
-                setLoading(false);
-            });
+            let content = addTag(tweetContent, `#${selectedTag}`);
+            content = addTag(content, OFFICIAL_TAG);
+            setTweetContent(content);
         }
     }, [selectedTag]);
 
     const sponsoredTopics = <>
         {!isReply && <>
             <div className='label'>
-                1. Choose a Sponsored Topic
+                Sponsored Topics
                 <Tooltip title={<span className='tooltip-text'>Adding sponsored Hashtag and tweet relevant content will grant you EXTRA mining rewards</span>}>
                     <span className='icon'>
                         <i className="fa-regular fa-circle-question"></i>
@@ -81,47 +100,39 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
                         </div>
                     </>
                 })}
-
-                <div className={`sponsored-tag ${selectedTag === NONE_TAG ? 'selected' : ''}`}
-                    key={NONE_TAG}
-                    onClick={() => {
-                        setSelectedTag(NONE_TAG);
-                    }}
-                >
-                    <div className='none-icon'>
-                        <i className="fa-solid fa-ban"></i>
-                    </div>
-                </div>
             </div>
         </>}
     </>
 
     const gptGeneration = <>
-        <div className='label'>{isReply ? '' : '2. '}GPT Generated Tweet</div>
-        {!!tweetContent && <>
+        <div className='label tweet-label'>
+            Tweet
+            <div className='gpt-generator-btn' onClick={() => {
+                setLoading(true);
+                generateTweetContent(selectedTag).then(tweet => {
+                    if (selectedTag) {
+                        tweet = addTag(tweet, selectedTag);
+                    }
+                    tweet = addTag(tweet, OFFICIAL_TAG);
+                    setTweetContent(tweet);
+                    setLoading(false);
+                })
+            }}>Use Tweet Generator</div>
+        </div>
+        {loading && <>
+            <div className='loading-section'>
+                <LoadingBar></LoadingBar>
+                <div className='loading-info'>
+                    GPTMiner generates customized tweets for you based on your historical content
+                </div>
+            </div>
+        </>}
+        {!loading && <>
             <div className='editor'>
                 <TextArea value={tweetContent} placeholder="GPT is generating a tweet for you..." onChange={(e) => {
                     setTweetContent(e.target.value);
                 }} />
             </div>
-        </>}
-
-        {!tweetContent && <>
-            {loading && <>
-                <div className='loading-section'>
-                    <LoadingBar></LoadingBar>
-                    <div className='loading-info'>
-                        GPTMiner generates customized tweets for you based on your historical content
-                    </div>
-                </div>
-            </>}
-            {!loading && <>
-                <div className='loading-section'>
-                    <div className='loading-info'>
-                        Select a tag and GPT will generate a tweet for you.
-                    </div>
-                </div>
-            </>}
         </>}
     </>
 

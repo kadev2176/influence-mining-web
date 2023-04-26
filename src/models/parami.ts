@@ -79,3 +79,5 @@ export const HNFT_CONFIG = [
     price: '19.2'
   }
 ];
+
+export const OFFICIAL_TAG = '#GPTMiner';
