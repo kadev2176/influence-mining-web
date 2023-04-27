@@ -82,12 +82,12 @@ const Advertisement: React.FC<AdvertisementProps> = (props) => {
                 <div className='user-name' title={tweet?.authorName}>
                   {tweet?.authorName}
                 </div>
-                <div className='price'>~11.16 AD3</div>
+                {/* <div className='price'>~11.16 AD3</div> */}
               </div>
-              <div className='token-price'>
+              {/* <div className='token-price'>
                 <div className='number'>8 holders</div>
                 <div className='change flat'>+0.00%</div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className='content'>
@@ -96,15 +96,12 @@ const Advertisement: React.FC<AdvertisementProps> = (props) => {
             </div>
             <div className='footer'>
               <div
-                className='action-button left'
+                className='action-button'
                 onClick={() => {
                   window.location.href = `${window.location.origin}/#/bid`;
                 }}
               >
-                Place an Ad
-              </div>
-              <div className='action-button right' onClick={handleComingSoon}>
-                Buy more
+                Bid Hyperlink Slot
               </div>
             </div>
           </div>
