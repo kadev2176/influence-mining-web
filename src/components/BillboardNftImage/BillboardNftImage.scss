@@ -1,4 +1,4 @@
-.nft-image {
+.nft-image-container {
   height: 100%;
   width: 100%;
   border-radius: 23px;
@@ -31,7 +31,7 @@
     left: 0;
     top: 0;
     background: #1DA1F2;
-    padding: 5px 10px;
+    padding: 6px 8px 4px 12px;
     border-radius: 23px 0 15px 0;
     transition: border-radius 0.1s ease-in-out;
 
@@ -41,15 +41,34 @@
   }
 
   .svg-container {
-    overflow: hidden;
     border-radius: 23px;
     width: 100%;
     height: 100%;
+
+    .nft-image {
+      height: 100%;
+      width: 100%;
+      border-radius: 23px;
+      box-sizing: border-box;
+    }
+
+    .nft-badge-container {
+      position: absolute;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      top: 0;
+
+      img {
+        width: 100%;
+      }
+    }
+
   }
 }
 
 @media only screen and (max-width: 991px) {
-  .nft-image {
+  .nft-image-container {
     &.selected {
       box-shadow: 0px 0px 0px 1px #1DA1F2 !important;
     }

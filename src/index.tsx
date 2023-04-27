@@ -23,6 +23,8 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 
 import './fonts/Gilroy-Bold.ttf';
 import './fonts/Gilroy-Regular.ttf';
+import MintNFTModal from './components/MintNFTModal/MintNFTModal';
+import MintPage from './pages/MintPage/MintPage';
 
 
 declare global {
@@ -67,10 +69,12 @@ root.render(
             <Route path='/' element={<Home />}>
               <Route path="/" element={<Landing />} />
               <Route path="/miner" element={<Miner />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              {/* <Route path="/dashboard" element={<Dashboard />} /> */}
               <Route path="/leaderboard" element={<LeaderBoard />} />
+              <Route path="/mint" element={<MintPage></MintPage>} />
 
-              <Route path="/test" element={<Test />} />
+
+              {/* <Route path="/test" element={<Test />} /> */}
               {/* <Route path="/billboard" element={<MintBillboard />} /> */}
               <Route path='*' element={<Navigate to='/' />} />
             </Route>
