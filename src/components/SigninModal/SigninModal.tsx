@@ -4,13 +4,15 @@ import { isMobile } from 'react-device-detect';
 import { getTwitterOauthUrl } from '../../services/mining.service';
 import MobileDrawer from '../MobileDrawer/MobileDrawer';
 import './SigninModal.scss';
+import { useSearchParams } from 'react-router-dom';
 
 export interface SigninModalProps { }
 
 function SigninModal({ }: SigninModalProps) {
+    const [params] = useSearchParams();
 
     const handleConnectTwitter = async () => {
-        const oauthUrl = await getTwitterOauthUrl();
+        const oauthUrl = await getTwitterOauthUrl(params.get('tag'));
 
         if (oauthUrl) {
             if (isMobile) {

@@ -206,9 +206,9 @@ export const queryAllImAccountsOfPage = async (query: string) => {
   }
 }
 
-export const getTwitterOauthUrl = async () => {
+export const getTwitterOauthUrl = async (tag: string | undefined | null) => {
   try {
-    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/twitter/login?state=gptminer_login`);
+    const resp = await fetch(`${PARAMI_AIRDROP}/influencemining/api/twitter/login?state=${tag ? `tag_${tag}` : 'gptminer_login'}`);
     const { oauthUrl } = await resp.json();
     return oauthUrl;
   } catch (e) {
