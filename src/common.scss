@@ -2,6 +2,8 @@ $card-background: #ffffff1f;
 
 $text-light-color: #848484;
 
+$text-gray-color: rgba(255, 255, 255, 0.5);
+
 @font-face {
   font-family: 'Gilroy-Bold';
   src: url('./fonts/Gilroy-Bold.ttf') format('truetype');
@@ -10,4 +12,20 @@ $text-light-color: #848484;
 @font-face {
   font-family: 'Gilroy-Regular';
   src: url('./fonts/Gilroy-Regular.ttf') format('truetype');
+}
+
+
+@mixin text-overflow($width) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+  max-width: $width;
+}
+
+@mixin flex($justify: flex-start, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-flow: row nowrap;
 }

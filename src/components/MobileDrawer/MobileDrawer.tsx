@@ -7,9 +7,10 @@ export interface MobileDrawerProps {
     closable?: boolean,
     children: React.ReactNode,
     onClose?: () => void
+    open?: boolean
 }
 
-function MobileDrawer({ children, closable = true, onClose }: MobileDrawerProps) {
+function MobileDrawer({ children, closable = true, onClose, open = true }: MobileDrawerProps) {
     return <>
         <Drawer
             className='mobile-drawer'
@@ -18,7 +19,7 @@ function MobileDrawer({ children, closable = true, onClose }: MobileDrawerProps)
             closable={false}
             maskClosable={closable}
             height={'auto'}
-            open
+            open={open}
             onClose={() => { onClose && onClose() }}
         >
             {closable && <>

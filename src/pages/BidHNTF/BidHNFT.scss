@@ -1,0 +1,13 @@
+@import '../../common.scss';
+
+.bid-ad-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  max-width: 956px;
+  min-height: 100vh;
+  background-image: url('../../../public/leaderboard-bg-top.png');
+  background-position: center top;
+  background-size: contain;
+  background-repeat: no-repeat;
+}

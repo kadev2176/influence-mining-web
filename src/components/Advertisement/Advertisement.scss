@@ -1,11 +1,11 @@
 @import '../../common.scss';
 
-.advertisementContainer {
+.advertisement-container {
   .bid-section {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    width: 442px;
+    width: 287px;
     background: #10121A;
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 20px;
@@ -13,6 +13,10 @@
     .user-info {
       display: flex;
       align-items: center;
+    }
+
+    .user-name {
+      @include text-overflow(200px);
     }
 
     .dao-info {
@@ -45,7 +49,7 @@
       font-size: 16px;
       color: rgba(255, 255, 255, 0.5);
       padding: 0 12px;
-      margin-top: 30px;
+      margin-top: 14px;
     }
 
     .change.flat {
@@ -53,8 +57,8 @@
       border-radius: 38px;
       height: 24px;
       font-size: 14px;
-      align-items: center;
       display: flex;
+      align-items: center;
       padding: 0 8px;
     }
   }
@@ -104,6 +108,14 @@
         border-top: 1px solid rgba(255, 255, 255, 0.13);
         border-left: 1px solid rgba(255, 255, 255, 0.13);
       }
+
+      .action-button {
+        padding: 12px;
+      }
+
+      .ad-description {
+        visibility: hidden;
+      }
     }
 
     .ad-header {
@@ -113,10 +125,15 @@
     }
 
     .ad-content {
-      padding: 48px;
+      padding: 70px;
       border-bottom-left-radius: 10px;
       border-bottom-right-radius: 10px;
       overflow: hidden;
+      &:hover {
+        .ad-description {
+          visibility: visible;
+        }
+      }
     }
 
     .reward {
@@ -141,17 +158,16 @@
   }
 
   .footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    @include flex();
     text-align: center;
     margin-top: 12px;
+    padding: 0 12px;
   }
 
   .action-button {
     min-width: 100px;
     cursor: pointer;
-    padding: 12px 18px;
+    padding: 12px 40px;
     width: fit-content;
     border-radius: 30px;
     background: #fff;
@@ -188,5 +204,85 @@
 
   .action-button:hover {
     background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .advertisement-container {
+    width: 100%;
+
+    .bid-section {
+      width: fit-content;
+      padding: 0;
+      border: none;
+
+      // .user-name {
+      //   @include text-overflow(140px);
+      // }
+
+      .dao-info-text {
+        font-size: 22px;
+      }
+
+      .token-price {
+        font-size: 18px;
+      }
+
+      .change.flat {
+        font-size: 12px;
+      }
+
+      .help {
+        font-size: 14px;
+        margin-top: 26px;
+        padding: 0;
+      }
+
+      .footer {
+        padding: 0;
+      }
+    }
+
+    .sponsor-info {
+      width: fit-content;
+      padding: 0;
+      border: none;
+      background: none;
+      border-radius: 0;
+
+      .ad-header {
+        padding: 15px 15px 4px 15px;
+      }
+
+      .ad-section,
+      .ad-header,
+      .sponsor-desc {
+        font-size: 15px;
+      }
+
+      .ad-content {
+        padding: 18px;
+      }
+
+      .reward-amount {
+        margin-top: 14px;
+      }
+
+      .ad-button {
+        font-size: 15px;
+        margin-top: 0;
+      }
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+    }
+
+    .action-button {
+      font-size: 18px;
+      padding: 10px 12px;
+      width: 100%;
+    }
   }
 }
