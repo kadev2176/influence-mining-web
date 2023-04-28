@@ -161,6 +161,7 @@
     @include flex();
     text-align: center;
     margin-top: 12px;
+    padding: 0 12px;
   }
 
   .action-button {
@@ -234,6 +235,10 @@
       .help {
         font-size: 14px;
         margin-top: 26px;
+        padding: 0;
+      }
+
+      .footer {
         padding: 0;
       }
     }
