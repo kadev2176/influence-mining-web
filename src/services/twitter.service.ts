@@ -1,8 +1,8 @@
 import fetchJsonp from "fetch-jsonp";
-import { PARAMI_AIRDROP } from "../models/parami";
+import { OFFICIAL_TAG, PARAMI_AIRDROP } from "../models/parami";
 import { fetchWithCredentials, fetchWithSig } from "../utils/api.util";
 
-const DEFAULT_TWEET = 'Become a mining node by leveraging your social influence to earn revenue. #GPTMiner';
+const DEFAULT_TWEET = `Become a mining node by leveraging your social influence to earn revenue. ${OFFICIAL_TAG}`;
 
 const DEFAULT_SPONSORED_TAGS = ['MirrorWorld'];
 

@@ -1,0 +1,195 @@
+.mint-page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  max-width: 956px;
+  min-height: 100vh;
+  background-image: url('../../../public/leaderboard-bg-top.png');
+  background-position: center top;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  .header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 47px;
+
+    .title-row {
+      display: flex;
+
+      font-size: 36px;
+      line-height: 42px;
+      font-family: Gilroy-Bold;
+
+      .title {
+        font-size: 36px;
+        line-height: 42px;
+        font-family: Gilroy-Bold;
+      }
+
+      .icon {
+        font-size: 18px;
+        margin-left: 10px;
+      }
+    }
+
+    .sub-title {
+      font-size: 18px;
+      line-height: 21px;
+      opacity: 0.5;
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .nfts {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      width: 100%;
+
+      .nft {
+        width: 160px;
+
+        .price {
+          display: flex;
+          font-size: 17.5px;
+          line-height: 21px;
+          font-family: Gilroy-Bold;
+          margin-bottom: 2px;
+
+          .icon {
+            margin-right: 9px;
+          }
+        }
+
+        .name {
+          font-size: 14px;
+          line-height: 16px;
+          font-family: Gilroy-Bold;
+          text-transform: uppercase;
+          letter-spacing: -1px;
+        }
+      }
+    }
+
+    .nft-image-container {
+      height: 160px;
+      width: 160px;
+      margin-bottom: 25px;
+    }
+
+    .nft-success {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      width: 500px;
+      margin-bottom: 100px;
+
+      .nft-image-container {
+        margin-top: 20px;
+        margin-bottom: 30px;
+      }
+
+      .description {
+        font-size: 14px;
+        line-height: 16px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .confetti {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+      }
+    }
+  }
+
+  .footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    .action-btn-primary {
+      width: 100%;
+      max-width: 330px;
+      font-size: 14px;
+      line-height: 16px;
+      padding: 13px;
+    }
+
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .mint-page-container {
+    padding: 0 16px;
+  }
+
+  .title {
+    font-size: 20px;
+    line-height: 23px;
+    margin-bottom: 15px;
+  }
+
+  .sub-title {
+    font-size: 14px;
+    line-height: 16px;
+    opacity: 0.6;
+    margin-bottom: 20px;
+  }
+
+  .nfts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    .nft {
+      width: 48%;
+      margin: 1px;
+
+      .nft-image-container {
+        margin-bottom: 20px;
+      }
+
+      .price {
+        display: flex;
+        font-size: 17.5px;
+        line-height: 21px;
+        font-family: Gilroy-Bold;
+        margin-bottom: 2px;
+
+        .icon {
+          margin-right: 9px;
+        }
+      }
+
+      .name {
+        font-size: 14px;
+        line-height: 16px;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  .btn-container {
+    margin-top: 27px;
+    margin-bottom: 11px;
+
+    .action-btn-primary {
+      font-size: 14px;
+      line-height: 16px;
+      padding: 13px 0;
+
+      .icon {
+        display: flex;
+        font-size: 14px;
+        line-height: 16px;
+      }
+    }
+  }
+}

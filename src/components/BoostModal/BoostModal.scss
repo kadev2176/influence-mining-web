@@ -98,3 +98,75 @@
     }
   }
 }
+
+.boost-drawer {
+  .info-section {
+    margin-top: 40px;
+    
+    .info-title {
+      font-family: 'Gilroy-Bold';
+      font-size: 18px;
+      line-height: 21px;
+      margin-bottom: 12px;
+    }
+
+    .boost-description {
+      font-size: 16px;
+      line-height: 19px;
+      color: #FFFFFF;
+      opacity: 0.6;
+    }
+  }
+
+  .boost-section {
+    margin-top: 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding-top: 25px;
+    
+    .boost-section-title {
+      font-family: 'Gilroy-Bold';
+      font-size: 18px;
+      line-height: 21px;
+      margin-bottom: 12px;
+    }
+
+    .current-stats {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 32px;
+
+      .current-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .stat-label {
+          font-size: 16px;
+          line-height: 19px;
+          color: #FFFFFF;
+          opacity: 0.6;
+          margin-bottom: 12px;
+        }
+
+        .stat-value {
+          font-family: Gilroy-Bold;
+          font-size: 22px;
+          line-height: 26px;
+          color: #1DA1F2;
+        }
+      }
+    }
+  }
+
+  .boost-btn {
+    padding: 18px 0;
+    text-align: center;
+    border: 1px solid #1DA1F2;
+    font-family: Gilroy-Bold;
+    font-size: 16px;
+    line-height: 19px;
+    color: #1DA1F2;
+    margin-bottom: 40px;
+  }
+}

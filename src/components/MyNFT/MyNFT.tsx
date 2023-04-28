@@ -1,7 +1,7 @@
 import { notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { useHNFT } from '../../hooks/useHNFT';
 import { useImAccount } from '../../hooks/useImAccount';
@@ -19,6 +19,7 @@ function MyNFT({ }: MyNFTProps) {
     const [mintNftModal, setMintNftModal] = useState<boolean>(false);
     const hnft = useHNFT();
     const { imAccount } = useImAccount();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isConnected) {
@@ -27,7 +28,7 @@ function MyNFT({ }: MyNFTProps) {
     }, [isConnected])
 
     return <>
-        {location.pathname !== '/' && <>
+        {(location.pathname !== '/' && location.pathname !== '/mint') && <>
             <div className={`my-nft-container ${location.pathname === '/leaderboard' ? 'high-position' : ''}`}>
                 {!isConnected && <>
                     <div className='no-connect' onClick={() => {
@@ -42,7 +43,8 @@ function MyNFT({ }: MyNFTProps) {
                 {isConnected && <>
                     {!hnft.balance && <>
                         <div className='no-hnft' onClick={() => {
-                            setMintNftModal(true);
+                            navigate('/mint');
+                            // setMintNftModal(true);
                         }}>
                             <span className='text'>
                                 {isMobile ? 'Mint HNFT' : 'Mint My HNFT'}
@@ -57,7 +59,8 @@ function MyNFT({ }: MyNFTProps) {
 
                         {!isMobile && <>
                             <div className='action-btn-primary active' onClick={() => {
-                                setMintNftModal(true);
+                                navigate('/mint');
+                                // setMintNftModal(true);
                             }}>Upgrade HNFT</div>
                         </>}
                     </>}
@@ -68,11 +71,11 @@ function MyNFT({ }: MyNFTProps) {
                 <ConnectWalletModal onCancel={() => { setConnectWalletModal(false) }}></ConnectWalletModal>
             </>}
 
-            {mintNftModal && <>
+            {/* {(mintNftModal || true) && <>
                 <MintNFTModal hnft={hnft} onCancel={() => { setMintNftModal(false) }} onSuccess={() => {
                     hnft.refetch();
                 }}></MintNFTModal>
-            </>}
+            </>} */}
         </>}
     </>;
 };
