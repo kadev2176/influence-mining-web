@@ -16,6 +16,7 @@ import GPTScore from '../../components/GPTScore/GPTScore';
 import { useHNFT } from '../../hooks/useHNFT';
 import { isMobile } from 'react-device-detect';
 import { OFFICIAL_TAG } from '../../models/parami';
+import { useSearchParams } from 'react-router-dom';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
@@ -38,6 +39,14 @@ function Miner() {
     const [showEvaluation, setShowEvaluation] = useState<boolean>(false);
     const hnft = useHNFT();
     const [isKOL, setIsKOL] = useState<boolean>(false);
+
+    const [params] = useSearchParams();
+
+    useEffect(() => {
+        if (params && params.get('tag')) {
+            setTweetGeneratorModal(true);
+        }
+    }, [params])
 
     useEffect(() => {
         if (Number(hnft.level)) {
