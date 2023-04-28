@@ -4,7 +4,19 @@ import { fetchWithCredentials, fetchWithSig } from "../utils/api.util";
 
 const DEFAULT_TWEET = `Become a mining node by leveraging your social influence to earn revenue. ${OFFICIAL_TAG}`;
 
-const DEFAULT_SPONSORED_TAGS = ['MirrorWorld'];
+export interface SponsoredTag {
+  tag: string;
+  link: string;
+  description: string;
+}
+
+const DEFAULT_SPONSORED_TAGS: SponsoredTag[] = [
+  {
+    tag: 'MirrorWorld',
+    link: 'https://mirrorworld.fun/',
+    description: 'Smart Platform by Mirror World is the first all-in-one application development platform that helps developers develop, grow and monetize their blockchain applications.'
+  }
+];
 
 export interface OembedTweet {
   tweetId: string;
