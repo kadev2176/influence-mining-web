@@ -43,8 +43,8 @@ export type ImAccount = {
 export type Ad3Tx = {
   id: string;
   timestamp: number;
-  type: string;
-  diff: number;
+  // type: string;
+  diff: string;
 }
 
 export type InfluenceTransaction = {
@@ -256,22 +256,25 @@ export const createAccountOrLogin = async (ticket: string) => {
   }
 }
 
-export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
+export const accountBindWallet = async (address: string, chainId: number) => {
   const data = JSON.stringify({
     wallet: address,
-    chainId,
-    oauth_token: oauthToken,
-    oauth_verifier: oauthVerifier,
-    refererWallet: referer
+    chainId
   });
-
-  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/accounts`, address, {
+  
+  const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/bindwallet`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'
     },
     body: data
   });
+
+  if (!resp) {
+    return {
+      success: false
+    }
+  }
 
   if (resp.ok) {
     return {
@@ -285,6 +288,36 @@ export const bindAccount = async (address: string, chainId: number, oauthToken: 
     message
   }
 }
+
+// export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
+//   const data = JSON.stringify({
+//     wallet: address,
+//     chainId,
+//     oauth_token: oauthToken,
+//     oauth_verifier: oauthVerifier,
+//     refererWallet: referer
+//   });
+
+//   const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/accounts`, address, {
+//     method: 'post',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: data
+//   });
+
+//   if (resp.ok) {
+//     return {
+//       success: true
+//     }
+//   }
+
+//   const { message } = await resp.json() as { message: string };
+//   return {
+//     success: false,
+//     message
+//   }
+// }
 
 export const startMining = async (address: string, chainId: number, hnftContract: string, hnftTokenId: string) => {
   const data = JSON.stringify({
@@ -329,10 +362,13 @@ export const getAd3Balance = async () => {
   return balance as Balance;
 }
 
-export const getAd3Transactions = async (address: string, chainId: number) => {
-  const res = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions?wallet=${address}&chain_id=${chainId}`, address);
-  const txs = await res.json();
-  return txs as Ad3Tx[];
+export const getAd3Transactions = async () => {
+  const res = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/ad3/transactions`);
+  if (!res) {
+    return [];
+  }
+  const txs = (await res.json()) as Ad3Tx[];
+  return txs.filter(tx => Number(tx.diff) < 0);
 }
 
 export const updateInfluence = async () => {
@@ -379,10 +415,18 @@ export const generateWithdrawSignature = async (amount: string) => {
   return sig as WithdrawAd3Signature;
 }
 
-export const getWithdrawSignatureOfTxId = async (txId: string, chainId: number, address: string) => {
-  const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/ad3/withdrawals/${txId}?chain_id=${chainId}`, address);
-  const sig = await resp.json();
-  return sig as WithdrawAd3Signature;
+export const getWithdrawSignatureOfTxId = async (txId: string) => {
+  try {
+    const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/ad3/withdrawals/${txId}`);
+    if (!resp) {
+      return null;
+    }
+    const sig = await resp.json();
+    return sig as WithdrawAd3Signature;
+  } catch (e) {
+    console.log('getWithdrawSignatureOfTxId error: ', e);
+    return null;
+  }
 }
 
 export const getImAccountsReadyForBid = async (address: string, chainId: number) => {

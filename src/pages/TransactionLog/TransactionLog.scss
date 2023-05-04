@@ -1,0 +1,108 @@
+.tx-log-page-container {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  max-width: 956px;
+  min-height: 100vh;
+
+  .back-btn-container {
+    font-size: 20px;
+    margin-bottom: 60px;
+
+    .back-btn {
+      width: fit-content;
+      cursor: pointer;
+    }
+  }
+
+  .title-container {
+    font-size: 36px;
+    line-height: 42px;
+    font-family: Gilroy-Bold;
+    margin-bottom: 30px;
+  }
+
+  .transactions-container {
+    .transaction {
+      background: #10121A;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+
+      &+.transaction {
+        margin-top: 10px;
+      }
+
+      .col {
+        min-width: 200px;
+      }
+
+      .label {
+        font-size: 18px;
+        line-height: 21px;
+        opacity: 0.5;
+        margin-bottom: 14px;
+      }
+
+      .value {
+        font-size: 18px;
+        line-height: 21px;
+      }
+
+      .state {
+        text-align: center;
+
+        .value {
+          .claim-btn {
+            cursor: pointer;
+            color: #42E3F1;
+          }
+        }
+      }
+
+      .time {
+        text-align: right;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 991px) {
+  .tx-log-page-container {
+    padding: 0 16px;
+
+    .title-container {
+      font-size: 32px;
+      line-height: 38px;
+    }
+
+    .transactions-container {
+      .transaction {
+        flex-direction: column;
+        padding: 14px;
+
+        .col {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          &+.col {
+            margin-top: 14px;
+          }
+
+          .label {
+            margin-bottom: 0;
+          }
+
+          .label,
+          .value {
+            font-size: 14px;
+            line-height: 16px;
+          }
+        }
+      }
+    }
+  }
+}
