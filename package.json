@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
+    "@material/web": "1.0.0-pre.7",
     "@polkadot/api": "^9.14.2",
     "@polkadot/util": "^10.4.2",
     "@polkadot/util-crypto": "^10.4.2",
@@ -20,6 +22,7 @@
     "ethers": "^5.7.2",
     "fetch-jsonp": "^1.2.3",
     "gh-pages": "^4.0.0",
+    "lodash": "^4.17.21",
     "qs": "6.11.1",
     "react": "^18.2.0",
     "react-countup": "^6.4.2",
@@ -61,6 +64,7 @@
   },
   "homepage": "https://gptminer.io/",
   "devDependencies": {
+    "@types/lodash": "^4.14.194",
     "@types/qs": "^6.9.7",
     "@types/three": "^0.149.0",
     "dotenv": "^16.0.3",
