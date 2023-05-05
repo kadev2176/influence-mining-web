@@ -22,7 +22,8 @@ function ClaimAd3Modal({ onCancel }: ClaimAd3ModalProps) {
 
     useEffect(() => {
         getAd3Balance().then(balance => {
-            setBalance(amountToFloatString(balance?.balance ?? '0'))
+            const balanceFloat = amountToFloatString(balance?.balance ?? '0');
+            setBalance(Number(balanceFloat).toFixed(4));
         })
     }, [])
 
@@ -59,15 +60,16 @@ function ClaimAd3Modal({ onCancel }: ClaimAd3ModalProps) {
     const content = <>
         <div className='header'>Claim My AD3</div>
         <div className='content'>
-            <div className='value'>{balance ? Number(balance).toFixed(4) : ''}</div>
+            <div className='value'>
+                <input type='number' value={balance} onChange={(e) => {
+                    setBalance(e.target.value);
+                }}></input>
+            </div>
             <div className='unit'>$AD3</div>
         </div>
         <div className='footer'>
-            <div className='action-btn-primary active' onClick={() => {
-                notification.info({
-                    message: 'Coming soon'
-                })
-                // onClaim()
+            <div className={`action-btn-primary ${Number(balance) > 0 ? 'active' : 'disabled'}`} onClick={() => {
+                onClaim()
             }}>Claim</div>
         </div>
     </>

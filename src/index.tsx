@@ -26,6 +26,7 @@ import './fonts/Gilroy-Bold.ttf';
 import './fonts/Gilroy-Regular.ttf';
 import MintNFTModal from './components/MintNFTModal/MintNFTModal';
 import MintPage from './pages/MintPage/MintPage';
+import TransactionLog from './pages/TransactionLog/TransactionLog';
 
 
 declare global {
@@ -70,14 +71,10 @@ root.render(
             <Route path='/' element={<Home />}>
               <Route path="/" element={<Landing />} />
               <Route path="/miner" element={<Miner />} />
-              {/* <Route path="/dashboard" element={<Dashboard />} /> */}
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path='/bid' element={<BidHNFT />} />
               <Route path="/mint" element={<MintPage></MintPage>} />
-
-
-              {/* <Route path="/test" element={<Test />} /> */}
-              {/* <Route path="/billboard" element={<MintBillboard />} /> */}
+              <Route path="/txLog" element={<TransactionLog></TransactionLog>} />
               <Route path='*' element={<Navigate to='/' />} />
             </Route>
           </Routes>

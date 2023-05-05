@@ -8,6 +8,7 @@ import { Ad3Activity, getAD3Activity, getAd3Balance } from '../../services/minin
 import { amountToFloatString } from '../../utils/format.util';
 import './Dashboard.scss';
 import { isMobile } from 'react-device-detect';
+import { useNavigate } from 'react-router-dom';
 
 export interface DashboardProps { }
 
@@ -18,6 +19,7 @@ function Dashboard({ }: DashboardProps) {
     const [profitStep, setProfitStep] = useState<string>('0');
     const [decimals, setDecimals] = useState<number>(2);
     const [claimModal, setClaimModal] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         getAd3Balance().then(balance => {
@@ -74,6 +76,13 @@ function Dashboard({ }: DashboardProps) {
                 <div className='card-title-row'>
                     <div className='title'>My Mining Rewards</div>
                     <div className='tag'>Test Network</div>
+                    <div className='tx-log-icon-container'>
+                        <div className='tx-log-icon' onClick={() => {
+                            navigate('/txLog');
+                        }}>
+                            <img src='/assets/images/tx-log.svg'></img>
+                        </div>
+                    </div>
                 </div>
 
                 <div className='reward-row'>

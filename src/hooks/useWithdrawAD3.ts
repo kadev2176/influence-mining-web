@@ -1,12 +1,13 @@
 import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
 import { SignatureERC20WithdrawContractAddress } from "../models/parami"
 import SignatureERC20Withdraw from '../contracts/SignatureERC20Withdraw.json';
+import { useEffect } from "react";
 
 export const useWithdrawAD3 = (amount?: string, nonce?: string, sig?: string) => {
   const { address } = useAccount();
   const { chain } = useNetwork();
   
-  const { config } = usePrepareContractWrite({
+  const { config, isError: prepareError } = usePrepareContractWrite({
     address: SignatureERC20WithdrawContractAddress,
     abi: SignatureERC20Withdraw.abi,
     functionName: 'withdraw',

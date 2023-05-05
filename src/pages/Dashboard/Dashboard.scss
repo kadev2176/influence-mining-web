@@ -41,6 +41,15 @@
         color: rgba(255, 255, 255, 0.6);
         padding: 2px 8px;
       }
+
+      .tx-log-icon-container {
+        flex-grow: 1;
+        .tx-log-icon {
+          cursor: pointer;
+          width: fit-content;
+          float: right;
+        }
+      }
     }
 
     .reward-row {

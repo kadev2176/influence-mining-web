@@ -31,10 +31,24 @@
     padding: 130px 0;
 
     .value {
-      font-size: 80px;
-      line-height: 94px;
-      letter-spacing: 0.11em;
-      font-family: Gilroy-Bold;
+      input {
+        border: none;
+        background: none;
+        outline: none;
+        max-width: 100%;
+        text-align: center;
+        color: #1DA1F2;
+        font-size: 80px;
+        line-height: 94px;
+        letter-spacing: 0.11em;
+        font-family: Gilroy-Bold;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
     }
 
     .unit {
@@ -70,8 +84,24 @@
     align-items: center;
 
     .value {
-      font-size: 40.7804px;
-      line-height: 48px;
+      input {
+        border: none;
+        background: none;
+        outline: none;
+        max-width: 100%;
+        text-align: center;
+        color: #1DA1F2;
+        font-size: 40.7804px;
+        line-height: 48px;
+        letter-spacing: 0.11em;
+        font-family: Gilroy-Bold;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
     }
 
     .unit {
