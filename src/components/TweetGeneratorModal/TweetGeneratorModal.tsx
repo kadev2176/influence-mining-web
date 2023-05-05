@@ -69,14 +69,7 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
 
     useEffect(() => {
         if (selectedTag) {
-            let content = addTag(tweetContent, `#${selectedTag.tag}`);
-            content = addTag(content, OFFICIAL_TAG);
-            sponsoredTags.forEach(tag => {
-                if (tag.tag !== selectedTag.tag) {
-                    content = content.replaceAll(`#${tag.tag}`, '');
-                }
-            })
-            setTweetContent(content);
+            setTweetContent(`#${selectedTag.tag} ${OFFICIAL_TAG}`)
         }
     }, [selectedTag]);
 
