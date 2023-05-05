@@ -99,13 +99,21 @@
       }
 
       button {
-        background-color: #D9D9D9;
-        font-size: 36px;
-        line-height: 42px;
-        color: #000;
-        border: none;
-        padding: 2px 38px;
+        background-color: transparent;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 22px;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 13px;
+        padding: 14px 54px;
         cursor: pointer;
+        min-width: 202px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+          border-color: rgba(255, 255, 255, 0.6);
+        }
       }
     }
   }
