@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
-    "@material/web": "1.0.0-pre.7",
     "@polkadot/api": "^9.14.2",
     "@polkadot/util": "^10.4.2",
     "@polkadot/util-crypto": "^10.4.2",

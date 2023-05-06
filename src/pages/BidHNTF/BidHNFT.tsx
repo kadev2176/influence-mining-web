@@ -13,10 +13,6 @@ import has from 'lodash/has';
 import type { UploadFile } from 'antd/es/upload/interface';
 import UserAvatar from '../../components/UserAvatar/UserAvatar';
 import styles from './BidHNFT.module.scss';
-import '@material/web/button/filled-button.js';
-import '@material/web/button/outlined-button.js';
-import '@material/web/checkbox/checkbox.js';
-import { MdFilledButton } from '@material/web/button/filled-button';
 
 const { Panel } = Collapse;
 
@@ -63,7 +59,6 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
         <div>Bid on HNFT</div>
         <span>Place your advertisement on HNFTs</span>
       </div>
-      <md-outlined-button label='Back'>back</md-outlined-button>
       <div className='ad-content'>
         <div className='ad-form'>
           <div className='title'>Config your Ad</div>
