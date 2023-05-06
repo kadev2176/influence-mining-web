@@ -9,6 +9,7 @@ import MyNFT from '../../components/MyNFT/MyNFT';
 import { Footer } from 'antd/es/layout/layout';
 import TweetGeneratorModal from '../../components/TweetGeneratorModal/TweetGeneratorModal';
 import { isMobile } from 'react-device-detect';
+import { OFFICIAL_TAG } from '../../models/parami';
 
 const { Content } = Layout;
 
@@ -64,7 +65,7 @@ function Home({ }: HomeProps) {
 
                     {!isMobile && <>
                         <div className='tweet-hint'>
-                            Post a tweet with <span className='tag'>#GPTMiner</span> and start earning
+                            Post a tweet with <span className='tag'>{OFFICIAL_TAG}</span> and start earning
                             <div className='action-btn-primary active' onClick={() => {
                                 setGenerateTweetModal(true);
                             }}>Tweet</div>
@@ -73,7 +74,7 @@ function Home({ }: HomeProps) {
 
                     {isMobile && <>
                         <div className='tweet-hint'>
-                            Post a tweet with <span className='tag'>#GPTMiner</span> and start earning
+                            Post a tweet with <span className='tag'>{OFFICIAL_TAG}</span> and start earning
                         </div>
                         <div className='action-btn-primary active' onClick={() => {
                             setGenerateTweetModal(true);

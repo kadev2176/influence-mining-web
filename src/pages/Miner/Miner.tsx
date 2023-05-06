@@ -14,13 +14,11 @@ import { useCountdown } from '../../hooks/useCountdown';
 import GroupMiningTweet, { GroupMiningLeaderTweet } from '../../components/GroupMiningTweet/GroupMiningTweet';
 import GPTScore from '../../components/GPTScore/GPTScore';
 import { useHNFT } from '../../hooks/useHNFT';
-import { Tooltip } from 'antd';
 import { isMobile } from 'react-device-detect';
+import { OFFICIAL_TAG } from '../../models/parami';
 
 const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
-
-const MinerTweetHashTag = '#GPTMiner';
 
 interface MostRecentTweet extends OembedTweet {
     evaluation: string;
@@ -231,11 +229,11 @@ function Miner() {
             {miningMode === 'solo' && <>
                 <div className='miner-title'>Solo Mining</div>
                 <div className='miner-description'>
-                    GPT evaluates your Tweet (attaching #GPTMiner) based on Originality, Creativity, Practicality, Personality & Discussability and generates a SCORE based on which, you will be earning rewards.
+                    GPT evaluates your Tweet (attaching {OFFICIAL_TAG}) based on Originality, Creativity, Practicality, Personality & Discussability and generates a SCORE based on which, you will be earning rewards.
                 </div>
 
                 <div className='section-card post-tweet'>
-                    <div className='post-info'>Tweet with <span className='hashtag'>{MinerTweetHashTag}</span> to start mining!</div>
+                    <div className='post-info'>Tweet with <span className='hashtag'>{OFFICIAL_TAG}</span> to start mining!</div>
                     <div className='twit-btn action-btn-primary active' onClick={() => {
                         setTweetGeneratorModal(true);
                     }}>Tweet</div>
@@ -247,7 +245,7 @@ function Miner() {
             {miningMode === 'group' && <>
                 <div className='miner-title'>Group Mining</div>
                 <div className='miner-description'>
-                    Comment under tweets (attaching #GPTMiner) to boost both yours and the original tweet's SCORE. More quality interaction in a thread means more earnings for everyone engaged.
+                    Comment under tweets (attaching {OFFICIAL_TAG}) to boost both yours and the original tweet's SCORE. More quality interaction in a thread means more earnings for everyone engaged.
                 </div>
 
                 {currentMiningTweet}

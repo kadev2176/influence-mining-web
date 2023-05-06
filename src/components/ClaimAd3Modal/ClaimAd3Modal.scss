@@ -48,3 +48,41 @@
     padding: 24px;
   }
 }
+
+.claim-ad3-drawer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .header {
+    font-size: 20px;
+    line-height: 23px;
+    color: #FFFFFF;
+    opacity: 0.6;
+    margin-bottom: 90px;
+  }
+
+  .content {
+    color: #1DA1F2;
+    font-family: 'Gilroy-Bold';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .value {
+      font-size: 40.7804px;
+      line-height: 48px;
+    }
+
+    .unit {
+      font-size: 32.8797px;
+      line-height: 39px;
+    }
+  }
+
+  .footer {
+    margin-top: 100px;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+}

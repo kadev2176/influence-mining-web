@@ -45,22 +45,22 @@ export const BillboardLevel2MiningPower: { [level: string]: number } = {
 export const HNFT_CONFIG = [
   {
     level: 0,
-    rank: 'Common',
-    name: 'Common Billboard',
+    rank: 'Novel',
+    name: 'Novel Billboard',
     boost: 'X2',
     price: '0'
   },
   {
     level: 1,
-    rank: 'Uncommon',
-    name: 'Uncommon Billboard',
+    rank: 'Rare',
+    name: 'Rare Billboard',
     boost: 'X5',
     price: '0.3'
   },
   {
     level: 2,
-    rank: 'Rare',
-    name: 'Rare Billboard',
+    rank: 'Premium',
+    name: 'Premium Billboard',
     boost: 'X10',
     price: '1.2'
   },
@@ -79,3 +79,5 @@ export const HNFT_CONFIG = [
     price: '19.2'
   }
 ];
+
+export const OFFICIAL_TAG = '#GPTMiner';

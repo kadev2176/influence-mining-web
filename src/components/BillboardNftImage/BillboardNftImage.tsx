@@ -16,16 +16,19 @@ function BillboardNftImage({ imageUrl, level = 0, active, selected, showTag = tr
     const svg = generateSvg(imageUrl, level);
 
     return <>
-        <div className={`nft-image ${active ? 'active' : ''} ${selected ? 'selected' : ''}`}>
+        <div className={`nft-image-container ${active ? 'active' : ''} ${selected ? 'selected' : ''}`}>
             {showTag && <>
                 <div className='boost-tag'>
                     {HNFT_CONFIG[level].rank}
-                    {/* <span className='icon'><i className="fa-solid fa-rocket"></i></span> */}
-                    {/* {HNFT_CONFIG[level].boost} */}
                 </div>
             </>}
 
-            <div className='svg-container' dangerouslySetInnerHTML={{ __html: svg }} />
+            <div className='svg-container'>
+                <img className='nft-image' src={imageUrl}></img>
+                <div className='nft-badge-container'>
+                    <img src={`/assets/nfts/badge-level-${level}.svg`}></img>
+                </div>
+            </div>
         </div>
     </>;
 };

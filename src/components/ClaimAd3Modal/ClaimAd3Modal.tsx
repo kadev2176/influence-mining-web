@@ -5,6 +5,8 @@ import { useWithdrawAD3 } from '../../hooks/useWithdrawAD3';
 import { generateWithdrawSignature, getAd3Balance, WithdrawAd3Signature } from '../../services/mining.service';
 import { amountToFloatString, inputFloatStringToAmount } from '../../utils/format.util';
 import './ClaimAd3Modal.scss';
+import { isMobile } from 'react-device-detect';
+import MobileDrawer from '../MobileDrawer/MobileDrawer';
 
 export interface ClaimAd3ModalProps {
     onCancel: () => void
@@ -54,31 +56,45 @@ function ClaimAd3Modal({ onCancel }: ClaimAd3ModalProps) {
     //     }
     // }, [isSuccess])
 
+    const content = <>
+        <div className='header'>Claim My AD3</div>
+        <div className='content'>
+            <div className='value'>{balance ? Number(balance).toFixed(4) : ''}</div>
+            <div className='unit'>$AD3</div>
+        </div>
+        <div className='footer'>
+            <div className='action-btn-primary active' onClick={() => {
+                notification.info({
+                    message: 'Coming soon'
+                })
+                // onClaim()
+            }}>Claim</div>
+        </div>
+    </>
+
     return <>
-        <Modal
-            className='claim-ad3-modal'
-            open
-            title=""
-            onCancel={() => {
-                onCancel()
-            }}
-            footer={null}
-            width={956}
-        >
-            <div className='header'>Claim My AD3</div>
-            <div className='content'>
-                <div className='value'>{balance ? Number(balance).toFixed(4) : ''}</div>
-                <div className='unit'>$AD3</div>
-            </div>
-            <div className='footer'>
-                <div className='action-btn-primary active' onClick={() => {
-                    notification.info({
-                        message: 'Coming soon'
-                    })
-                    // onClaim()
-                }}>Claim</div>
-            </div>
-        </Modal>
+        {!isMobile && <>
+            <Modal
+                className='claim-ad3-modal'
+                open
+                title=""
+                onCancel={() => {
+                    onCancel()
+                }}
+                footer={null}
+                width={956}
+            >
+                {content}
+            </Modal>
+        </>}
+
+        {isMobile && <>
+            <MobileDrawer closable onClose={onCancel}>
+                <div className='claim-ad3-drawer'>
+                    {content}
+                </div>
+            </MobileDrawer>
+        </>}
     </>;
 };
 

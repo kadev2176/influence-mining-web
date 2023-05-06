@@ -27,6 +27,22 @@
         font-size: 16px;
         margin-left: 5px;
       }
+
+      &.tweet-label {
+        display: flex;
+        align-items: center;
+
+        .gpt-generator-btn {
+          margin-left: 20px;
+          padding: 7px;
+          cursor: pointer;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 5px;
+          font-size: 14px;
+          line-height: 16px;
+          color: #1DA1F2;
+        }
+      }
     }
 
     .tags-row {
@@ -46,7 +62,7 @@
         display: flex;
         align-items: center;
 
-        & + .sponsored-tag {
+        &+.sponsored-tag {
           margin-left: 16px;
         }
 
@@ -136,6 +152,22 @@
       font-size: 16px;
       margin-left: 5px;
     }
+
+    &.tweet-label {
+      display: flex;
+      align-items: center;
+
+      .gpt-generator-btn {
+        margin-left: 20px;
+        padding: 7px;
+        cursor: pointer;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 16px;
+        color: #1DA1F2;
+      }
+    }
   }
 
   .tags-row {
@@ -155,7 +187,7 @@
       display: flex;
       align-items: center;
 
-      & + .sponsored-tag {
+      &+.sponsored-tag {
         margin-left: 10px;
       }
 
