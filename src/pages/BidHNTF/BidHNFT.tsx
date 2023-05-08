@@ -7,6 +7,7 @@ import {
   Upload,
   InputNumber,
   Collapse,
+  Select,
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import has from 'lodash/has';
@@ -15,15 +16,20 @@ import UserAvatar from '../../components/UserAvatar/UserAvatar';
 import styles from './BidHNFT.module.scss';
 
 const { Panel } = Collapse;
+const { Option } = Select;
 
 interface BidHNFTProps {}
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'md-outlined-button': PersonInfoProps;
-    }
-  }
+export enum IMAGE_TYPE {
+  ICON = 'icon',
+  POSTER = 'poster',
+}
+
+export interface UserInstruction {
+  text: string;
+  tag?: string;
+  score?: number;
+  link?: string;
 }
 
 interface PersonInfoProps
@@ -35,12 +41,35 @@ interface PersonInfoProps
   size?: string;
 }
 
+const defaultInstruction: UserInstruction = {
+  text: 'Follow Parami on Twitter',
+  tag: 'Twitter',
+  score: 1,
+  link: 'https://twitter.com/intent/follow?screen_name=ParamiProtocol',
+};
+
 const BidHNFT: React.FC<BidHNFTProps> = (props) => {
   const [form] = Form.useForm();
   const { getFieldValue } = form;
   const [content, setContent] = useState<string>('View Ads. Get Paid.');
   const [iconUploadFiles, setIconUploadFiles] = useState<UploadFile[]>([]);
   const [posterUploadFiles, setPosterUploadFiles] = useState<UploadFile[]>([]);
+
+  const uploadProps = {
+    name: 'file',
+    action: 'https://ipfs.parami.io/api/v0/add?stream-channels=true',
+    // listType: 'picture',
+    showUploadList: { showPreviewIcon: false },
+    multiple: false,
+    progress: {
+      strokeColor: {
+        '0%': '#108ee9',
+        '100%': '#87d068',
+      },
+      strokeWidth: 3,
+      format: (percent: any) => percent && `${parseFloat(percent.toFixed(2))}%`,
+    },
+  };
 
   const onFinish = (values: any) => {
     message.success('Submit success!');
@@ -51,6 +80,32 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
       setContent(changedValues.content);
     }
     console.log(changedValues, '---changedValues---');
+  };
+
+  const handleBeforeUpload = (imageType: IMAGE_TYPE) => {
+    return async (file: any) => {
+      console.log(file, '---file---');
+      // return await compressImageFile(file, imageType);
+    };
+  };
+
+  const handleUploadOnChange = (imageType: IMAGE_TYPE) => {
+    return (info: any) => {
+      const { fileList } = info;
+      console.log(info, '---info---');
+
+      //   if (info.file.status === 'done') {
+      //     const ipfsHash = info.file.response.Hash;
+      //     const imageUrl = config.ipfs.endpoint + ipfsHash;
+      //     fileList[0].url = imageUrl;
+      //   }
+      //   if (info.file.status === 'error') {
+      //     message.error('Upload Image Error');
+      //   }
+      //   imageType === IMAGE_TYPE.POSTER
+      //     ? setPosterUploadFiles(fileList)
+      //     : setIconUploadFiles(fileList);
+    };
   };
 
   return (
@@ -75,17 +130,14 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
               required
               initialValue={content}
             >
-              <Input className='ad-form-content' />
+              <Input className='ad-form-item' />
             </Form.Item>
             <Form.Item name='adIcon' label='Ad icon' required>
               <Upload
-                multiple={false}
-                showUploadList={{ showPreviewIcon: false }}
                 // fileList={iconUploadFiles}
-                // action={config.ipfs.upload}
-                listType='picture'
-                // onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
-                // beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
+                {...uploadProps}
+                onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
+                beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
               >
                 <Button icon={<UploadOutlined />} className='ad-form-upload'>
                   Click to Upload
@@ -94,13 +146,9 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
             </Form.Item>
             <Form.Item name='poster' label='Poster' required>
               <Upload
-                multiple={false}
-                showUploadList={{ showPreviewIcon: false }}
-                // fileList={iconUploadFiles}
-                // action={config.ipfs.upload}
-                listType='picture'
-                // onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
-                // beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
+                {...uploadProps}
+                onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
+                beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
               >
                 <Button icon={<UploadOutlined />} className='ad-form-upload'>
                   Click to Upload
@@ -108,36 +156,46 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
               </Upload>
             </Form.Item>
             <Form.Item name='instruction' label='Instruction' required>
-              <Upload
-                multiple={false}
-                showUploadList={{ showPreviewIcon: false }}
-                // fileList={iconUploadFiles}
-                // action={config.ipfs.upload}
-                listType='picture'
-                // onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
-                // beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
-              >
-                <Button icon={<UploadOutlined />} className='ad-form-upload'>
-                  Click to Upload
-                </Button>
-              </Upload>
+              <div className='instruction'>
+                <span>{defaultInstruction.text}</span>
+                <a className='follow-twitter' href={defaultInstruction.link}>
+                  {defaultInstruction.tag}
+                </a>
+                <span>+1</span>
+              </div>
             </Form.Item>
             <Collapse ghost>
               <Panel header='Advanced Settings' key='1'>
                 <Form.Item name='reward-rate' label='Reward Rate' required>
-                  <InputNumber min={0} max={100} className='ad-form-content' />
+                  <InputNumber min={0} max={100} className='ad-form-item' />
                 </Form.Item>
                 <Form.Item name='lifetime' label='lifetime' required>
-                  <InputNumber min={0} max={100} className='ad-form-content' />
+                  <Select
+                    size='large'
+                    style={{
+                      width: '100%',
+                    }}
+                    defaultValue={1}
+                    // onChange={(value) => {
+                    //   setLifetime(Number(value));
+                    // }}
+                    value={1}
+                    className='ad-form-item'
+                  >
+                    <Option value={1}>1 DAY</Option>
+                    <Option value={3}>3 DAYS</Option>
+                    <Option value={7}>7 DAYS</Option>
+                    <Option value={15}>15 DAYS</Option>
+                  </Select>
                 </Form.Item>
                 <Form.Item name='payout-base' label='Payout Base' required>
-                  <InputNumber min={0} max={100} className='ad-form-content' />
+                  <InputNumber min={0} max={100} className='ad-form-item' />
                 </Form.Item>
                 <Form.Item name='payout-min' label='Payout Min' required>
-                  <InputNumber min={0} max={100} className='ad-form-content' />
+                  <InputNumber min={0} max={100} className='ad-form-item' />
                 </Form.Item>
                 <Form.Item name='payout-max' label='Payout Max' required>
-                  <InputNumber min={0} max={100} className='ad-form-content' />
+                  <InputNumber min={0} max={100} className='ad-form-item' />
                 </Form.Item>
               </Panel>
             </Collapse>

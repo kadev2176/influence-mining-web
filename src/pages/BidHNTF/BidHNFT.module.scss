@@ -52,7 +52,7 @@
         margin-right: 32px;
         padding: 28px 20px 0 20px;
 
-        &-content,
+        &-item,
         &-upload {
           border-radius: 10px;
           height: 60px;
@@ -60,26 +60,52 @@
           min-width: 300px;
         }
 
-        &-content {
+        &-item {
           color: #fff;
           background: rgba(255, 255, 255, 0.05);
           font-size: 20px;
 
-          .ant-input-number-handler-wrap {
+          .ant-input-number-handler-wrap,
+          .ant-select-selector {
             background-color: rgba(255, 255, 255, 0.05);
           }
 
-          .ant-input-number-input {
+          .ant-input-number-input,
+          .ant-select-selector {
             height: 60px;
             font-size: 20px;
+          }
+
+          .ant-select-selector {
+            @include flex();
+            text-align: center;
           }
         }
 
         &-upload {
           border: 1px solid #1DA1F2;
           color: #1DA1F2;
-          border-radius: 10px;
           background: #10121A;
+        }
+
+        .ant-upload-list-item-name {
+          @include text-overflow(250px)
+        }
+
+        .follow-twitter {
+          background: #1DA1F2;
+          border: 1px solid #1DA1F2;
+          padding: 4px 8px;
+          border-radius: 8px;
+          color: #FFFFFF;
+        }
+
+        .instruction {
+          @include flex(space-between, center);
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+          height: 60px;
+          padding: 0 18px;
         }
 
         .ant-form-item-required {
