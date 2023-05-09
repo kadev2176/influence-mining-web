@@ -115,7 +115,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
               required
               initialValue={content}
             >
-              <Input className='ad-form-item' />
+              <Input className='ad-form-item' bordered={false} />
             </Form.Item>
             <Form.Item name='adIcon' label='Ad icon' required>
               <Upload
@@ -155,7 +155,12 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
             <Collapse ghost>
               <Panel header='Advanced Settings' key='1'>
                 <Form.Item name='reward-rate' label='Reward Rate' required>
-                  <InputNumber min={0} max={100} className='ad-form-item' />
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    className='ad-form-item'
+                    bordered={false}
+                  />
                 </Form.Item>
                 <Form.Item name='lifetime' label='lifetime' required>
                   <Select
@@ -175,13 +180,28 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
                   </Select>
                 </Form.Item>
                 <Form.Item name='payout-base' label='Payout Base' required>
-                  <InputNumber min={0} max={100} className='ad-form-item' />
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    className='ad-form-item'
+                    bordered={false}
+                  />
                 </Form.Item>
                 <Form.Item name='payout-min' label='Payout Min' required>
-                  <InputNumber min={0} max={100} className='ad-form-item' />
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    className='ad-form-item'
+                    bordered={false}
+                  />
                 </Form.Item>
                 <Form.Item name='payout-max' label='Payout Max' required>
-                  <InputNumber min={0} max={100} className='ad-form-item' />
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    className='ad-form-item'
+                    bordered={false}
+                  />
                 </Form.Item>
               </Panel>
             </Collapse>
@@ -218,7 +238,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
         <div className='title'>Bid your price</div>
         <div className='bid-nfts'>
           <div className='bid-nfts-title'>Nfts</div>
-          <Input className='bid-nfts-input' />
+          <Input className='bid-nfts-input' bordered={false} />
           <div className='action-btn-primary active bid-button'>Bid</div>
         </div>
       </div>
