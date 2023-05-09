@@ -1,0 +1,373 @@
+@import '../../common.scss';
+
+.bidAdContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  max-width: 956px;
+  min-height: 100vh;
+  background-image: url('../../../public/leaderboard-bg-top.png');
+  background-position: center top;
+  background-size: contain;
+  background-repeat: no-repeat;
+  padding: 60px 0;
+
+  :global {
+
+    .ad-header {
+      >div {
+        font-size: 36px;
+        line-height: 42px;
+      }
+
+      >span {
+        font-size: 18px;
+        color: $text-gray-color;
+        line-height: 21px;
+      }
+    }
+
+    .ad-form,
+    .ad-footer,
+    .ad-preview {
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      background: #10121A;
+    }
+
+    .ad-content {
+      margin-top: 60px;
+      display: flex;
+
+      .title {
+        font-size: 24px;
+        color: #fff;
+        font-family: 'Gilroy-Bold';
+        margin-bottom: 64px;
+      }
+
+      .ad-form {
+        flex: 1;
+        height: 100%;
+        margin-right: 32px;
+        padding: 28px 20px 0 20px;
+
+        &-item,
+        &-upload {
+          border-radius: 10px;
+          height: 60px;
+          width: 100%;
+          min-width: 300px;
+        }
+
+        &-item {
+          color: #fff;
+          background: rgba(255, 255, 255, 0.05);
+          font-size: 20px;
+
+          .ant-input-number-handler-wrap,
+          .ant-select-selector {
+            background-color: rgba(255, 255, 255, 0.05);
+          }
+
+          .ant-input-number-input,
+          .ant-select-selector {
+            height: 60px;
+            font-size: 20px;
+          }
+
+          .ant-select-selector {
+            @include flex();
+            text-align: center;
+          }
+        }
+
+        &-upload {
+          border: 1px solid #1DA1F2;
+          color: #1DA1F2;
+          background: #10121A;
+        }
+
+        .ant-upload-list-item-name {
+          @include text-overflow(200px)
+        }
+
+        .follow-twitter {
+          background: #1DA1F2;
+          border: 1px solid #1DA1F2;
+          padding: 4px 8px;
+          border-radius: 8px;
+          color: #FFFFFF;
+        }
+
+        .instruction {
+          @include flex(space-between, center);
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+          height: 60px;
+          padding: 0 18px;
+        }
+
+        .ant-form-item-required {
+          font-family: 'Gilroy-Bold';
+          font-size: 24px;
+          color: #fff;
+
+          &::before {
+            color: #1DA1F2 !important;
+          }
+        }
+
+        .ant-collapse-content-box {
+          padding: 0;
+        }
+
+        .ant-collapse-header {
+          padding: 12px 0;
+          @include flex(flex-start, center);
+          font-size: 24px;
+
+          &-text {
+            font-family: 'Gilroy-Bold';
+          }
+
+          .ant-collapse-arrow {
+            font-size: 16px;
+          }
+        }
+      }
+
+      .ad-preview {
+        padding: 28px;
+        height: 696px;
+        width: 680px;
+        display: flex;
+        flex-direction: column;
+
+        .content {
+          border: 1px solid rgba(255, 255, 255, 0.13);
+          border-radius: 20px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          padding: 20px;
+
+          .header {
+            display: flex;
+          }
+
+          .avatar {
+            width: 70px;
+            height: 70px;
+          }
+
+          .sponsor-desc {
+            display: flex;
+            flex-direction: column;
+            font-size: 24px;
+            margin-left: 12px;
+
+            >span {
+              color: rgba(255, 255, 255, 0.5)
+            }
+          }
+
+          .section {
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 10px;
+            margin-top: 24px;
+            font-size: 24px;
+            color: #fff;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+
+            .ad-title {
+              padding: 24px 26px 10px 26px;
+              height: 62px;
+              @include text-overflow(460px)
+            }
+
+            .ad-poster {
+              background: #020510;
+              overflow: hidden;
+              height: 100%;
+              width: 100%;
+              border-bottom-left-radius: 10px;
+              border-bottom-right-radius: 10px;
+            }
+          }
+
+          .arrow {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            transform: rotate(45deg);
+            left: 24px;
+            top: -11px;
+            z-index: 1;
+            background: #10121A;
+            border-top-left-radius: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.13);
+            border-left: 1px solid rgba(255, 255, 255, 0.13);
+          }
+        }
+      }
+    }
+
+    .ad-footer {
+      margin-top: 120px;
+      padding: 35px 0;
+      font-size: 24px;
+
+      .title {
+        width: 100%;
+        padding-bottom: 46px;
+        border-bottom: 0.5px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+      }
+
+      .bid-nfts {
+        padding: 0 60px;
+        @include flex();
+        flex-direction: column;
+        width: 100%;
+
+        &-title {
+          width: 100%;
+          margin-bottom: 18px;
+          margin-top: 22px;
+        }
+
+        &-input {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+          height: 60px;
+        }
+      }
+
+      .bid-button {
+        width: 323px;
+        height: 40px;
+        margin-top: 46px;
+      }
+    }
+  }
+
+}
+
+.lifetimePopup {
+  background: black;
+}
+
+@media only screen and (max-width: 991px) {
+  .bidAdContainer {
+    padding: 0 20px;
+
+    :global {
+      .ad-header {
+        >div {
+          font-size: 32px;
+          line-height: 38px;
+        }
+
+        >span {
+          font-size: 14px;
+          line-height: 16px;
+        }
+      }
+
+      .ad-content {
+        margin-top: 50px;
+        flex-direction: column-reverse;
+
+        .title {
+          margin-bottom: 28px;
+          font-size: 17px;
+        }
+
+        .ad-preview {
+          width: fit-content;
+          height: 500px;
+          margin-bottom: 20px;
+          padding: 16px;
+
+          .content {
+            .avatar {
+              width: 50px;
+              height: 50px;
+            }
+
+            .sponsor-desc,
+            .section {
+              font-size: 18px;
+            }
+
+            .section {
+              .ad-title {
+                padding: 18px 12px 12px 12px;
+                height: 52px;
+                @include text-overflow(200px)
+              }
+            }
+          }
+        }
+
+        .ad-form {
+          margin: 0;
+
+          &-content,
+          &-upload {
+            height: 40px;
+          }
+
+          &-content {
+            font-size: 14px;
+
+            .ant-input-number-input {
+              height: 40px;
+              font-size: 14px;
+            }
+          }
+
+          .ant-form-item-required {
+            font-size: 17px;
+          }
+
+          .ant-collapse-header {
+            padding: 12px 0;
+            font-size: 17px;
+
+            .ant-collapse-arrow {
+              font-size: 14px;
+            }
+          }
+        }
+      }
+
+      .ad-footer {
+        margin-top: 60px;
+        padding: 20px 0;
+
+        .title {
+          padding-bottom: 20px;
+        }
+
+        .bid-button {
+          width: 100%;
+          margin-top: 30px;
+        }
+
+        .bid-nfts {
+          padding: 0 20px;
+          // height: 44px;
+
+          &-input {
+            height: 44px;
+          }
+        }
+      }
+    }
+  }
+}
