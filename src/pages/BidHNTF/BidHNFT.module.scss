@@ -89,7 +89,7 @@
         }
 
         .ant-upload-list-item-name {
-          @include text-overflow(250px)
+          @include text-overflow(200px)
         }
 
         .follow-twitter {
@@ -255,6 +255,10 @@
     }
   }
 
+}
+
+.lifetimePopup {
+  background: black;
 }
 
 @media only screen and (max-width: 991px) {

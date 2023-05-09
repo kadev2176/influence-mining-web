@@ -33,7 +33,8 @@
     "three": "^0.149.0",
     "typescript": "^4.9.5",
     "wagmi": "^0.10.15",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "browser-image-compression": "^2.0.0"
   },
   "scripts": {
     "predeploy": "npm run build && cp CNAME build/",

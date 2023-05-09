@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import has from 'lodash/has';
+import { compressImageFile } from '../../utils/upload.util';
 import type { UploadFile } from 'antd/es/upload/interface';
 import UserAvatar from '../../components/UserAvatar/UserAvatar';
 import styles from './BidHNFT.module.scss';
@@ -32,15 +33,6 @@ export interface UserInstruction {
   link?: string;
 }
 
-interface PersonInfoProps
-  extends React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLElement>,
-    HTMLElement
-  > {
-  label: string;
-  size?: string;
-}
-
 const defaultInstruction: UserInstruction = {
   text: 'Follow Parami on Twitter',
   tag: 'Twitter',
@@ -50,25 +42,20 @@ const defaultInstruction: UserInstruction = {
 
 const BidHNFT: React.FC<BidHNFTProps> = (props) => {
   const [form] = Form.useForm();
-  const { getFieldValue } = form;
   const [content, setContent] = useState<string>('View Ads. Get Paid.');
   const [iconUploadFiles, setIconUploadFiles] = useState<UploadFile[]>([]);
   const [posterUploadFiles, setPosterUploadFiles] = useState<UploadFile[]>([]);
 
   const uploadProps = {
     name: 'file',
+    headers: {
+      authorization: 'authorization-text',
+    },
     action: 'https://ipfs.parami.io/api/v0/add?stream-channels=true',
-    // listType: 'picture',
+    withCredentials: true,
     showUploadList: { showPreviewIcon: false },
     multiple: false,
-    progress: {
-      strokeColor: {
-        '0%': '#108ee9',
-        '100%': '#87d068',
-      },
-      strokeWidth: 3,
-      format: (percent: any) => percent && `${parseFloat(percent.toFixed(2))}%`,
-    },
+    maxCount: 1,
   };
 
   const onFinish = (values: any) => {
@@ -79,32 +66,30 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
     if (has(changedValues, 'content')) {
       setContent(changedValues.content);
     }
-    console.log(changedValues, '---changedValues---');
   };
 
   const handleBeforeUpload = (imageType: IMAGE_TYPE) => {
     return async (file: any) => {
-      console.log(file, '---file---');
-      // return await compressImageFile(file, imageType);
+      return await compressImageFile(file, imageType);
     };
   };
 
   const handleUploadOnChange = (imageType: IMAGE_TYPE) => {
     return (info: any) => {
       const { fileList } = info;
-      console.log(info, '---info---');
+      console.log(info, '---info----');
 
-      //   if (info.file.status === 'done') {
-      //     const ipfsHash = info.file.response.Hash;
-      //     const imageUrl = config.ipfs.endpoint + ipfsHash;
-      //     fileList[0].url = imageUrl;
-      //   }
-      //   if (info.file.status === 'error') {
-      //     message.error('Upload Image Error');
-      //   }
-      //   imageType === IMAGE_TYPE.POSTER
-      //     ? setPosterUploadFiles(fileList)
-      //     : setIconUploadFiles(fileList);
+      if (info.file.status === 'done') {
+        // const ipfsHash = info.file.response.Hash;
+        // const imageUrl = config.ipfs.endpoint + ipfsHash;
+        // fileList[0].url = imageUrl;
+      }
+      if (info.file.status === 'error') {
+        message.error('Upload Image Error');
+      }
+      imageType === IMAGE_TYPE.POSTER
+        ? setPosterUploadFiles(fileList)
+        : setIconUploadFiles(fileList);
     };
   };
 
@@ -134,8 +119,9 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
             </Form.Item>
             <Form.Item name='adIcon' label='Ad icon' required>
               <Upload
-                // fileList={iconUploadFiles}
                 {...uploadProps}
+                fileList={iconUploadFiles}
+                listType='picture'
                 onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
                 beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
               >
@@ -147,6 +133,8 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
             <Form.Item name='poster' label='Poster' required>
               <Upload
                 {...uploadProps}
+                fileList={posterUploadFiles}
+                listType='picture'
                 onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
                 beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
               >
@@ -176,9 +164,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
                       width: '100%',
                     }}
                     defaultValue={1}
-                    // onChange={(value) => {
-                    //   setLifetime(Number(value));
-                    // }}
+                    popupClassName={styles.lifetimePopup}
                     value={1}
                     className='ad-form-item'
                   >
