@@ -14,7 +14,6 @@ $text-gray-color: rgba(255, 255, 255, 0.5);
   src: url('./fonts/Gilroy-Regular.ttf') format('truetype');
 }
 
-
 @mixin text-overflow($width) {
   overflow: hidden;
   text-overflow: ellipsis;

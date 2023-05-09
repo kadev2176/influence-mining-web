@@ -12,26 +12,30 @@ import { goerli } from "wagmi/chains";
 import { Routes, Route, HashRouter, Navigate } from "react-router-dom";
 import { ConfigProvider } from 'antd';
 import Home from './pages/Home/Home';
-import Test from './pages/Test/Test';
-import MintBillboard from './components/MintBillboard/MintBillboard';
 import { ApiPromise } from '@polkadot/api';
 import Miner from './pages/Miner/Miner';
 import Landing from './pages/Landing/Landing';
 import LeaderBoard from './pages/LeaderBoard/LeaderBoard';
-import Dashboard from './pages/Dashboard/Dashboard';
 import BidHNFT from './pages/BidHNTF/BidHNFT';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-
 import './fonts/Gilroy-Bold.ttf';
 import './fonts/Gilroy-Regular.ttf';
-import MintNFTModal from './components/MintNFTModal/MintNFTModal';
 import MintPage from './pages/MintPage/MintPage';
 import TransactionLog from './pages/TransactionLog/TransactionLog';
+import 'hyperlink-nft-badge';
 
 
 declare global {
   interface Window {
     apiWs: ApiPromise;
+  }
+
+  namespace JSX {
+    interface IntrinsicElements {
+      'hnft-badge': React.DetailedHTMLProps<
+        any, any
+      >;
+    }
   }
 }
 
