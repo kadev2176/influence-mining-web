@@ -27,22 +27,6 @@
         font-size: 16px;
         margin-left: 5px;
       }
-
-      &.tweet-label {
-        display: flex;
-        align-items: center;
-
-        .gpt-generator-btn {
-          margin-left: 20px;
-          padding: 7px;
-          cursor: pointer;
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 5px;
-          font-size: 14px;
-          line-height: 16px;
-          color: #1DA1F2;
-        }
-      }
     }
 
     .tags-row {
@@ -86,8 +70,40 @@
       }
     }
 
+    .sponsor-info {
+      font-size: 20px;
+      line-height: 28px;
+      color: #1DA1F2;
+
+      .sponsor-link {
+        font-family: Gilroy-Bold;
+        margin-left: 5px;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
+        .icon {
+          margin-left: 4px;
+        }
+      }
+    }
+
+    .sponsor-description {
+      font-size: 20px;
+      line-height: 28px;
+      color: #1DA1F2;
+      margin-bottom: 20px;
+    }
+
+    .gpt-generator-btn {
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
     .editor {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
 
       textarea {
         border: 1px solid rgba(255, 255, 255, 0.13);
@@ -104,6 +120,17 @@
           color: #FFFFFF;
           opacity: 0.6;
         }
+      }
+    }
+
+    .sponsor-prompt {
+      font-size: 18px;
+      line-height: 25px;
+      color: #1DA1F2;
+      margin-bottom: 20px;
+
+      .icon {
+        margin-right: 5px;
       }
     }
 
@@ -146,27 +173,11 @@
     font-size: 20px;
     line-height: 23px;
     opacity: 0.6;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
 
     .icon {
       font-size: 16px;
       margin-left: 5px;
-    }
-
-    &.tweet-label {
-      display: flex;
-      align-items: center;
-
-      .gpt-generator-btn {
-        margin-left: 20px;
-        padding: 7px;
-        cursor: pointer;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 5px;
-        font-size: 14px;
-        line-height: 16px;
-        color: #1DA1F2;
-      }
     }
   }
 
@@ -174,7 +185,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 
     .sponsored-tag {
       background: rgba(255, 255, 255, 0.05);
@@ -211,7 +222,41 @@
     }
   }
 
+  .sponsor-info {
+    font-size: 14px;
+    line-height: 20px;
+    color: #1DA1F2;
+
+    .sponsor-link {
+      font-family: Gilroy-Bold;
+      margin-left: 4px;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      .icon {
+        margin-left: 4px;
+      }
+    }
+  }
+
+  .sponsor-description {
+    font-size: 14px;
+    line-height: 20px;
+    color: #1DA1F2;
+    margin-bottom: 18px;
+  }
+
+  .gpt-generator-btn {
+    width: fit-content;
+    margin-bottom: 18px;
+  }
+
   .editor {
+    margin-bottom: 18px;
+    
     textarea {
       border: 1px solid rgba(255, 255, 255, 0.13);
       border-radius: 21px;
@@ -227,6 +272,16 @@
         color: #FFFFFF;
         opacity: 0.6;
       }
+    }
+  }
+
+  .sponsor-prompt {
+    color: #1DA1F2;
+    font-size: 12px;
+    line-height: 17px;
+    margin-bottom: 20px;
+    .icon {
+      margin-right: 4px;
     }
   }
 
@@ -246,7 +301,8 @@
   }
 
   .btn-container {
-    margin: 74px 0;
+    margin-top: 0;
+    margin-bottom: 20px;
 
     .action-btn-primary {
       font-size: 24px;

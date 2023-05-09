@@ -114,6 +114,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
+
     .action-btn-primary {
       width: 100%;
       max-width: 330px;
@@ -128,19 +129,23 @@
 @media only screen and (max-width: 991px) {
   .mint-page-container {
     padding: 0 16px;
-  }
 
-  .title {
-    font-size: 20px;
-    line-height: 23px;
-    margin-bottom: 15px;
-  }
+    .header {
+      .title-row {
+        .title {
+          font-size: 20px;
+          line-height: 23px;
+          margin-bottom: 15px;
+        }
+      }
 
-  .sub-title {
-    font-size: 14px;
-    line-height: 16px;
-    opacity: 0.6;
-    margin-bottom: 20px;
+      .sub-title {
+        font-size: 14px;
+        line-height: 16px;
+        opacity: 0.6;
+        margin-bottom: 20px;
+      }
+    }
   }
 
   .nfts {

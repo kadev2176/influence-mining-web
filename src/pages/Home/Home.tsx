@@ -21,14 +21,15 @@ function Home({ }: HomeProps) {
     const [generateTweetModal, setGenerateTweetModal] = useState<boolean>(false);
 
     useEffect(() => {
-        const params = parseUrlParams() as { code: string };
+        const params = parseUrlParams() as { code: string, state: string };
         if (params.code) {
             createAccountOrLogin(params.code).then(res => {
                 if (res.success) {
                     notification.success({
                         message: 'Login Successful!'
                     })
-                    window.location.href = `${window.location.origin}/#/miner`;
+                    const tag = params.state && params.state.startsWith('tag_') ? params.state.slice(4) : null;
+                    window.location.href = `${window.location.origin}/#/miner${tag ? `?tag=${tag}` : ''}`;
                     // navigate('/miner');
                     return;
                 }

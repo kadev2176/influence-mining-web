@@ -2,7 +2,7 @@ import { Modal, Tooltip } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import { generateReplyTweetContent, generateTweetContent, getSponsoredTags } from '../../services/twitter.service';
+import { SponsoredTag, generateReplyTweetContent, generateTweetContent, getSponsoredTags } from '../../services/twitter.service';
 import LoadingBar from '../LoadingBar/LoadingBar';
 import MobileDrawer from '../MobileDrawer/MobileDrawer';
 import './TweetGeneratorModal.scss';
@@ -13,7 +13,6 @@ import { useSearchParams } from 'react-router-dom';
 export interface TweetGeneratorModalProps {
     onCancel: () => void;
     tweet?: GroupMiningLeaderTweet;
-    tag?: string;
 }
 
 const NONE_TAG = 'none';
@@ -25,19 +24,19 @@ const addTag = (content: string, tag: string) => {
     return content;
 }
 
-function TweetGeneratorModal({ onCancel, tweet, tag }: TweetGeneratorModalProps) {
+function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
     const [tweetContent, setTweetContent] = useState<string>(OFFICIAL_TAG);
     const [loading, setLoading] = useState<boolean>();
-    const [sponsoredTags, setSponsoredTags] = useState<string[]>([]);
-    const [selectedTag, setSelectedTag] = useState<string | undefined>(tag);
+    const [sponsoredTags, setSponsoredTags] = useState<SponsoredTag[]>([]);
+    const [selectedTag, setSelectedTag] = useState<SponsoredTag>();
     const isReply = !!tweet;
     const [params] = useSearchParams();
 
     useEffect(() => {
         if (params && sponsoredTags?.length) {
-            const tag = params.get('tag');
-            if (tag) {
-                const preSelectedTag = sponsoredTags.find(sponsoredTag => sponsoredTag.toLocaleLowerCase() === tag.toLocaleLowerCase())
+            const tagOnParam = params.get('tag');
+            if (tagOnParam) {
+                const preSelectedTag = sponsoredTags.find(sponsoredTag => sponsoredTag.tag.toLocaleLowerCase() === tagOnParam.toLocaleLowerCase())
                 if (preSelectedTag) {
                     setSelectedTag(preSelectedTag);
                 }
@@ -70,9 +69,7 @@ function TweetGeneratorModal({ onCancel, tweet, tag }: TweetGeneratorModalProps)
 
     useEffect(() => {
         if (selectedTag) {
-            let content = addTag(tweetContent, `#${selectedTag}`);
-            content = addTag(content, OFFICIAL_TAG);
-            setTweetContent(content);
+            setTweetContent(`#${selectedTag.tag} ${OFFICIAL_TAG}`)
         }
     }, [selectedTag]);
 
@@ -89,36 +86,47 @@ function TweetGeneratorModal({ onCancel, tweet, tag }: TweetGeneratorModalProps)
             <div className='tags-row'>
                 {sponsoredTags.map(tag => {
                     return <>
-                        <div className={`sponsored-tag ${selectedTag === tag ? 'selected' : ''}`}
-                            key={`key-${tag}`}
+                        <div className={`sponsored-tag ${selectedTag?.tag === tag.tag ? 'selected' : ''}`}
+                            key={`key-${tag.tag}`}
                             onClick={() => {
                                 setSelectedTag(tag);
                             }}
                         >
-                            #{tag}
-                            <img className='gift-icon' src='/assets/images/gift.png'></img>
+                            #{tag.tag}
                         </div>
                     </>
                 })}
             </div>
+            {!!selectedTag && <>
+                <div className='sponsor-info'>EXTRA rewards from
+                    <span className='sponsor-link' onClick={() => {
+                        window.open(selectedTag.link)
+                    }}>
+                        {selectedTag.tag}
+                        <span className='icon'>
+                            <i className="fa-solid fa-arrow-up-right-from-square"></i>
+                        </span>
+                    </span>
+                </div>
+                <div className='sponsor-description'>
+                    {selectedTag.description}
+                </div>
+            </>}
         </>}
     </>
 
     const gptGeneration = <>
-        <div className='label tweet-label'>
-            Tweet
-            <div className='gpt-generator-btn' onClick={() => {
-                setLoading(true);
-                generateTweetContent(selectedTag).then(tweet => {
-                    if (selectedTag) {
-                        tweet = addTag(tweet, selectedTag);
-                    }
-                    tweet = addTag(tweet, OFFICIAL_TAG);
-                    setTweetContent(tweet);
-                    setLoading(false);
-                })
-            }}>Use Tweet Generator</div>
-        </div>
+        <div className='gpt-generator-btn action-btn-primary active' onClick={() => {
+            setLoading(true);
+            generateTweetContent(selectedTag?.tag).then(tweet => {
+                if (selectedTag) {
+                    tweet = addTag(tweet, selectedTag.tag);
+                }
+                tweet = addTag(tweet, OFFICIAL_TAG);
+                setTweetContent(tweet);
+                setLoading(false);
+            })
+        }}>GPT based tweet generation</div>
         {loading && <>
             <div className='loading-section'>
                 <LoadingBar></LoadingBar>
@@ -132,6 +140,12 @@ function TweetGeneratorModal({ onCancel, tweet, tag }: TweetGeneratorModalProps)
                 <TextArea value={tweetContent} placeholder="GPT is generating a tweet for you..." onChange={(e) => {
                     setTweetContent(e.target.value);
                 }} />
+            </div>
+            <div className='sponsor-prompt'>
+                <span className='icon'>
+                    <i className="fa-solid fa-circle-info"></i>
+                </span>
+                Sponsored Hashtags 🎁 bear EXTRA rewards. Tweets relevant to the sponsor's project will grant you the prize.
             </div>
         </>}
     </>
