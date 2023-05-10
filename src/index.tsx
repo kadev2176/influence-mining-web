@@ -22,20 +22,10 @@ import './fonts/Gilroy-Bold.ttf';
 import './fonts/Gilroy-Regular.ttf';
 import MintPage from './pages/MintPage/MintPage';
 import TransactionLog from './pages/TransactionLog/TransactionLog';
-import 'hyperlink-nft-badge';
-
 
 declare global {
   interface Window {
     apiWs: ApiPromise;
-  }
-
-  namespace JSX {
-    interface IntrinsicElements {
-      'hnft-badge': React.DetailedHTMLProps<
-        any, any
-      >;
-    }
   }
 }
 

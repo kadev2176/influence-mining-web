@@ -3,6 +3,7 @@ import { OembedTweet } from '../../services/twitter.service';
 import { formatInfluenceScore } from '../../utils/format.util';
 import UserAvatar from '../UserAvatar/UserAvatar';
 import './LeaderBoardUserCard.scss';
+import { HnftBadge } from 'hyperlink-nft-badge';
 
 export interface LeaderTweet extends Partial<OembedTweet> {
   evaluation: string;
@@ -25,7 +26,8 @@ const LeaderBoardUserCard = ({
   return (
     <div className={`user-card-container ${size}`}>
       <div className='user-card-container-ad'>
-        <hnft-badge imageurl="some_url"></hnft-badge>
+        <HnftBadge imageurl='123'></HnftBadge>
+        {/* <hnft-badge imageurl="some_url"></hnft-badge> */}
       </div>
 
       <div
