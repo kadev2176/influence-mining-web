@@ -162,6 +162,17 @@
         }
       }
 
+      &.original {
+        .tweet-content {
+          margin-left: 0;
+          max-width: 100%;
+          
+          .user-row {
+            margin-bottom: 15px;
+          }
+        }
+      }
+
       .tweet-content {
         display: flex;
         flex-direction: column;
@@ -187,6 +198,17 @@
 
           .twitter-name {
             opacity: 0.5;
+          }
+        }
+
+        .replying-row {
+          font-size: 20px;
+          line-height: 28px;
+          color: rgba(255, 255, 255, 0.5);
+
+          .replying-name {
+            color: #47CAFF;
+            cursor: pointer;
           }
         }
 
@@ -222,10 +244,10 @@
           line-height: 21px;
           color: #FFFFFF;
           opacity: 0.5;
-          margin-right: 30px;
         }
 
         .timer {
+          margin-left: 30px;
           display: flex;
           font-weight: 600;
           font-size: 23.0721px;
@@ -383,6 +405,10 @@
       .miner-tweet-content {
         border-radius: 10px;
 
+        &.original {
+          margin-bottom: 12px;
+        }
+
         .avatar-container {
           .avatar {
             width: 38px;
@@ -392,7 +418,7 @@
 
         .tweet-content {
           .user-row {
-            margin-bottom: 20px;
+            margin-bottom: 8px;
 
             .username {
               font-size: 14px;
@@ -405,12 +431,17 @@
             }
           }
 
+          .replying-row {
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 17px;
+          }
+
           .content-row {
             font-size: 14px;
             line-height: 17px;
           }
         }
-
       }
 
       .gpt-score {

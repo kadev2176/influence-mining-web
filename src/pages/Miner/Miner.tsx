@@ -22,6 +22,7 @@ const utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
 interface MostRecentTweet extends OembedTweet {
+    originalTweet: OembedTweet | null;
     evaluation: string;
     justPosted: boolean;
     isMiner: boolean;
@@ -78,8 +79,15 @@ function Miner() {
                 return;
             }
 
+            const originalTweetId = imAccount?.conversationId;
+            let originalTweet = null;
+            if (originalTweetId && originalTweetId !== id) {
+                originalTweet = await fetchOembedTweet(originalTweetId);
+            }
+
             setMostRecentTweet({
                 ...tweet,
+                originalTweet: originalTweet,
                 evaluation: imAccount?.tweetEvaluation ?? '',
                 justPosted: true,
                 isMiner: true
@@ -123,6 +131,30 @@ function Miner() {
     const currentMiningTweet = <>
         {mostRecentTweet && <>
             <div className='miner-tweet'>
+                {mostRecentTweet.originalTweet && <>
+                    <div className='section-card miner-tweet-content original'>
+                        <div className='tweet-content'>
+                            <div className='user-row' onClick={() => {
+                                window.open(mostRecentTweet.originalTweet?.authorUrl);
+                            }}>
+                                <span className='username'>
+                                    @{mostRecentTweet.originalTweet.authorName}
+                                </span>
+                            </div>
+                            <div className='content-row' onClick={() => {
+                                window.open(mostRecentTweet.originalTweet?.tweetUrl);
+                            }}>
+                                {mostRecentTweet.originalTweet.tweetContent}
+                            </div>
+                        </div>
+
+                        {!isMobile && <>
+                            <div className='corner-tag'>
+                                <div className='timer-label'>Original Tweet</div>
+                            </div>
+                        </>}
+                    </div>
+                </>}
                 {isMobile && <>
                     <div className='countdown-card'>
                         <div className='timer-label'>Mining time left</div>
@@ -150,6 +182,13 @@ function Miner() {
                             </span>
                             <span className='twitter-name'>@{imAccount?.twitterUsername}</span>
                         </div>
+                        {mostRecentTweet.originalTweet && <>
+                            <div className='replying-row'>
+                                Replying to <span className='replying-name' onClick={() => {
+                                    window.open(mostRecentTweet.originalTweet?.authorUrl);
+                                }}>@{mostRecentTweet.originalTweet.authorName}</span>
+                            </div>
+                        </>}
                         <div className='content-row' onClick={() => {
                             window.open(mostRecentTweet.tweetUrl);
                         }}>
@@ -210,6 +249,8 @@ function Miner() {
         <div className='vault-container'>
             <Dashboard></Dashboard>
 
+            {currentMiningTweet}
+
             <div className={`switch-btn ${isKOL ? 'kol' : ''}`}>
                 {isKOL && <>
                     <div className={`option ${miningMode === 'group' ? 'active' : ''}`} onClick={() => {
@@ -247,8 +288,6 @@ function Miner() {
                         setTweetGeneratorModal(true);
                     }}>Tweet</div>
                 </div>
-
-                {currentMiningTweet}
             </>}
 
             {miningMode === 'group' && <>
@@ -256,8 +295,6 @@ function Miner() {
                 <div className='miner-description'>
                     Comment under tweets (attaching {OFFICIAL_TAG}) to boost both yours and the original tweet's SCORE. More quality interaction in a thread means more earnings for everyone engaged.
                 </div>
-
-                {currentMiningTweet}
 
                 {leaderTweets && <>
                     {leaderTweets.map(tweet => {
