@@ -120,7 +120,7 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
             setLoading(true);
             generateTweetContent(selectedTag?.tag).then(tweet => {
                 if (selectedTag) {
-                    tweet = addTag(tweet, selectedTag.tag);
+                    tweet = addTag(tweet, `#${selectedTag.tag}`);
                 }
                 tweet = addTag(tweet, OFFICIAL_TAG);
                 setTweetContent(tweet);
