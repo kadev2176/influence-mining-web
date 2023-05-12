@@ -10,7 +10,7 @@ import { amountToFloatString } from '../../utils/format.util';
 import { useBillboardPrices } from '../../hooks/useBillboardPrices';
 import { BigNumber } from 'ethers';
 import LoadingBar from '../../components/LoadingBar/LoadingBar';
-import { HNFT_CONFIG } from '../../models/parami';
+import { EIP5489ForInfluenceMiningContractAddress, HNFT_CONFIG } from '../../models/parami';
 import { useMintBillboard } from '../../hooks/useMintBillboard';
 import { useUpgradeBillboard } from '../../hooks/useUpgradeBillboard';
 import { useApproveAD3 } from '../../hooks/useApproveAD3';
@@ -28,7 +28,7 @@ function MintPage({ }: MintPageProps) {
     const [priceDiff, setPriceDiff] = useState<string>('');
     const { mint, isSuccess: mintSuccess, isLoading: mintLoading, error: mintError, prepareError: mintPrepareError } = useMintBillboard(selectedNft?.level, imAccount?.twitterProfileImageUri ?? '');
     const { upgradeHnft, isSuccess: upgradeSuccess, isLoading: upgradeLoading, error: upgradeError, prepareError: upgradePrepareError } = useUpgradeBillboard(hnft.tokenId, selectedNft?.level);
-    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError, prepareError: approveAd3PrepareError } = useApproveAD3(priceDiff);
+    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError, prepareError: approveAd3PrepareError } = useApproveAD3(EIP5489ForInfluenceMiningContractAddress, priceDiff);
     const navigate = useNavigate();
     const [connectWalletModal, setConnectWalletModal] = useState<boolean>(false);
 
