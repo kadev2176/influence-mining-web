@@ -12,18 +12,40 @@ export interface SponsoredTag {
 
 const DEFAULT_SPONSORED_TAGS: SponsoredTag[] = [
   {
+    tag: '0xScope',
+    link: 'https://0xscope.com/',
+    description: '0xScope is able to combine Web2 and Web3 data into a Knowledge Graph, allowing creatorsto launch cutting-edge applications with powerful insights.'
+  },
+  {
     tag: 'MirrorWorld',
     link: 'https://mirrorworld.fun/',
     description: 'Smart Platform by Mirror World is the first all-in-one application development platform that helps developers develop, grow and monetize their blockchain applications.'
-  }, {
+  },
+  {
     tag: 'KNN3',
     link: 'https://www.knn3.xyz/',
     description: 'KNN3 Network is a one-stop Web3 User-centric DataFi solution for d/Apps and smart contracts. KNN3 allows d/Apps & smart contracts to interact with cross-platform user-centric data in multiple algo-friendly ways.'
-  }, {
-    tag: 'CultDAO',
-    link: 'https://cultdao.io/',
-    description: 'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future. Our society is built to make it as difficult as possible to break away from societal, economic and other norms.'
+  },
+  {
+    tag: 'DeBox',
+    link: 'https://debox.pro/',
+    description: 'The all in one Web3.0 social platform.'
+  },
+  {
+    tag: 'ParamiProtocol',
+    link: 'https://gptminer.io/',
+    description: 'Parami is building an incentive layer to aggregate #Web3 traffic. Making #NFTs the decentralized medium.'
+  },
+  {
+    tag: 'AkiNetwork',
+    link: 'https://akiprotocol.io/',
+    description: 'Connecting the Web3 Dots: Influencer-centered,Data-driven'
   }
+  // }, {
+  //   tag: 'CultDAO',
+  //   link: 'https://cultdao.io/',
+  //   description: 'The purpose of CULT is to empower and fund those building and contributing towards our decentralized future. Our society is built to make it as difficult as possible to break away from societal, economic and other norms.'
+  // }
 ];
 
 export interface OembedTweet {

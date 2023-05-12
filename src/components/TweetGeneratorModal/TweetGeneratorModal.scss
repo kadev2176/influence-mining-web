@@ -33,7 +33,8 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: space-between;
 
       .sponsored-tag {
         background: rgba(255, 255, 255, 0.05);
@@ -45,10 +46,7 @@
         padding: 10px 28px;
         display: flex;
         align-items: center;
-
-        &+.sponsored-tag {
-          margin-left: 16px;
-        }
+        margin-bottom: 20px;
 
         &:hover {
           cursor: pointer;
@@ -185,7 +183,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 18px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 
     .sponsored-tag {
       background: rgba(255, 255, 255, 0.05);
@@ -197,10 +196,8 @@
       padding: 6px 17px;
       display: flex;
       align-items: center;
-
-      &+.sponsored-tag {
-        margin-left: 10px;
-      }
+      margin-bottom: 18px;
+      margin-right: 10px;
 
       &:hover {
         cursor: pointer;
