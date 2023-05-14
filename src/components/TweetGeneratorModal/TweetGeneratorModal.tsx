@@ -93,6 +93,9 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
                             }}
                         >
                             #{tag.tag}
+                            {tag.enabled && <>
+                                <span className='gift-icon'>🎁</span>
+                            </>}
                         </div>
                     </>
                 })}
