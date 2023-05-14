@@ -34,7 +34,7 @@
       flex-direction: row;
       align-items: center;
       flex-wrap: wrap;
-      justify-content: space-between;
+      justify-content: flex-start;
 
       .sponsored-tag {
         background: rgba(255, 255, 255, 0.05);
@@ -47,6 +47,7 @@
         display: flex;
         align-items: center;
         margin-bottom: 20px;
+        margin-right: 20px;
 
         &:hover {
           cursor: pointer;
@@ -57,9 +58,8 @@
         }
 
         .gift-icon {
-          margin-left: 5px;
-          height: 22px;
-          width: 22px;
+          margin-left: 4px;
+          font-size: 20px;
         }
 
         .none-icon {
