@@ -368,7 +368,7 @@ export const getAd3Transactions = async () => {
     return [];
   }
   const txs = (await res.json()) as Ad3Tx[];
-  return txs.filter(tx => Number(tx.diff) < 0);
+  return txs.filter(tx => Number(tx.diff) < 0).reverse();
 }
 
 export const updateInfluence = async () => {

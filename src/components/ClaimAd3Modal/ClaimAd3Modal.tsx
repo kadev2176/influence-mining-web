@@ -7,18 +7,21 @@ import { amountToFloatString, inputFloatStringToAmount } from '../../utils/forma
 import './ClaimAd3Modal.scss';
 import { isMobile } from 'react-device-detect';
 import MobileDrawer from '../MobileDrawer/MobileDrawer';
+import LoadingBar from '../LoadingBar/LoadingBar';
 
 export interface ClaimAd3ModalProps {
-    onCancel: () => void
+    onCancel: () => void;
+    onSuccess: () => void;
 }
 
-function ClaimAd3Modal({ onCancel }: ClaimAd3ModalProps) {
+function ClaimAd3Modal({ onCancel, onSuccess }: ClaimAd3ModalProps) {
     const { address } = useAccount();
     const { chain } = useNetwork();
     const [balance, setBalance] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false);
     const [withdrawSig, setWithdrawSig] = useState<WithdrawAd3Signature>();
     const { withdraw, isError, isLoading, isSuccess } = useWithdrawAD3(withdrawSig?.amount, withdrawSig?.nounce, withdrawSig?.sig);
+    const withdrawReady = !!withdraw;
 
     useEffect(() => {
         getAd3Balance().then(balance => {
@@ -45,32 +48,44 @@ function ClaimAd3Modal({ onCancel }: ClaimAd3ModalProps) {
     }, [isError])
 
     useEffect(() => {
-        if (withdrawSig) {
+        if (withdrawSig && withdrawReady) {
             withdraw?.();
         }
-    }, [withdrawSig])
+    }, [withdrawSig, withdrawReady])
 
-    // useEffect(() => {
-    //     if (isSuccess) {
-    //         setLoading(false);
-    //         onSuccess();
-    //     }
-    // }, [isSuccess])
+    useEffect(() => {
+        if (isSuccess) {
+            setLoading(false);
+            onSuccess();
+        }
+    }, [isSuccess])
 
     const content = <>
         <div className='header'>Claim My AD3</div>
         <div className='content'>
-            <div className='value'>
-                <input type='number' value={balance} onChange={(e) => {
-                    setBalance(e.target.value);
-                }}></input>
-            </div>
-            <div className='unit'>$AD3</div>
+            {!loading && <>
+                <div className='value'>
+                    <input type='number' value={balance} onChange={(e) => {
+                        setBalance(e.target.value);
+                    }}></input>
+                </div>
+                <div className='unit'>$AD3</div>
+            </>}
+
+            {loading && <>
+                <LoadingBar></LoadingBar>
+            </>}
         </div>
         <div className='footer'>
-            <div className={`action-btn-primary ${Number(balance) > 0 ? 'active' : 'disabled'}`} onClick={() => {
-                onClaim()
-            }}>Claim</div>
+            {!loading && <>
+                <div className={`action-btn-primary ${Number(balance) > 0 ? 'active' : 'disabled'}`} onClick={() => {
+                    onClaim()
+                }}>Claim</div>
+            </>}
+
+            {loading && <>
+                <div className={`action-btn-primary disabled`}>Claim</div>
+            </>}
         </div>
     </>
 
