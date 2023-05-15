@@ -1,4 +1,4 @@
-import { useAccount, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
+import { useAccount, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
 import { SignatureERC20WithdrawContractAddress } from "../models/parami"
 import SignatureERC20Withdraw from '../contracts/SignatureERC20Withdraw.json';
 import { useEffect } from "react";

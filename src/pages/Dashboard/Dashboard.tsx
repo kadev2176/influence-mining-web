@@ -121,9 +121,17 @@ function Dashboard({ }: DashboardProps) {
         </div>
 
         {claimModal && <>
-            <ClaimAd3Modal onCancel={() => {
-                setClaimModal(false)
-            }}></ClaimAd3Modal>
+            <ClaimAd3Modal
+                onCancel={() => {
+                    setClaimModal(false);
+                }}
+                onSuccess={() => {
+                    notification.success({
+                        message: 'Claim Success',
+                    })
+                    setClaimModal(false);
+                }}
+            ></ClaimAd3Modal>
         </>}
     </>;
 };
