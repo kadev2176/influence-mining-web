@@ -23,8 +23,9 @@ import { useAuctionEvent } from '../../hooks/useAuctionEvent';
 import { useAuthorizeSlotTo } from '../../hooks/useAuthorizeSlotTo';
 import { useApproveHnft } from '../../hooks/useApproveHnft';
 import { useAccount } from 'wagmi';
-import { createBid } from '../../services/bid.service';
+import { BidWithSignature, createBid } from '../../services/bid.service';
 import { useImAccount } from '../../hooks/useImAccount';
+import { useCommitBid } from '../../hooks/useCommitBid';
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -54,13 +55,13 @@ const adMetadataUrl = 'https://ipfs.parami.io/ipfs/QmY3ttSmNBbcKPit8mJ1FLatcDDeN
 
 const BidHNFT: React.FC<BidHNFTProps> = (props) => {
   const [form] = Form.useForm();
-  const {imAccount} = useImAccount();
+  const { imAccount } = useImAccount();
   const { address } = useAccount();
   const [content, setContent] = useState<string>('View Ads. Get Paid.');
   const [iconUploadFiles, setIconUploadFiles] = useState<UploadFile[]>([]);
   const [posterUploadFiles, setPosterUploadFiles] = useState<UploadFile[]>([]);
   const { approve, isSuccess: approveSuccess } = useApproveAD3(AuctionContractAddress, inputFloatStringToAmount('10'));
-  const [hnft, setHnft] = useState<any>({ address: EIP5489ForInfluenceMiningContractAddress, tokenId: 1 }); // todo: get hnft from url params
+  const [hnft, setHnft] = useState<any>({ address: EIP5489ForInfluenceMiningContractAddress, tokenId: '1' }); // todo: get hnft from url params
   const { authorizeSlotTo, isSuccess: authorizeSlotToSuccess, currentSlotManager } = useAuthorizeSlotTo(hnft.tokenId, AuctionContractAddress);
   const { preBid, isSuccess: preBidSuccess, prepareError: preBidPrepareError } = usePreBid(hnft.address, hnft.tokenId);
   const [bidPreparedEvent, setBidPreparedEvent] = useState<any>();
@@ -71,12 +72,28 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
       preBidId
     })
   });
+
   const { approve: hnftApprove } = useApproveHnft(AuctionContractAddress, hnft.tokenId);
-  const [bidWithSig, setBidWithSig] = useState<any>();
+  const [bidWithSig, setBidWithSig] = useState<BidWithSignature>();
+  const { commitBid, isSuccess: commitBidSuccess } = useCommitBid(hnft.tokenId, hnft.address, inputFloatStringToAmount('10'), adMetadataUrl, bidWithSig?.sig, bidWithSig?.id, bidWithSig?.prev_bid_id, '0');
+  const commitBidReady = !!commitBid;
+
+  useEffect(() => {
+    if (bidWithSig && commitBidReady) {
+      commitBid?.();
+    }
+  }, [bidWithSig, commitBidReady])
+
+  useEffect(() => {
+    if (commitBidSuccess) {
+      console.log('commit bid success!!');
+    }
+  }, [commitBidSuccess])
 
   useEffect(() => {
     if (bidPreparedEvent && bidPreparedEvent.bidder) {
       // todo: create adMeta
+      console.log('bid prepare event done. create bid now...');
       createBid(imAccount?.id ?? '26', 1, EIP5489ForInfluenceMiningContractAddress, hnft.tokenId, inputFloatStringToAmount('10'), inputFloatStringToAmount('10')).then((bidWithSig) => {
         console.log('create bid got sig', bidWithSig);
         setBidWithSig(bidWithSig);
