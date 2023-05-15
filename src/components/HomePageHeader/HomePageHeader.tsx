@@ -4,8 +4,9 @@ import './HomePageHeader.scss';
 import { isMobile } from 'react-device-detect';
 import { Dropdown } from 'antd';
 import UserAvatar from '../UserAvatar/UserAvatar';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { shortenString } from '../../utils/format.util';
+import { useEffect } from 'react';
 
 export interface HomePageHeaderProps { }
 
@@ -24,6 +25,14 @@ function HomePageHeader({ }: HomePageHeaderProps) {
     const navigate = useNavigate();
     const location = useLocation();
     const { address } = useAccount();
+    const { chain } = useNetwork();
+    const { switchNetwork } = useSwitchNetwork();
+
+    useEffect(() => {
+        if (chain && switchNetwork && chain.id !== 5) {
+            switchNetwork!(5)
+        }
+    }, [chain, switchNetwork])
 
     const openWhitepaper = () => {
         window.open('https://parami.gitbook.io/gpt-miner/');
@@ -58,7 +67,18 @@ function HomePageHeader({ }: HomePageHeaderProps) {
                     <div className='user-info-section'>
                         {!!address && <>
                             <div className='user-profile'>
-                                <div className='username'>{shortenString(address, 13)}</div>
+                                {chain?.id === 5 && <>
+                                    <div className='username'>
+                                        {shortenString(address, 13)}
+                                    </div>
+                                </>}
+                                {chain?.id !== 5 && <>
+                                    <div className='network-warning' onClick={() => {
+                                        switchNetwork?.(5)
+                                    }}>
+                                        Unsupported Network
+                                    </div>
+                                </>}
                             </div>
                         </>}
 

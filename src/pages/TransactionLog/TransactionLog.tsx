@@ -50,7 +50,7 @@ function TransactionLog({ }: TransactionLogProps) {
         const txs = await getAd3Transactions();
         const records = await Promise.all(txs.map(async tx => {
             const withdrawSig = await getWithdrawSignatureOfTxId(tx.id);
-            const nonceUsed = withdrawSig?.nounce ? await isNonceUsed!(withdrawSig.nounce) : false;
+            const nonceUsed = (withdrawSig?.nounce && isNonceUsed) ? await isNonceUsed!(withdrawSig.nounce) : false;
             return {
                 ...tx,
                 withdrawSig: withdrawSig,

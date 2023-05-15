@@ -7,7 +7,7 @@ export const useWithdrawAD3 = (amount?: string, nonce?: string, sig?: string) =>
   const { address } = useAccount();
   const { chain } = useNetwork();
   
-  const { config, isError: prepareError } = usePrepareContractWrite({
+  const { config, error: prepareError } = usePrepareContractWrite({
     address: SignatureERC20WithdrawContractAddress,
     abi: SignatureERC20Withdraw.abi,
     functionName: 'withdraw',
