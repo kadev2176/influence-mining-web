@@ -75,7 +75,8 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
 
   const { approve: hnftApprove } = useApproveHnft(AuctionContractAddress, hnft.tokenId);
   const [bidWithSig, setBidWithSig] = useState<BidWithSignature>();
-  const { commitBid, isSuccess: commitBidSuccess } = useCommitBid(hnft.tokenId, hnft.address, inputFloatStringToAmount('10'), adMetadataUrl, bidWithSig?.sig, bidWithSig?.id, bidWithSig?.prev_bid_id, '0');
+  // todo: upload data and get adMetadataUrl
+  const { commitBid, isSuccess: commitBidSuccess } = useCommitBid(hnft.tokenId, hnft.address, inputFloatStringToAmount('10'), adMetadataUrl, bidWithSig?.sig, bidWithSig?.prev_bid_id, bidWithSig?.id, bidWithSig?.last_bid_remain);
   const commitBidReady = !!commitBid;
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
 
   useEffect(() => {
     if (commitBidSuccess) {
+      // todo: refresh and clear state
       console.log('commit bid success!!');
     }
   }, [commitBidSuccess])
@@ -94,7 +96,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
     if (bidPreparedEvent && bidPreparedEvent.bidder) {
       // todo: create adMeta
       console.log('bid prepare event done. create bid now...');
-      createBid(imAccount?.id ?? '26', 1, EIP5489ForInfluenceMiningContractAddress, hnft.tokenId, inputFloatStringToAmount('10'), inputFloatStringToAmount('10')).then((bidWithSig) => {
+      createBid(imAccount?.id ?? '26', 1, EIP5489ForInfluenceMiningContractAddress, hnft.tokenId, inputFloatStringToAmount('10')).then((bidWithSig) => {
         console.log('create bid got sig', bidWithSig);
         setBidWithSig(bidWithSig);
       })
