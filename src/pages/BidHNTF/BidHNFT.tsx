@@ -159,9 +159,9 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
       console.log(info, '---info----');
 
       if (info.file.status === 'done') {
-        // const ipfsHash = info.file.response.Hash;
-        // const imageUrl = config.ipfs.endpoint + ipfsHash;
-        // fileList[0].url = imageUrl;
+        const ipfsHash = info.file.response.Hash;
+        const imageUrl = 'https://ipfs.parami.io/ipfs/' + ipfsHash;
+        fileList[0].url = imageUrl;
       }
       if (info.file.status === 'error') {
         message.error('Upload Image Error');
@@ -240,8 +240,8 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
                 {...uploadProps}
                 fileList={posterUploadFiles}
                 listType='picture'
-                onChange={handleUploadOnChange(IMAGE_TYPE.ICON)}
-                beforeUpload={handleBeforeUpload(IMAGE_TYPE.ICON)}
+                onChange={handleUploadOnChange(IMAGE_TYPE.POSTER)}
+                beforeUpload={handleBeforeUpload(IMAGE_TYPE.POSTER)}
               >
                 <Button icon={<UploadOutlined />} className='ad-form-upload'>
                   Click to Upload
@@ -343,7 +343,30 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
         <div className='title'>Bid your price</div>
         <div className='bid-nfts'>
           <div className='bid-nfts-title'>Nfts</div>
-          <Input className='bid-nfts-input' bordered={false} />
+          <div className='bid-nfts-content'>
+            <div className='bid-nfts-content-header'>
+              <div className='bid-nfts-content-header-item'>
+                HNFT
+              </div>
+              <div className='bid-nfts-content-header-item'>
+                Min Price
+              </div>
+              <div className='bid-nfts-content-header-item'>
+                Offer a price
+              </div>
+            </div>
+            <div className='bid-nfts-content-body'>
+              <div className='bid-nfts-content-body-item'>
+                XPC
+              </div>
+              <div className='bid-nfts-content-body-item'>
+                0.1
+              </div>
+              <div className='bid-nfts-content-body-item'>
+                <Input className='bid-nfts-body-input' bordered={false} />
+              </div>
+            </div>
+          </div>
           <div className='action-btn-primary active bid-button' onClick={() => {
             handleBid();
           }}>Bid</div>

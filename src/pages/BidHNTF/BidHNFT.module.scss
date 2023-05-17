@@ -241,10 +241,45 @@
           margin-top: 22px;
         }
 
-        &-input {
+        // &-input {
+        //   background: rgba(255, 255, 255, 0.05);
+        //   border-radius: 10px;
+        //   height: 60px;
+        // }
+        .bid-nfts-content {
           background: rgba(255, 255, 255, 0.05);
           border-radius: 10px;
-          height: 60px;
+          width: 100%;
+
+          &-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+
+            >* {
+              padding: 15px;
+              flex: 1;
+              text-align: center;
+              font-size: 24px;
+            }
+          }
+
+          &-body {
+            display: flex;
+
+            >* {
+              flex: 1;
+              text-align: center;
+              padding: 38px 12px;
+
+              .bid-nfts-body-input {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 10px;
+                height: 40px;
+                text-align: center;
+              }
+            }
+          }
         }
       }
 
