@@ -1,5 +1,5 @@
 import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi"
-import { AuctionContractAddress, EIP5489ForInfluenceMiningContractAddress } from "../models/parami"
+import { AuctionContractAddress } from "../models/parami";
 import AuctionContract from '../contracts/Auction.json';
 
 export const usePreBid = (address: string, tokenId: number) => {

@@ -13,6 +13,8 @@ export const AD3ContractAddress = '0xf6b2923717175185a626790FF78B6f37DAbb3565'; 
 
 export const AuctionContractAddress = '0xADBd2c28Fc837a47A291Dd28fc45032402E26164'; // goerli
 
+export const HNFTGovernanceContractAddress = '0x7c3826180814518C7d7765b1ECE11eDB708a7850'; // goerli
+
 export const SignatureERC20WithdrawContractAddress = '0x6Abc172465AeD91D0B7b1C220454a474C826831F'; // goerli
 
 export enum AD3TxType {
