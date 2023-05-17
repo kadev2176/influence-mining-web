@@ -8,6 +8,7 @@ import { amountToFloatString, formatAd3Amount } from '../../utils/format.util';
 import { useCheckWithdrawNonceUsed } from '../../hooks/useCheckWithdrawNonceUsed';
 import { useWithdrawAD3 } from '../../hooks/useWithdrawAD3';
 import { useNavigate } from 'react-router-dom';
+import { notification } from 'antd';
 
 interface TxRecord extends Ad3Tx {
     withdrawSig: WithdrawAd3Signature | null;
@@ -23,6 +24,7 @@ function TransactionLog({ }: TransactionLogProps) {
     const [withdrawSig, setWithdrawSig] = useState<WithdrawAd3Signature>();
     const { withdraw, isError, isLoading, isSuccess } = useWithdrawAD3(withdrawSig?.amount, withdrawSig?.nounce, withdrawSig?.sig);
     const navigate = useNavigate();
+    const withdrawReady = !!withdraw;
 
     useEffect(() => {
         if (isError) {
@@ -32,13 +34,17 @@ function TransactionLog({ }: TransactionLogProps) {
     }, [isError])
 
     useEffect(() => {
-        if (withdrawSig) {
+        if (withdrawSig && withdrawReady) {
+            setLoading(true);
             withdraw?.();
         }
-    }, [withdrawSig])
+    }, [withdrawSig, withdrawReady])
 
     useEffect(() => {
         if (isSuccess) {
+            notification.success({
+                message: 'Claim Success'
+            })
             setLoading(false);
             setWithdrawSig(undefined);
             fetchTxRecords();
@@ -50,7 +56,7 @@ function TransactionLog({ }: TransactionLogProps) {
         const txs = await getAd3Transactions();
         const records = await Promise.all(txs.map(async tx => {
             const withdrawSig = await getWithdrawSignatureOfTxId(tx.id);
-            const nonceUsed = withdrawSig?.nounce ? await isNonceUsed!(withdrawSig.nounce) : false;
+            const nonceUsed = (withdrawSig?.nounce && isNonceUsed) ? await isNonceUsed!(withdrawSig.nounce) : false;
             return {
                 ...tx,
                 withdrawSig: withdrawSig,

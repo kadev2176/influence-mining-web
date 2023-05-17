@@ -9,6 +9,7 @@ import { amountToFloatString } from '../../utils/format.util';
 import './Dashboard.scss';
 import { isMobile } from 'react-device-detect';
 import { useNavigate } from 'react-router-dom';
+import { useHNFT } from '../../hooks/useHNFT';
 
 export interface DashboardProps { }
 
@@ -20,6 +21,7 @@ function Dashboard({ }: DashboardProps) {
     const [decimals, setDecimals] = useState<number>(2);
     const [claimModal, setClaimModal] = useState<boolean>(false);
     const navigate = useNavigate();
+    const hnft = useHNFT();
 
     useEffect(() => {
         getAd3Balance().then(balance => {
@@ -100,9 +102,18 @@ function Dashboard({ }: DashboardProps) {
                 </div>
 
                 <div className='action-btn-primary active claim-btn' onClick={() => {
-                    setClaimModal(true)
+                    if (!hnft.balance) {
+                        navigate('/mint')
+                    } else {
+                        setClaimModal(true)
+                    }
                 }}>
-                    Claim
+                    {!!hnft.balance && <>
+                        Claim
+                    </>}
+                    {!hnft.balance && <>
+                        Mint HNFT and Claim
+                    </>}
                 </div>
             </div>
 
@@ -110,9 +121,17 @@ function Dashboard({ }: DashboardProps) {
         </div>
 
         {claimModal && <>
-            <ClaimAd3Modal onCancel={() => {
-                setClaimModal(false)
-            }}></ClaimAd3Modal>
+            <ClaimAd3Modal
+                onCancel={() => {
+                    setClaimModal(false);
+                }}
+                onSuccess={() => {
+                    notification.success({
+                        message: 'Claim Success',
+                    })
+                    setClaimModal(false);
+                }}
+            ></ClaimAd3Modal>
         </>}
     </>;
 };
