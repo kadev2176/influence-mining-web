@@ -7,6 +7,8 @@ export const PARAMI_WALLET = 'https://staging.parami.io';
 // export const PARAMI_SUBQUERY = 'https://graph.parami.io';
 export const PARAMI_SUBQUERY = 'https://staging.parami.io/graph/';
 
+export const IPFS_UPLOAD_ENDPOINT = 'https://ipfs.parami.io/api/v0/add?stream-channels=true';
+
 export const EIP5489ForInfluenceMiningContractAddress = '0x94F25955e84682BbE5301537f29442Ce1D5b7584'; // goerli
 
 export const AD3ContractAddress = '0xf6b2923717175185a626790FF78B6f37DAbb3565'; // goerli

@@ -27,6 +27,7 @@ import { BidWithSignature, createBid } from '../../services/bid.service';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useCommitBid } from '../../hooks/useCommitBid';
 import { useCurBid } from '../../hooks/useCurrentBid';
+import { uploadIPFS } from '../../services/ipfs.service';
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -52,19 +53,37 @@ const defaultInstruction: UserInstruction = {
   link: 'https://twitter.com/intent/follow?screen_name=ParamiProtocol',
 };
 
-const adMetadataUrl = 'https://ipfs.parami.io/ipfs/QmY3ttSmNBbcKPit8mJ1FLatcDDeNDhmkkYU9TnCEJSsjZ';
+interface AdMeta {
+  icon?: string;
+  poster?: string;
+  title?: string;
+  tag?: string;
+  url?: string;
+}
+
+const mockAdData = {
+  icon: 'https://pbs.twimg.com/profile_images/1611305582367215616/4W9XpGpU.jpg',
+  poster: 'https://pbs.twimg.com/media/FqlTSTOWYAA7yKN?format=jpg&name=small',
+  title: 'Tweeting is Mining!',
+  tag: 'twitter',
+  url: 'https://twitter.com/ParamiProtocol'
+}
+
+// const adMetadataUrl = 'https://ipfs.parami.io/ipfs/QmY3ttSmNBbcKPit8mJ1FLatcDDeNDhmkkYU9TnCEJSsjZ';
 
 const BidHNFT: React.FC<BidHNFTProps> = (props) => {
   const [form] = Form.useForm();
   const { imAccount } = useImAccount();
   const { address } = useAccount();
   const [content, setContent] = useState<string>('View Ads. Get Paid.');
+  const [adMetadataUrl, setAdMetadataUrl] = useState<string>();
   const [iconUploadFiles, setIconUploadFiles] = useState<UploadFile[]>([]);
   const [posterUploadFiles, setPosterUploadFiles] = useState<UploadFile[]>([]);
   const { approve, isSuccess: approveSuccess } = useApproveAD3(AuctionContractAddress, inputFloatStringToAmount('20')); // approve amount = min_deposite_amount + new_bid_price
-  const [hnft, setHnft] = useState<any>({ address: EIP5489ForInfluenceMiningContractAddress, tokenId: '1' }); // todo: get hnft from url params
+  const [hnft, setHnft] = useState<any>({ address: EIP5489ForInfluenceMiningContractAddress, tokenId: '138' }); // todo: get hnft from url params
   const { authorizeSlotTo, isSuccess: authorizeSlotToSuccess, currentSlotManager } = useAuthorizeSlotTo(hnft.tokenId, AuctionContractAddress);
   const { preBid, isSuccess: preBidSuccess, prepareError: preBidPrepareError } = usePreBid(hnft.address, hnft.tokenId);
+  const preBidReady = !!preBid;
   const curBid = useCurBid(hnft.address, hnft.tokenId);
   const [bidPreparedEvent, setBidPreparedEvent] = useState<any>();
   const { unwatch } = useAuctionEvent('BidPrepared', (hNFTContractAddr: string, curBidId: string, preBidId: string, bidder: string) => {
@@ -77,7 +96,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
 
   const { approve: hnftApprove } = useApproveHnft(AuctionContractAddress, hnft.tokenId);
   const [bidWithSig, setBidWithSig] = useState<BidWithSignature>();
-  const { commitBid, isSuccess: commitBidSuccess } = useCommitBid(hnft.tokenId, hnft.address, inputFloatStringToAmount('10'), adMetadataUrl, bidWithSig?.sig, curBid?.bidId ?? 0, bidWithSig?.id, bidWithSig?.last_bid_remain);
+  const { commitBid, isSuccess: commitBidSuccess } = useCommitBid(hnft.tokenId, hnft.address, inputFloatStringToAmount('10'), adMetadataUrl, bidWithSig?.sig, bidWithSig?.prev_bid_id, bidWithSig?.id, bidWithSig?.last_bid_remain);
   const commitBidReady = !!commitBid;
 
   useEffect(() => {
@@ -100,6 +119,14 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
   //     setBidWithSig(bidWithSig);
   //   })
   // }, [])
+
+  // upload mock ad data
+  useEffect(() => {
+    uploadIPFS(mockAdData).then(res => {
+      console.log('upload ipfs res', res);
+      setAdMetadataUrl(`https://ipfs.parami.io/ipfs/${res.Hash}`)
+    })
+  }, [])
 
   useEffect(() => {
     if (bidPreparedEvent && bidPreparedEvent.bidder) {
@@ -166,6 +193,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
       if (info.file.status === 'error') {
         message.error('Upload Image Error');
       }
+      console.log('upload done', fileList);
       imageType === IMAGE_TYPE.POSTER
         ? setPosterUploadFiles(fileList)
         : setIconUploadFiles(fileList);
@@ -185,7 +213,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
   }, [authorizeSlotToSuccess])
 
   useEffect(() => {
-    if (approveSuccess) {
+    if (approveSuccess && preBidReady) {
       if (currentSlotManager && currentSlotManager.toLowerCase() === AuctionContractAddress.toLowerCase()) {
         console.log('bid: pre bid direct');
         preBid?.();
@@ -193,7 +221,7 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
         authorizeSlotTo?.();
       }
     }
-  }, [approveSuccess])
+  }, [approveSuccess, preBidReady])
 
   return (
     <div className={styles.bidAdContainer}>
