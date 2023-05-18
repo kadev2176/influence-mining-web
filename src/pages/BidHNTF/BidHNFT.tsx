@@ -126,12 +126,12 @@ const BidHNFT: React.FC<BidHNFTProps> = (props) => {
     name: 'file',
     // crossOrigin: 'anonymous',
     headers: {
-      authorization: 'authorization-text',
-      origin: 'gptminer.io',
-      'Referrer-Policy': 'no-referrer'
+      // authorization: 'authorization-text',
+      // origin: 'gptminer.io',
+      // 'Referrer-Policy': 'no-referrer'
     },
     action: 'https://ipfs.parami.io/api/v0/add?stream-channels=true',
-    withCredentials: true,
+    withCredentials: false,
     showUploadList: { showPreviewIcon: false },
     multiple: false,
     maxCount: 1,
