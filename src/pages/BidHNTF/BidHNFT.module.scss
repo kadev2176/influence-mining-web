@@ -270,13 +270,15 @@
             >* {
               flex: 1;
               text-align: center;
-              padding: 38px 12px;
+              padding: 24px 12px;
+              line-height: 40px;
 
               .bid-nfts-body-input {
                 background: rgba(255, 255, 255, 0.05);
                 border-radius: 10px;
                 height: 40px;
                 text-align: center;
+                font-size: 24px;
               }
             }
           }
