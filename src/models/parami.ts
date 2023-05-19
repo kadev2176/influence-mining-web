@@ -13,7 +13,7 @@ export const EIP5489ForInfluenceMiningContractAddress = '0x94F25955e84682BbE5301
 
 export const AD3ContractAddress = '0xf6b2923717175185a626790FF78B6f37DAbb3565'; // goerli
 
-export const AuctionContractAddress = '0xADBd2c28Fc837a47A291Dd28fc45032402E26164'; // goerli
+export const AuctionContractAddress = '0x6023cF66B0AD3e79D942c2a66B368C921632D1c2'; // goerli
 
 export const HNFTGovernanceContractAddress = '0x7c3826180814518C7d7765b1ECE11eDB708a7850'; // goerli
 
