@@ -23,6 +23,10 @@ function MyNFT({ }: MyNFTProps) {
     const navigate = useNavigate();
 
     useEffect(() => {
+        console.log('my hnft', hnft);
+    }, [hnft])
+
+    useEffect(() => {
         if (imAccount && !imAccount.wallet && address && chain) {
             accountBindWallet(address, chain.id).then(res => {
                 if (res.success) {

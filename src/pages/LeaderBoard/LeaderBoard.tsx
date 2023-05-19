@@ -32,6 +32,7 @@ function LeaderBoard(_: LeaderBoardProps) {
         const { nodes: leaders, pageInfo: pageInfoData } = await getLeaderBoardImAccountsOfPage(20, pageInfo?.endCursor);
         setPageInfo(pageInfoData);
         const rows = await Promise.all((leaders || []).map(async ({ node: account }, index) => {
+            console.log('leaders', account);
             const tweet = account?.tweetId ? await fetchOembedTweet(account?.tweetId) : {};
             return {
                 ...account,

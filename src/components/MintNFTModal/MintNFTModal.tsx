@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useMintBillboard } from '../../hooks/useMintBillboard';
-import { HNFT_CONFIG } from '../../models/parami';
+import { EIP5489ForInfluenceMiningContractAddress, HNFT_CONFIG } from '../../models/parami';
 import BillboardNftImage from '../BillboardNftImage/BillboardNftImage';
 import Confetti from '../Confetti/Confetti';
 import MobileDrawer from '../MobileDrawer/MobileDrawer';
@@ -28,7 +28,7 @@ function MintNFTModal({ onCancel, hnft, onSuccess }: MintNFTModalProps) {
     const [priceDiff, setPriceDiff] = useState<string>('');
     const { mint, isSuccess: mintSuccess, isLoading: mintLoading, error: mintError, prepareError: mintPrepareError } = useMintBillboard(selectedNft?.level, imAccount?.twitterProfileImageUri ?? '');
     const { upgradeHnft, isSuccess: upgradeSuccess, isLoading: upgradeLoading, error: upgradeError, prepareError: upgradePrepareError } = useUpgradeBillboard(hnft.tokenId, selectedNft?.level);
-    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError, prepareError: approveAd3PrepareError } = useApproveAD3(priceDiff);
+    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError, prepareError: approveAd3PrepareError } = useApproveAD3(EIP5489ForInfluenceMiningContractAddress, priceDiff);
 
     const prices = useBillboardPrices();
 

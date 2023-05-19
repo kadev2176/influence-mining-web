@@ -10,6 +10,7 @@ import { useApproveAD3 } from '../../hooks/useApproveAD3';
 import { formatAd3Amount } from '../../utils/format.util';
 import { useImAccount } from '../../hooks/useImAccount';
 import BillboardNftImage from '../BillboardNftImage/BillboardNftImage';
+import { EIP5489ForInfluenceMiningContractAddress } from '../../models/parami';
 
 const { Title } = Typography;
 
@@ -49,7 +50,7 @@ function MintBillboard() {
     const { imAccount } = useImAccount();
     const { mint, isSuccess: mintSuccess, isLoading: mintLoading, error: mintError } = useMintBillboard(mintLevel, imAccount?.twitterProfileImageUri ?? ''); // default image?
     const { upgradeHnft, isSuccess: upgradeSuccess, isLoading: upgradeLoading, error: upgradeError } = useUpgradeBillboard(hnft.tokenId, upgradeToLevel);
-    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError } = useApproveAD3(price);
+    const { approve, isLoading: approveLoading, isSuccess: approveSuccess, error: approveError } = useApproveAD3(EIP5489ForInfluenceMiningContractAddress, price);
 
     const clearState = () => {
         setMintLevel(undefined);
