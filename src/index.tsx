@@ -22,6 +22,7 @@ import './fonts/Gilroy-Bold.ttf';
 import './fonts/Gilroy-Regular.ttf';
 import MintPage from './pages/MintPage/MintPage';
 import TransactionLog from './pages/TransactionLog/TransactionLog';
+import ClaimAd from './pages/ClaimAd/ClaimAd';
 
 declare global {
   interface Window {
@@ -69,6 +70,8 @@ root.render(
               <Route path='/bid' element={<BidHNFT />} />
               <Route path="/mint" element={<MintPage></MintPage>} />
               <Route path="/txLog" element={<TransactionLog></TransactionLog>} />
+              <Route path="/claim/ad" element={<ClaimAd></ClaimAd>} />
+
               <Route path='*' element={<Navigate to='/' />} />
             </Route>
           </Routes>
