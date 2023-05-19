@@ -55,34 +55,42 @@ function Home({ }: HomeProps) {
 
     return <>
         <Layout className='layout-container'>
-            <HomePageHeader />
-            <MyNFT></MyNFT>
-            <Content className='layout-content-container'>
-                <Outlet></Outlet>
-            </Content>
-            <Footer className='layout-footer'>
-                <div className='footer-content'>
-                    <div className='info'>Powered by GPT-3.5</div>
+            {location.pathname !== '/claim/ad' && <>
+                <HomePageHeader />
+                <MyNFT></MyNFT>
+                <Content className='layout-content-container'>
+                    <Outlet></Outlet>
+                </Content>
+                <Footer className='layout-footer'>
+                    <div className='footer-content'>
+                        <div className='info'>Powered by GPT-3.5</div>
 
-                    {!isMobile && <>
-                        <div className='tweet-hint'>
-                            Post a tweet with <span className='tag'>{OFFICIAL_TAG}</span> and start earning
+                        {!isMobile && <>
+                            <div className='tweet-hint'>
+                                Post a tweet with <span className='tag'>{OFFICIAL_TAG}</span> and start earning
+                                <div className='action-btn-primary active' onClick={() => {
+                                    setGenerateTweetModal(true);
+                                }}>Tweet</div>
+                            </div>
+                        </>}
+
+                        {isMobile && <>
+                            <div className='tweet-hint'>
+                                Post a tweet with <span className='tag'>{OFFICIAL_TAG}</span> and start earning
+                            </div>
                             <div className='action-btn-primary active' onClick={() => {
                                 setGenerateTweetModal(true);
                             }}>Tweet</div>
-                        </div>
-                    </>}
+                        </>}
+                    </div>
+                </Footer>
+            </>}
 
-                    {isMobile && <>
-                        <div className='tweet-hint'>
-                            Post a tweet with <span className='tag'>{OFFICIAL_TAG}</span> and start earning
-                        </div>
-                        <div className='action-btn-primary active' onClick={() => {
-                            setGenerateTweetModal(true);
-                        }}>Tweet</div>
-                    </>}
-                </div>
-            </Footer>
+            {location.pathname === '/claim/ad' && <>
+                <Content className='layout-content-container'>
+                    <Outlet></Outlet>
+                </Content>
+            </>}
         </Layout>
 
         {generateTweetModal && <>

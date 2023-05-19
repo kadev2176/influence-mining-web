@@ -3,8 +3,8 @@ import { fetchWithCredentials } from "../utils/api.util";
 
 export const claimToken = async (bidId: string, tags: string[]) => {
   const data = {
-    bidId: '46368947434159255729594421132936372433627765618616351696110617778694083182289',
-    tags: ['Twitter'],
+    bidId,
+    tags,
   }
 
   const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/relayer/api/viewer/claim_ad_reward`, {
@@ -17,6 +17,12 @@ export const claimToken = async (bidId: string, tags: string[]) => {
 
   if (!resp) {
     return null;
+  }
+
+  if (resp.ok) {
+    return {
+      success: true,
+    }
   }
 
   return await resp.json();
