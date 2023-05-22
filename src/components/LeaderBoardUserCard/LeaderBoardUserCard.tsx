@@ -10,6 +10,8 @@ export interface LeaderTweet extends Partial<OembedTweet> {
   avatar: string;
   rank: string;
   influence: string;
+  hnftContractAddr: string;
+  hnftTokenId: number;
 }
 export interface LeaderBoardUserCardProps {
   tweet: LeaderTweet;
@@ -26,8 +28,7 @@ const LeaderBoardUserCard = ({
   return (
     <div className={`user-card-container ${size}`}>
       <div className='user-card-container-ad'>
-        <HnftBadge imageurl='123'></HnftBadge>
-        {/* <hnft-badge imageurl="some_url"></hnft-badge> */}
+        <HnftBadge hnftImageUrl={tweet.avatar} hnftContractAddress={tweet.hnftContractAddr} hnftTokenId={tweet.hnftTokenId}></HnftBadge>
       </div>
 
       <div

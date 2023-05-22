@@ -8,7 +8,7 @@ import { useImAccount } from '../../hooks/useImAccount';
 import BillboardNftImage from '../BillboardNftImage/BillboardNftImage';
 import ConnectWalletModal from '../ConnectWalletModal/ConnectWalletModal';
 import './MyNFT.scss';
-import { accountBindWallet } from '../../services/mining.service';
+import { accountBindHNFT, accountBindWallet } from '../../services/mining.service';
 
 export interface MyNFTProps { }
 
@@ -23,8 +23,19 @@ function MyNFT({ }: MyNFTProps) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log('my hnft', hnft);
-    }, [hnft])
+        if (hnft?.address && hnft?.tokenId && imAccount) {
+            if (!imAccount.hnftContractAddr || !imAccount.hnftTokenId) {
+                accountBindHNFT(hnft.address, hnft.tokenId).then(res => {
+                    if (!res.success) {
+                        notification.error({
+                            message: 'Bind HNFT failed',
+                            description: res.message,
+                        })
+                    }
+                })
+            }
+        }
+    }, [hnft, imAccount])
 
     useEffect(() => {
         if (imAccount && !imAccount.wallet && address && chain) {

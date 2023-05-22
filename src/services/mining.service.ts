@@ -289,35 +289,38 @@ export const accountBindWallet = async (address: string, chainId: number) => {
   }
 }
 
-// export const bindAccount = async (address: string, chainId: number, oauthToken: string, oauthVerifier: string, referer?: string) => {
-//   const data = JSON.stringify({
-//     wallet: address,
-//     chainId,
-//     oauth_token: oauthToken,
-//     oauth_verifier: oauthVerifier,
-//     refererWallet: referer
-//   });
+export const accountBindHNFT = async (hnftAddr: string, tokenId: string) => {
+  const data = JSON.stringify({
+    hnft_token_id: tokenId,
+    hnft_contract_addr: hnftAddr
+  });
+  
+  const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/hnft`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: data
+  });
 
-//   const resp = await fetchWithSig(`${PARAMI_AIRDROP}/influencemining/api/accounts`, address, {
-//     method: 'post',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: data
-//   });
+  if (!resp) {
+    return {
+      success: false
+    }
+  }
 
-//   if (resp.ok) {
-//     return {
-//       success: true
-//     }
-//   }
+  if (resp.ok) {
+    return {
+      success: true
+    }
+  }
 
-//   const { message } = await resp.json() as { message: string };
-//   return {
-//     success: false,
-//     message
-//   }
-// }
+  const { message } = await resp.json() as { message: string };
+  return {
+    success: false,
+    message
+  }
+}
 
 export const startMining = async (address: string, chainId: number, hnftContract: string, hnftTokenId: string) => {
   const data = JSON.stringify({

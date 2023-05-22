@@ -73,20 +73,13 @@
   }
 
   .user-card-container-ad {
-    background-color: #fff;
     border-radius: 50%;
     width: 37px;
     height: 37px;
-    border: 2px solid #fff;
     position: absolute;
     left: 50%;
     z-index: 10;
     top: 0;
     transform: translateX(70%);
-    cursor: pointer;
-    background-image: url('../../../public/heart.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 66%;
   }
 }
