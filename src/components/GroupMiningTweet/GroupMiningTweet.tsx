@@ -5,6 +5,7 @@ import './GroupMiningTweet.scss';
 import GPTScore from '../GPTScore/GPTScore';
 import { formatInfluenceScore } from '../../utils/format.util';
 import { isMobile } from 'react-device-detect';
+import { OFFICIAL_TAG } from '../../models/parami';
 
 export interface GroupMiningLeaderTweet extends Partial<OembedTweet> {
     twitterName: string;
@@ -21,15 +22,25 @@ export interface GroupMiningTweetProps {
     tweet: GroupMiningLeaderTweet;
 }
 
+function extractHashtags(tweet: string) {
+    const hashtagRegex = /#(\w+)/g;
+    const hashtags = tweet.match(hashtagRegex);
+    return hashtags ? hashtags : [];
+}
+
 function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
 
     const replyTweet = () => {
+        const hashtags = extractHashtags(tweet?.tweetContent ?? '');
+        const topicTag = hashtags.find(t => t !== OFFICIAL_TAG);
+        
+        const replyTags = `${(topicTag ?? '').replace('#', '')},${OFFICIAL_TAG.replace('#', '')}`;
         if (isMobile) {
-            window.open(`twitter://post?${tweet ? `in_reply_to=${tweet.tweetId}` : ''}}`);
+            window.open(`twitter://post?hashtags=${replyTags}&${tweet ? `in_reply_to=${tweet.tweetId}` : ''}}`);
             return;
         }
-    
-        window.open(`https://twitter.com/intent/tweet?${tweet ? `in_reply_to=${tweet.tweetId}` : ''}`);
+
+        window.open(`https://twitter.com/intent/tweet?hashtags=${replyTags}&${tweet ? `in_reply_to=${tweet.tweetId}` : ''}`);
     }
 
     return <>
