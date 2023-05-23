@@ -91,6 +91,7 @@ export const queryAllImAccounts = async (query: string) => {
       nodes {
         id,
         wallet,
+        chainId,
         influence,
         influenceBonus,
         influenceBoost,

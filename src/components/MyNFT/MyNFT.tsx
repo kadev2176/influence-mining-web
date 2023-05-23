@@ -38,12 +38,18 @@ function MyNFT({ }: MyNFTProps) {
     }, [hnft, imAccount])
 
     useEffect(() => {
-        if (imAccount && !imAccount.wallet && address && chain) {
-            accountBindWallet(address, chain.id).then(res => {
-                if (res.success) {
-                    refresh();
-                }
-            })
+        if (imAccount && address && chain) {
+            if (!imAccount.wallet || !imAccount.chainId || imAccount.chainId !== chain.id) {
+                accountBindWallet(address, chain.id).then(res => {
+                    if (res.success) {
+                        refresh();
+                    } else {
+                        notification.warning({
+                            message: res.message
+                        })
+                    }
+                })
+            }
         }
     }, [imAccount, address, chain]);
 
