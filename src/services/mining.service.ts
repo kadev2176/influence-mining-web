@@ -262,7 +262,7 @@ export const accountBindWallet = async (address: string, chainId: number) => {
     wallet: address,
     chainId
   });
-  
+
   const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/bindwallet`, {
     method: 'post',
     headers: {
@@ -295,7 +295,7 @@ export const accountBindHNFT = async (hnftAddr: string, tokenId: string) => {
     hnft_token_id: tokenId,
     hnft_contract_addr: hnftAddr
   });
-  
+
   const resp = await fetchWithCredentials(`${PARAMI_AIRDROP}/influencemining/api/accounts/current/hnft`, {
     method: 'post',
     headers: {
@@ -500,6 +500,16 @@ export const getIMAccountOfBillboard = async (walletAddress: string, contractAdd
   } catch (e) {
     console.log('query allImAccounts error', e);
   }
+}
+
+export const getPromoIMAccount = async () => {
+  // Aki Network
+  const query = `filter: { id: {equalTo: 724}}`;
+  const accounts = await queryAllImAccounts(query);
+  if (!accounts) {
+    return;
+  }
+  return accounts[0];
 }
 
 export const getMyIMAccount = async () => {

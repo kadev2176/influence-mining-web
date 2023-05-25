@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useImAccount } from '../../hooks/useImAccount';
 import { useInterval } from '../../hooks/useInterval';
-import { ImAccount, getLeaderBoardImAccounts } from '../../services/mining.service';
+import { ImAccount, getLeaderBoardImAccounts, getPromoIMAccount } from '../../services/mining.service';
 import { fetchOembedTweet, OembedTweet } from '../../services/twitter.service';
 import { formatInfluenceScore, formatTwitterImageUrl } from '../../utils/format.util';
 import './Miner.scss';
@@ -104,8 +104,9 @@ function Miner() {
     }, [imAccount]);
 
     const fetchLeaderTweets = async () => {
+        const promo = await getPromoIMAccount();
         const leaders = await getLeaderBoardImAccounts(30);
-        const leaderTweets = await Promise.all((leaders ?? []).filter(leader => leader.tweetId === leader.conversationId).slice(0, 5).map(async (leaderAccount, index) => {
+        const leaderTweets = await Promise.all([promo!, ...(leaders ?? [])].filter(leader => leader.tweetId === leader.conversationId).slice(0, 5).map(async (leaderAccount, index) => {
             const tweet = leaderAccount?.tweetId ? await fetchOembedTweet(leaderAccount.tweetId) : {};
             return {
                 twitterProfileImageUri: formatTwitterImageUrl(leaderAccount?.twitterProfileImageUri),
