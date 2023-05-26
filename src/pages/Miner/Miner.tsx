@@ -119,6 +119,7 @@ function Miner() {
                 tweetContentScore: leaderAccount.tweetContentScore,
                 authorName: leaderAccount.twitterName,
                 authorUrl: `https://twitter.com/${leaderAccount.twitterUsername}`,
+                promo: leaderAccount.promo,
                 ...tweet,
             }
         }));

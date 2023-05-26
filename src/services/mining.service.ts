@@ -38,6 +38,7 @@ export type ImAccount = {
   twitterProfileImageUri: string;
   twitterUsername: string;
   twitterName: string;
+  promo?: boolean;
 }
 
 export type Ad3Tx = {
@@ -512,7 +513,8 @@ export const getPromoIMAccount = async () => {
   return {
     ...accounts[0],
     tweetId: '1661735839033065476',
-    conversationId: '1661735839033065476'
+    conversationId: '1661735839033065476',
+    promo: true
   };
 }
 

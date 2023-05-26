@@ -16,6 +16,7 @@ export interface GroupMiningLeaderTweet extends Partial<OembedTweet> {
     influenceBoost?: string;
     boost?: string;
     tweetContentScore?: string;
+    promo?: boolean;
 }
 
 export interface GroupMiningTweetProps {
@@ -33,7 +34,7 @@ function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
     const replyTweet = () => {
         const hashtags = extractHashtags(tweet?.tweetContent ?? '');
         const topicTag = hashtags.find(t => t !== OFFICIAL_TAG);
-        
+
         const replyTags = `${(topicTag ?? '').replace('#', '')},${OFFICIAL_TAG.replace('#', '')}`;
         // if (isMobile) {
         //     window.open(`twitter://post?hashtags=${replyTags}&${tweet ? `in_reply_to=${tweet.tweetId}` : ''}}`);
@@ -62,12 +63,24 @@ function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
                         </span>
                         <span className='twitter-name'>@{tweet?.twitterUsername}</span>
                     </div>
-                    <div className='scores'>
-                        <GPTScore label={'Base'} value={`+${formatInfluenceScore(tweet?.tweetContentScore)}`}></GPTScore>
-                        <GPTScore label={'Boost'} value={`x${tweet.influenceBoost}`}></GPTScore>
-                        <GPTScore label={'Reply'} value={`+${formatInfluenceScore(tweet?.influenceBonus)}`}></GPTScore>
-                        <GPTScore label={'Total'} value={`+${formatInfluenceScore(tweet?.influence)}`}></GPTScore>
-                    </div>
+                    {!tweet.promo && <>
+                        <div className='scores'>
+                            <GPTScore label={'Base'} value={`+${formatInfluenceScore(tweet?.tweetContentScore)}`}></GPTScore>
+                            <GPTScore label={'Boost'} value={`x${tweet.influenceBoost}`}></GPTScore>
+                            <GPTScore label={'Reply'} value={`+${formatInfluenceScore(tweet?.influenceBonus)}`}></GPTScore>
+                            <GPTScore label={'Total'} value={`+${formatInfluenceScore(tweet?.influence)}`}></GPTScore>
+                        </div>
+                    </>}
+                    {tweet.promo && <>
+                        <div className='promo-tag'>
+                            <div className='icon'>
+                                <img src={`/assets/icons/promo-gift.svg`}></img>
+                            </div>
+                            <div className='text'>
+                                "Reply to sponsors to get more rewards"
+                            </div>
+                        </div>
+                    </>}
                 </div>
                 <div className='content-row' onClick={() => {
                     // window.open(tweet.tweetUrl);

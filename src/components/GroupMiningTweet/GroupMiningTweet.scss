@@ -60,6 +60,25 @@
         flex-grow: 1;
         justify-content: flex-end;
       }
+
+      .promo-tag {
+        display: flex;
+        flex-grow: 1;
+        justify-content: flex-end;
+        align-items: center;
+
+        .icon {
+          margin-right: 10px;
+        }
+
+        .text {
+          max-width: 200px;
+          color: #FFC700;
+          font-size: 18px;
+          line-height: 21px;
+          font-family: Gilroy-Bold;
+        }
+      }
     }
 
     .content-row {
@@ -95,9 +114,16 @@
         flex-direction: column;
         align-items: flex-start;
         margin-bottom: 12px;
-        
+
         .user {
           margin-bottom: 12px;
+        }
+
+        .promo-tag {
+          .text {
+            font-size: 14px;
+            line-height: 16px;
+          }
         }
       }
 
