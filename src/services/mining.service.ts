@@ -509,7 +509,11 @@ export const getPromoIMAccount = async () => {
   if (!accounts) {
     return;
   }
-  return accounts[0];
+  return {
+    ...accounts[0],
+    tweetId: '1661735839033065476',
+    conversationId: '1661735839033065476'
+  };
 }
 
 export const getMyIMAccount = async () => {
