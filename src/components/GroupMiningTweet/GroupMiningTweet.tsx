@@ -35,10 +35,10 @@ function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
         const topicTag = hashtags.find(t => t !== OFFICIAL_TAG);
         
         const replyTags = `${(topicTag ?? '').replace('#', '')},${OFFICIAL_TAG.replace('#', '')}`;
-        if (isMobile) {
-            window.open(`twitter://post?hashtags=${replyTags}&${tweet ? `in_reply_to=${tweet.tweetId}` : ''}}`);
-            return;
-        }
+        // if (isMobile) {
+        //     window.open(`twitter://post?hashtags=${replyTags}&${tweet ? `in_reply_to=${tweet.tweetId}` : ''}}`);
+        //     return;
+        // }
 
         window.open(`https://twitter.com/intent/tweet?hashtags=${replyTags}&${tweet ? `in_reply_to=${tweet.tweetId}` : ''}`);
     }
