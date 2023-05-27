@@ -106,7 +106,9 @@ function Miner() {
     const fetchLeaderTweets = async () => {
         const promo = await getPromoIMAccount();
         const leaders = await getLeaderBoardImAccounts(30);
-        const leaderTweets = await Promise.all([promo!, ...(leaders ?? [])].filter(leader => leader.tweetId === leader.conversationId).slice(0, 5).map(async (leaderAccount, index) => {
+        const leaderTweets = await Promise.all([promo!, ...(leaders ?? [])].filter(leader => {
+            return leader.tweetId === leader.conversationId && leader.tweetContent?.toLowerCase().includes(OFFICIAL_TAG.toLowerCase())
+        }).slice(0, 5).map(async (leaderAccount, index) => {
             const tweet = leaderAccount?.tweetId ? await fetchOembedTweet(leaderAccount.tweetId) : {};
             return {
                 twitterProfileImageUri: formatTwitterImageUrl(leaderAccount?.twitterProfileImageUri),

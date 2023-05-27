@@ -1,3 +1,4 @@
+import { OFFICIAL_TAG } from "../models/parami";
 import { doGraghQueryIM, fetchWithCredentials, fetchWithSig } from "../utils/api.util";
 import { formatTwitterImageUrl } from "../utils/format.util";
 
@@ -126,7 +127,7 @@ export const queryAllImAccounts = async (query: string) => {
       ...account,
       tweetId: tweetStats.tweet_id,
       conversationId: tweetStats.conversation_id,
-      tweetContent: tweetStats.tweet_content,
+      tweetContent: tweetStats.text,
       tweetEvaluation: tweetStats.evaluation,
       tweetContentScore: tweetStats.score,
       twitterUsername: twitterAccount.username,
@@ -514,6 +515,7 @@ export const getPromoIMAccount = async () => {
     ...accounts[0],
     tweetId: '1661735839033065476',
     conversationId: '1661735839033065476',
+    tweetContent: OFFICIAL_TAG,
     promo: true
   };
 }
