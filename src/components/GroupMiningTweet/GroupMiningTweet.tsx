@@ -77,7 +77,7 @@ function GroupMiningTweet({ tweet }: GroupMiningTweetProps) {
                                 <img src={`/assets/icons/promo-gift.svg`}></img>
                             </div>
                             <div className='text'>
-                                "Reply to sponsors to get more rewards"
+                                "Reply the tweet to mine rewards!"
                             </div>
                         </div>
                     </>}
