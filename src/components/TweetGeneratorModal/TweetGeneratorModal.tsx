@@ -86,14 +86,16 @@ function TweetGeneratorModal({ onCancel, tweet }: TweetGeneratorModalProps) {
             <div className='tags-row'>
                 {sponsoredTags.map(tag => {
                     return <>
-                        <div className={`sponsored-tag ${selectedTag?.tag === tag.tag ? 'selected' : ''}`}
+                        <div className={`sponsored-tag ${selectedTag?.tag === tag.tag ? 'selected' : ''} ${tag.enabled ? '' : 'disabled'}`}
                             key={`key-${tag.tag}`}
                             onClick={() => {
-                                setSelectedTag(tag);
+                                if (tag.enabled) {
+                                    setSelectedTag(tag);
+                                }
                             }}
                         >
                             #{tag.tag}
-                            {tag.enabled && <>
+                            {tag.giftIcon && <>
                                 <span className='gift-icon'>🎁</span>
                             </>}
                         </div>

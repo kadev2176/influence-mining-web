@@ -8,46 +8,54 @@ export interface SponsoredTag {
   tag: string;
   link: string;
   description: string;
+  giftIcon: boolean;
   enabled: boolean;
 }
 
 const DEFAULT_SPONSORED_TAGS: SponsoredTag[] = [
   {
+    tag: 'AkiNetwork',
+    link: 'https://akiprotocol.io/',
+    description: 'Connecting the Web3 Dots: Influencer-centered,Data-driven',
+    giftIcon: true,
+    enabled: true
+  },
+  {
     tag: '0xScope',
     link: 'https://0xscope.com/',
     description: '0xScope is able to combine Web2 and Web3 data into a Knowledge Graph, allowing creatorsto launch cutting-edge applications with powerful insights.',
-    enabled: true
+    giftIcon: false,
+    enabled: false
   },
   {
     tag: 'MirrorWorld',
     link: 'https://mirrorworld.fun/',
     description: 'Smart Platform by Mirror World is the first all-in-one application development platform that helps developers develop, grow and monetize their blockchain applications.',
-    enabled: true
+    giftIcon: false,
+    enabled: false
   },
   {
     tag: 'KNN3',
     link: 'https://www.knn3.xyz/',
     description: 'KNN3 Network is a one-stop Web3 User-centric DataFi solution for d/Apps and smart contracts. KNN3 allows d/Apps & smart contracts to interact with cross-platform user-centric data in multiple algo-friendly ways.',
-    enabled: true
+    giftIcon: false,
+    enabled: false
   },
   {
     tag: 'DeBox',
     link: 'https://debox.pro/',
     description: 'DeBox is an all-in-one web3 platform-based community management tool that divides on-chain asset data and behavioral data into several instant messaging groups.',
-    enabled: true
+    giftIcon: false,
+    enabled: false
   },
   {
     tag: 'ParamiProtocol',
     link: 'https://gptminer.io/',
     description: 'Parami is building an incentive layer to aggregate #Web3 traffic. Making #NFTs the decentralized medium.',
-    enabled: true
-  },
-  {
-    tag: 'AkiNetwork',
-    link: 'https://akiprotocol.io/',
-    description: 'Connecting the Web3 Dots: Influencer-centered,Data-driven',
+    giftIcon: false,
     enabled: false
   }
+  
   // }, {
   //   tag: 'CultDAO',
   //   link: 'https://cultdao.io/',
