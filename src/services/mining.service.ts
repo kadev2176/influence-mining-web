@@ -513,8 +513,8 @@ export const getPromoIMAccount = async () => {
   }
   return {
     ...accounts[0],
-    tweetId: '1661735839033065476',
-    conversationId: '1661735839033065476',
+    tweetId: '1665025285094535168',
+    conversationId: '1665025285094535168',
     tweetContent: OFFICIAL_TAG,
     promo: true
   };
