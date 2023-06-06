@@ -33,7 +33,11 @@ function ClaimAd3Modal({ onCancel, onSuccess }: ClaimAd3ModalProps) {
     const onClaim = async () => {
         setLoading(true);
         try {
-            const sig = await generateWithdrawSignature(inputFloatStringToAmount(balance));
+            const ad3balance = await getAd3Balance();
+            const maxAmount = ad3balance?.balance ?? '0';
+            const inputAmount = inputFloatStringToAmount(balance);
+            const amount = BigInt(inputAmount) > BigInt(maxAmount) ? maxAmount : inputAmount;
+            const sig = await generateWithdrawSignature(amount);
             setWithdrawSig(sig);
         } catch (e) {
             setLoading(false);

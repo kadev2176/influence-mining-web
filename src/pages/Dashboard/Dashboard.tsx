@@ -101,20 +101,28 @@ function Dashboard({ }: DashboardProps) {
                     <div className='unit'>$AD3</div>
                 </div>
 
-                <div className='action-btn-primary active claim-btn' onClick={() => {
-                    if (!hnft.balance) {
-                        navigate('/mint')
-                    } else {
-                        setClaimModal(true)
-                    }
-                }}>
-                    {!!hnft.balance && <>
+                {Number(totalBalance) > 0 && <>
+                    <div className='action-btn-primary active claim-btn' onClick={() => {
+                        if (!hnft.balance) {
+                            navigate('/mint')
+                        } else {
+                            setClaimModal(true)
+                        }
+                    }}>
+                        {!!hnft.balance && <>
+                            Claim
+                        </>}
+                        {!hnft.balance && <>
+                            Mint HNFT and Claim
+                        </>}
+                    </div>
+                </>}
+
+                {Number(totalBalance) == 0 && <>
+                    <div className='action-btn-primary disabled claim-btn'>
                         Claim
-                    </>}
-                    {!hnft.balance && <>
-                        Mint HNFT and Claim
-                    </>}
-                </div>
+                    </div>
+                </>}
             </div>
 
 
