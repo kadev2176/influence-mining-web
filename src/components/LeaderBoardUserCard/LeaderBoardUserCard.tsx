@@ -28,7 +28,7 @@ const LeaderBoardUserCard = ({
   return (
     <div className={`user-card-container ${size}`}>
       <div className='user-card-container-ad'>
-        <HnftBadge hnftImageUrl={tweet.avatar} hnftContractAddress={tweet.hnftContractAddr} hnftTokenId={tweet.hnftTokenId}></HnftBadge>
+        <HnftBadge hnftImageUrl={tweet.avatar} hnftContractAddress={tweet.hnftContractAddr} hnftTokenId={tweet.hnftTokenId} darkMode={true}></HnftBadge>
       </div>
 
       <div
