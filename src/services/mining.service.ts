@@ -505,19 +505,20 @@ export const getIMAccountOfBillboard = async (walletAddress: string, contractAdd
 }
 
 export const getPromoIMAccount = async () => {
+  return null;
   // Aki Network
-  const query = `filter: { id: {equalTo: 724}}`;
-  const accounts = await queryAllImAccounts(query);
-  if (!accounts) {
-    return;
-  }
-  return {
-    ...accounts[0],
-    tweetId: '1665025285094535168',
-    conversationId: '1665025285094535168',
-    tweetContent: OFFICIAL_TAG,
-    promo: true
-  };
+  // const query = `filter: { id: {equalTo: 724}}`;
+  // const accounts = await queryAllImAccounts(query);
+  // if (!accounts) {
+  //   return;
+  // }
+  // return {
+  //   ...accounts[0],
+  //   tweetId: '1665025285094535168',
+  //   conversationId: '1665025285094535168',
+  //   tweetContent: OFFICIAL_TAG,
+  //   promo: true
+  // };
 }
 
 export const getMyIMAccount = async () => {
