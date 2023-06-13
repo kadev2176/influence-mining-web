@@ -17,8 +17,8 @@ const DEFAULT_SPONSORED_TAGS: SponsoredTag[] = [
     tag: 'AkiNetwork',
     link: 'https://akiprotocol.io/',
     description: 'Connecting the Web3 Dots: Influencer-centered,Data-driven',
-    giftIcon: true,
-    enabled: true
+    giftIcon: false,
+    enabled: false
   },
   {
     tag: '0xScope',
